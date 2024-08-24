@@ -1,0 +1,160 @@
+-- Function to set up the GUI
+local function setupGui()
+    -- Check if the GUI already exists
+    local existingGui = game.Players.LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("ScriptGui")
+    if existingGui then
+        existingGui:Destroy() -- Remove the old GUI if it exists
+    end
+
+    -- Create the main ScreenGui
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "ScriptGui"
+    screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+    -- Create the log TextBox
+    local logTextBox = Instance.new("TextBox")
+    logTextBox.Name = "LogTextBox"
+    logTextBox.Parent = screenGui
+    logTextBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255) -- White background
+    logTextBox.BackgroundTransparency = 0.5 -- Semi-transparent
+    logTextBox.BorderColor3 = Color3.fromRGB(0, 0, 255) -- Blue border
+    logTextBox.BorderSizePixel = 2
+    logTextBox.Position = UDim2.new(0.3, 0, 0.1, 0) -- Position above the original TextBox
+    logTextBox.Size = UDim2.new(0.4, 0, 0.3, 0) -- Larger size to fit multiple lines
+    logTextBox.Text = "-- Console Logs Shown Here --" -- Placeholder text
+    logTextBox.TextColor3 = Color3.fromRGB(255, 0, 0) -- Black text
+    logTextBox.Font = Enum.Font.PatrickHand -- Font style
+    logTextBox.TextSize = 18 -- Font size
+    logTextBox.TextScaled = true -- Scale text to fit the TextBox
+    logTextBox.ClearTextOnFocus = false -- Keep text when focused
+    logTextBox.TextWrapped = true -- Wrap text to fit within the TextBox
+    logTextBox.MultiLine = true -- Allows multiple lines
+    logTextBox.TextStrokeTransparency = 0.8 -- Add some contrast for readability
+
+    -- Add rounded corners to the Log TextBox
+    local uiCornerLog = Instance.new("UICorner")
+    uiCornerLog.CornerRadius = UDim.new(0.2, 0) -- Rounded corners
+    uiCornerLog.Parent = logTextBox
+
+    -- Create the original TextBox
+    local textBox = Instance.new("TextBox")
+    textBox.Name = "ScriptTextBox"
+    textBox.Parent = screenGui
+    textBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255) -- White background
+    textBox.BackgroundTransparency = 0.5 -- Semi-transparent
+    textBox.BorderColor3 = Color3.fromRGB(0, 0, 255) -- Blue border
+    textBox.BorderSizePixel = 2
+    textBox.Position = UDim2.new(0.3, 0, 0.45, 0) -- Position below the log TextBox
+    textBox.Size = UDim2.new(0.4, 0, 0.1, 0) -- Width and height
+    textBox.Text = " " -- Placeholder text
+    textBox.TextColor3 = Color3.fromRGB(0, 0, 255) -- Black text
+    textBox.Font = Enum.Font.PatrickHand -- Font style
+    textBox.TextSize = 18 -- Font size
+    textBox.TextScaled = true -- Scale text to fit the TextBox
+    textBox.ClearTextOnFocus = false -- Keep text when focused
+
+    -- Add rounded corners to the TextBox
+    local uiCornerTextBox = Instance.new("UICorner")
+    uiCornerTextBox.CornerRadius = UDim.new(0.2, 0) -- Rounded corners
+    uiCornerTextBox.Parent = textBox
+
+    -- Create the Button to execute the code
+    local executeButton = Instance.new("TextButton")
+    executeButton.Name = "ExecuteButton"
+    executeButton.Parent = screenGui
+    executeButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- Green background
+    executeButton.BackgroundTransparency = 0.8
+    executeButton.BorderColor3 = Color3.fromRGB(0, 0, 0) -- Black border
+    executeButton.BorderSizePixel = 2
+    executeButton.Position = UDim2.new(0.3, 0, 0.55, 0) -- Positioned below the original TextBox
+    executeButton.Size = UDim2.new(0.4, 0, 0.1, 0) -- Width and height
+    executeButton.Text = "Activated Script" -- Button text
+    executeButton.TextColor3 = Color3.fromRGB(0, 255, 0) -- Black text
+    executeButton.Font = Enum.Font.PatrickHand -- Font style
+    executeButton.TextSize = 18 -- Font size
+    executeButton.TextScaled = true -- Scale text to fit the button
+
+    -- Add rounded corners to the Button
+    local uiCornerButton = Instance.new("UICorner")
+    uiCornerButton.CornerRadius = UDim.new(0.2, 0) -- Rounded corners
+    uiCornerButton.Parent = executeButton
+
+    -- Create the Toggle Button for hiding/showing the GUI elements
+    local toggleButton = Instance.new("TextButton")
+    toggleButton.Name = "ToggleButton"
+    toggleButton.Parent = screenGui
+    toggleButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255) -- White background
+    toggleButton.BackgroundTransparency = 0.5 -- Semi-transparent
+    toggleButton.BorderColor3 = Color3.fromRGB(0, 0, 255) -- Blue border
+    toggleButton.BorderSizePixel = 2
+    toggleButton.Position = UDim2.new(0.7, 0, -0.1, 0) -- Positioned at the top right
+    toggleButton.Size = UDim2.new(0.2, 0, 0.1, 0) -- Width and height
+    toggleButton.Text = "Close" -- Initial text
+    toggleButton.TextColor3 = Color3.fromRGB(0, 0, 0) -- Black text
+    toggleButton.Font = Enum.Font.PatrickHand -- Font style
+    toggleButton.TextSize = 18 -- Font size
+    toggleButton.TextScaled = true -- Scale text to fit the button
+
+    -- Add rounded corners to the Toggle Button
+    local uiCornerToggle = Instance.new("UICorner")
+    uiCornerToggle.CornerRadius = UDim.new(0.2, 0) -- Rounded corners
+    uiCornerToggle.Parent = toggleButton
+
+    -- Initial visibility state
+    local isVisible = true
+    textBox.Visible = isVisible
+    executeButton.Visible = isVisible
+    logTextBox.Visible = isVisible
+
+    -- Function to toggle visibility of the GUI elements
+    local function toggleVisibility()
+        isVisible = not isVisible
+        textBox.Visible = isVisible
+        executeButton.Visible = isVisible
+        logTextBox.Visible = isVisible
+        toggleButton.Text = isVisible and "Close" or "Open" -- Update text based on visibility
+    end
+
+    -- Connect the toggle button to the function
+    toggleButton.MouseButton1Click:Connect(toggleVisibility)
+
+    -- Function to execute the script from the TextBox input and update the log TextBox
+    local function executeScript()
+        local scriptCode = textBox.Text
+        local output = {}
+
+        -- Redirect print statements
+        local oldPrint = print
+        local function newPrint(...)
+            table.insert(output, table.concat({...}, " "))
+            oldPrint(...)
+        end
+        print = newPrint
+
+        -- Execute the script code
+        local success, result = pcall(function()
+            loadstring(scriptCode)()
+        end)
+
+        -- Restore the original print function
+        print = oldPrint
+
+        -- Update log TextBox
+        if success then
+            logTextBox.Text = table.concat(output, "\n")
+        else
+            logTextBox.Text = "Error: " .. result
+        end
+    end
+
+    -- Connect the execute button to the function
+    executeButton.MouseButton1Click:Connect(executeScript)
+end
+
+-- Run the setupGui function each time the player respawns
+game.Players.LocalPlayer.CharacterAdded:Connect(setupGui)
+
+-- Set up GUI for the current player if they are already in the game
+if game.Players.LocalPlayer.Character then
+    setupGui()
+end

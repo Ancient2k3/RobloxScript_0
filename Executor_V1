@@ -151,6 +151,31 @@ local function setupGui()
         textBox.Text = "loadstring(game:HttpGet('https://raw.githubusercontent.com/NganHa2k3/RobloxScript/main2/Float_V0'))()"
     end)
 
+local script3Button = Instance.new("TextButton")
+    script3Button.Name = "Script1Button"
+    script3Button.Parent = screenGui
+    script3Button.BackgroundColor3 = Color3.fromRGB(200, 200, 200) -- Gray background
+    script3Button.BackgroundTransparency = 0.5
+    script3Button.BorderColor3 = Color3.fromRGB(0, 0, 255) -- Blue border
+    script3Button.BorderSizePixel = 2
+    script3Button.Size = UDim2.new(0.05, 0, 0.05, 0) -- Width and height
+    script3Button.Text = "My Script: BoomBox" -- Button text
+    script3Button.TextColor3 = Color3.fromRGB(0, 0, 0) -- Black text
+    script3Button.Font = Enum.Font.PatrickHand -- Font style
+    script3Button.TextSize = 18 -- Font size
+    script3Button.TextScaled = true -- Scale text to fit the button
+    script3Button.Position = UDim2.new(0.4, 0, 0.7, 0) -- Position below the Toggle Button
+
+    -- Add rounded corners to Script3 Button
+    local uiCornerScript3 = Instance.new("UICorner")
+    uiCornerScript3.CornerRadius = UDim.new(0.2, 0) -- Rounded corners
+    uiCornerScript3.Parent = script3Button
+
+    -- Connect Script3 button click event
+    script3Button.MouseButton1Click:Connect(function()
+        textBox.Text = "loadstring(game:HttpGet('https://raw.githubusercontent.com/NganHa2k3/RobloxScript/item/SoundID_V0'))()"
+    end)
+
     -- Initial visibility state
     local isVisible = true
     textBox.Visible = isVisible
@@ -158,6 +183,7 @@ local function setupGui()
     logTextBox.Visible = isVisible
     script1Button.Visible = isVisible
     script2Button.Visible = isVisible
+    script3Button.Visible = isVisible
 
     -- Function to toggle visibility of the GUI elements
     local function toggleVisibility()
@@ -167,6 +193,7 @@ local function setupGui()
         logTextBox.Visible = isVisible
         script1Button.Visible = isVisible
         script2Button.Visible = isVisible
+        script3Button.Visible = isVisible
         toggleButton.Text = isVisible and "Close" or "Open" -- Update text based on visibility
     end
 

@@ -198,7 +198,7 @@ local script4Button = Instance.new("TextButton")
 
     -- Connect Script4 button click event
     script4Button.MouseButton1Click:Connect(function()
-        textBox.Text = "loadstring(game:HttpGet('https://raw.githubusercontent.com/NganHa2k3/RobloxScript/main2/MurderMystery_V0'))()"
+        textBox.Text = "loadstring(game:HttpGet('https://raw.githubusercontent.com/NganHa2k3/RobloxScript/main2/MurderMystery2_V0'))()"
     end)
 
     -- Initial visibility state

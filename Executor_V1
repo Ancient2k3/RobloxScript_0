@@ -129,7 +129,7 @@ local function setupGui()
     local script2Button = Instance.new("TextButton")
     script2Button.Name = "Script2Button"
     script2Button.Parent = screenGui
-    script2Button.BackgroundColor3 = Color3.fromRGB(200, 200, 200) -- Gray background
+    script2Button.BackgroundColor3 = Color3.fromRGB(0, 200, 0) -- Gray background
     script2Button.BackgroundTransparency = 0.5
     script2Button.BorderColor3 = Color3.fromRGB(0, 0, 255) -- Blue border
     script2Button.BorderSizePixel = 2
@@ -152,9 +152,9 @@ local function setupGui()
     end)
 
 local script3Button = Instance.new("TextButton")
-    script3Button.Name = "Script1Button"
+    script3Button.Name = "Script3Button"
     script3Button.Parent = screenGui
-    script3Button.BackgroundColor3 = Color3.fromRGB(200, 200, 200) -- Gray background
+    script3Button.BackgroundColor3 = Color3.fromRGB(0, 0, 200) -- Gray background
     script3Button.BackgroundTransparency = 0.5
     script3Button.BorderColor3 = Color3.fromRGB(0, 0, 255) -- Blue border
     script3Button.BorderSizePixel = 2
@@ -177,9 +177,9 @@ local script3Button = Instance.new("TextButton")
     end)
 
 local script4Button = Instance.new("TextButton")
-    script4Button.Name = "Script1Button"
+    script4Button.Name = "Script4Button"
     script4Button.Parent = screenGui
-    script4Button.BackgroundColor3 = Color3.fromRGB(200, 200, 200) -- Gray background
+    script4Button.BackgroundColor3 = Color3.fromRGB(220, 0, 0) -- Gray background
     script4Button.BackgroundTransparency = 0.5
     script4Button.BorderColor3 = Color3.fromRGB(0, 0, 255) -- Blue border
     script4Button.BorderSizePixel = 2
@@ -201,6 +201,31 @@ local script4Button = Instance.new("TextButton")
         textBox.Text = "loadstring(game:HttpGet('https://raw.githubusercontent.com/NganHa2k3/RobloxScript/main2/MurderMystery2_V0'))()"
     end)
 
+local script5Button = Instance.new("TextButton")
+    script5Button.Name = "Script5Button"
+    script5Button.Parent = screenGui
+    script5Button.BackgroundColor3 = Color3.fromRGB(255, 255, 0) -- Gray background
+    script5Button.BackgroundTransparency = 0.5
+    script5Button.BorderColor3 = Color3.fromRGB(0, 0, 255) -- Blue border
+    script5Button.BorderSizePixel = 2
+    script5Button.Size = UDim2.new(0.05, 0, 0.05, 0) -- Width and height
+    script5Button.Text = "My Script: Part Teleport" -- Button text
+    script5Button.TextColor3 = Color3.fromRGB(0, 0, 0) -- Black text
+    script5Button.Font = Enum.Font.PatrickHand -- Font style
+    script5Button.TextSize = 18 -- Font size
+    script5Button.TextScaled = true -- Scale text to fit the button
+    script5Button.Position = UDim2.new(0.5, 0, 0.8, 0) -- Position below the Toggle Button
+
+    -- Add rounded corners to Script5 Button
+    local uiCornerScript5 = Instance.new("UICorner")
+    uiCornerScript5.CornerRadius = UDim.new(0.2, 0) -- Rounded corners
+    uiCornerScript5.Parent = script5Button
+
+    -- Connect Script5 button click event
+    script5Button.MouseButton1Click:Connect(function()
+        textBox.Text = "loadstring(game:HttpGet('https://raw.githubusercontent.com/NganHa2k3/RobloxScript/main2/Part_V0'))()"
+    end)
+
     -- Initial visibility state
     local isVisible = true
     textBox.Visible = isVisible
@@ -210,6 +235,7 @@ local script4Button = Instance.new("TextButton")
     script2Button.Visible = isVisible
     script3Button.Visible = isVisible
     script4Button.Visible = isVisible
+    script5Button.Visible = isVisible
 
     -- Function to toggle visibility of the GUI elements
     local function toggleVisibility()
@@ -221,6 +247,7 @@ local script4Button = Instance.new("TextButton")
         script2Button.Visible = isVisible
         script3Button.Visible = isVisible
         script4Button.Visible = isVisible
+        script5Button.Visible = isVisible
         toggleButton.Text = isVisible and "Close" or "Open" -- Update text based on visibility
     end
 

@@ -254,7 +254,7 @@ local script6Button = Instance.new("TextButton")
 local script7Button = Instance.new("TextButton")
     script7Button.Name = "Script7Button"
     script7Button.Parent = screenGui
-    script7Button.BackgroundColor3 = Color3.fromRGB(200, 190, 0) -- Gray background
+    script7Button.BackgroundColor3 = Color3.fromRGB(255, 0, 200) -- Gray background
     script7Button.BackgroundTransparency = 0.5
     script7Button.BorderColor3 = Color3.fromRGB(0, 0, 255) -- Blue border
     script7Button.BorderSizePixel = 2
@@ -273,7 +273,7 @@ local script7Button = Instance.new("TextButton")
 
     -- Connect Script7 button click event
     script7Button.MouseButton1Click:Connect(function()
-        textBox.Text = "loadstring(game:HttpGet('https://raw.githubusercontent.com/NganHa2k3/RobloxScript/item/Commands_V2_0'))()"
+        textBox.Text = "loadstring(game:HttpGet('https://raw.githubusercontent.com/NganHa2k3/RobloxScript/item/Commands_V1'))()"
     end)
 
     -- Initial visibility state

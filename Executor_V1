@@ -370,3 +370,16 @@ end
 
 -- Call the function to set up the GUI
 setupGui()
+
+
+
+
+-- Notification --
+
+local CoreGui = game:GetService("StarterGui")
+
+CoreGui:SetCore("SendNotification", {
+    Title = "Executor with Console Logs",
+    Text = "Type Anything Inside It to See What Happened !",
+    Duration = 2,
+})

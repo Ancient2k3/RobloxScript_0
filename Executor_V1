@@ -276,6 +276,31 @@ local script7Button = Instance.new("TextButton")
         textBox.Text = "loadstring(game:HttpGet('https://raw.githubusercontent.com/NganHa2k3/RobloxScript/item/Commands_V3'))()"
     end)
 
+local script8Button = Instance.new("TextButton")
+script8Button.Name = "Script8Button"
+script8Button.Parent = screenGui
+script8Button.BackgroundColor3 = Color3.fromRGB(255, 0, 200) -- Gray background
+script8Button.BackgroundTransparency = 0.5
+script8Button.BorderColor3 = Color3.fromRGB(0, 0, 255) -- Blue border
+script8Button.BorderSizePixel = 2
+script8Button.Size = UDim2.new(0.05, 0, 0.05, 0) -- Width and height
+script8Button.Text = "My Script: TSB_UI" -- Button text
+script8Button.TextColor3 = Color3.fromRGB(0, 0, 0) -- Black text
+script8Button.Font = Enum.Font.PatrickHand -- Font style
+script8Button.TextSize = 18 -- Font size
+script8Button.TextScaled = true -- Scale text to fit the button
+script8Button.Position = UDim2.new(0.6, 0, 0.8, 0) -- Position below the Toggle Button
+
+-- Add rounded corners to Script8 Button
+local uiCornerScript8 = Instance.new("UICorner")
+uiCornerScript8.CornerRadius = UDim.new(0.2, 0) -- Rounded corners
+uiCornerScript8.Parent = script8Button
+
+-- Connect Script8 button click event
+script8Button.MouseButton1Click:Connect(function()
+    textBox.Text = "loadstring(game:HttpGet('https://raw.githubusercontent.com/NganHa2k3/RobloxScript/UI/TSB_UI'))()"
+end)
+
     -- Initial visibility state
     local isVisible = true
     textBox.Visible = isVisible
@@ -288,6 +313,7 @@ local script7Button = Instance.new("TextButton")
     script5Button.Visible = isVisible
     script6Button.Visible = isVisible
     script7Button.Visible = isVisible
+    script8Button.Visible = isVisible
 
     -- Function to toggle visibility of the GUI elements
     local function toggleVisibility()
@@ -302,6 +328,7 @@ local script7Button = Instance.new("TextButton")
         script5Button.Visible = isVisible
         script6Button.Visible = isVisible
         script7Button.Visible = isVisible
+        script8Button.Visible = isVisible
         toggleButton.Text = isVisible and "Close" or "Open" -- Update text based on visibility
     end
 

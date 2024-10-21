@@ -15,15 +15,15 @@ local function setupGui()
     local logTextBox = Instance.new("TextBox")
     logTextBox.Name = "LogTextBox"
     logTextBox.Parent = screenGui
-    logTextBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255) -- White background
+    logTextBox.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- White background
     logTextBox.BackgroundTransparency = 0.5 -- Semi-transparent
     logTextBox.BorderColor3 = Color3.fromRGB(0, 0, 255) -- Blue border
     logTextBox.BorderSizePixel = 2
-    logTextBox.Position = UDim2.new(0.3, 0, 0.1, 0) -- Position above the original TextBox
-    logTextBox.Size = UDim2.new(0.4, 0, 0.3, 0) -- Larger size to fit multiple lines
-    logTextBox.Text = "-- Console Logs Shown Here --" -- Placeholder text
+    logTextBox.Position = UDim2.new(0.3, 0, 0.25, 0) -- Position above the original TextBox
+    logTextBox.Size = UDim2.new(0.4, 0, 0.1, 0) -- Larger size to fit multiple lines
+    logTextBox.Text = "No Console Logs" -- Placeholder text
     logTextBox.TextColor3 = Color3.fromRGB(255, 0, 0) -- Black text
-    logTextBox.Font = Enum.Font.PatrickHand -- Font style
+    logTextBox.Font = Enum.Font.Code -- Font style
     logTextBox.TextSize = 18 -- Font size
     logTextBox.TextScaled = true -- Scale text to fit the TextBox
     logTextBox.ClearTextOnFocus = false -- Keep text when focused
@@ -33,14 +33,14 @@ local function setupGui()
 
     -- Add rounded corners to the Log TextBox
     local uiCornerLog = Instance.new("UICorner")
-    uiCornerLog.CornerRadius = UDim.new(0.2, 0) -- Rounded corners
+    uiCornerLog.CornerRadius = UDim.new(0.1, 0) -- Rounded corners
     uiCornerLog.Parent = logTextBox
 
     -- Create the original TextBox
     local textBox = Instance.new("TextBox")
     textBox.Name = "ScriptTextBox"
     textBox.Parent = screenGui
-    textBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255) -- White background
+    textBox.BackgroundColor3 = Color3.fromRGB(0, 0, 0) -- White background
     textBox.BackgroundTransparency = 0.5 -- Semi-transparent
     textBox.BorderColor3 = Color3.fromRGB(0, 0, 255) -- Blue border
     textBox.BorderSizePixel = 2

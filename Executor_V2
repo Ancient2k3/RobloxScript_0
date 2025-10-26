@@ -1,11 +1,3 @@
--- v2 rework --
--- random stuff --
-local env = getgenv or false
-if env then getgenv().custom_exec_ui = {
-    plrs = game:GetService("Players"),
-    plr = plrs.LocalPlayer
-} print("It's seem like Client supported: getgenv func!") else print("Client unsupported: gengenv func!") end
-
 -- main stuff --
 local ExGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("ExecuteTools")
 if ExGui then

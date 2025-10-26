@@ -1,4 +1,4 @@
--- main stuff --
+-- Version2: Re-Write --
 local ExGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("ExecuteTools")
 if ExGui then
     ExGui:Destroy()

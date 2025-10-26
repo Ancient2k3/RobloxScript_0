@@ -1,3 +1,12 @@
+-- v2 rework --
+-- random stuff --
+local env = getgenv or false
+if env then getgenv().custom_exec_ui = {
+    plrs = game:GetService("Players"),
+    plr = plrs.LocalPlayer
+} print("It's seem like Client supported: getgenv func!") else print("Client unsupported: gengenv func!") end
+
+-- main stuff --
 local ExGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("ExecuteTools")
 if ExGui then
     ExGui:Destroy()
@@ -30,12 +39,14 @@ DebugConsole.Name = "LP_Console"
 DebugConsole.Parent = ExScreenGui
 DebugConsole.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 DebugConsole.BackgroundTransparency = 0.5
-DebugConsole.Position = UDim2.new(0.3, 0, 0.25, 0)
+DebugConsole.Position = UDim2.new(0.3, 0, 0.345, 0)
 DebugConsole.Size = UDim2.new(0.4, 0, 0.1, 0)
 DebugConsole.TextScaled = true
 DebugConsole.TextColor3 = Color3.fromRGB(255, 255, 0)
 DebugConsole.Font = Enum.Font.Code
 DebugConsole.TextSize = 18
+DebugConsole.Text = ""
+DebugConsole.PlaceholderText = "Output:"
 DebugConsole.TextWrapped = true
 DebugConsole.MultiLine = true
 DebugConsole.TextStrokeTransparency = 0.8
@@ -53,9 +64,10 @@ ScriptBox.TextScaled = true
 ScriptBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 ScriptBox.Font = Enum.Font.Code
 ScriptBox.TextSize = 18
+ScriptBox.MultiLine = true
 ScriptBox.Text = ""
 ScriptBox.ClearTextOnFocus = false
-ScriptBox.PlaceholderText = "Paste In Here A Script/ Write A Script"
+ScriptBox.PlaceholderText = "example: print('hello world')"
 ScriptBox.Visible = false
 
 PressExecute = Instance.new("TextButton")
@@ -63,8 +75,8 @@ PressExecute.Name = "Normal_RunScript"
 PressExecute.Parent = ExScreenGui
 PressExecute.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 PressExecute.BackgroundTransparency = 0.5
-PressExecute.Position = UDim2.new(0.3, 0, 0.55, 0)
-PressExecute.Size = UDim2.new(0.2, 0, 0.1, 0)
+PressExecute.Position = UDim2.new(0.3, 0, 0.555, 0)
+PressExecute.Size = UDim2.new(0.15, 0, 0.06, 0)
 PressExecute.TextScaled = true
 PressExecute.TextColor3 = Color3.fromRGB(0, 255, 0)
 PressExecute.Font = Enum.Font.Code
@@ -77,8 +89,8 @@ LoopExecute.Name = "Loop_RunScript"
 LoopExecute.Parent = ExScreenGui
 LoopExecute.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 LoopExecute.BackgroundTransparency = 0.5
-LoopExecute.Position = UDim2.new(0.52, 0, 0.55, 0)
-LoopExecute.Size = UDim2.new(0.2, 0, 0.1, 0)
+LoopExecute.Position = UDim2.new(0.452, 0, 0.555, 0)
+LoopExecute.Size = UDim2.new(0.15, 0, 0.06, 0)
 LoopExecute.TextScaled = true
 LoopExecute.TextColor3 = Color3.fromRGB(0, 255, 0)
 LoopExecute.Font = Enum.Font.Code
@@ -91,8 +103,8 @@ LoopDelay.Name = "Set_Execute_Delay"
 LoopDelay.Parent = ExScreenGui
 LoopDelay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 LoopDelay.BackgroundTransparency = 0.5
-LoopDelay.Position = UDim2.new(0.3, 0, 0.15, 0)
-LoopDelay.Size = UDim2.new(0.05, 0, 0.1, 0)
+LoopDelay.Position = UDim2.new(0.65, 0, 0.555, 0)
+LoopDelay.Size = UDim2.new(0.05, 0, 0.06, 0)
 LoopDelay.TextScaled = true
 LoopDelay.TextColor3 = Color3.fromRGB(0, 255, 255)
 LoopDelay.TextSize = 18
@@ -107,7 +119,7 @@ Shown_Hidden_UI.Name = "ImGirl"
 Shown_Hidden_UI.Parent = ExScreenGui
 Shown_Hidden_UI.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
 Shown_Hidden_UI.BackgroundTransparency = 0.5
-Shown_Hidden_UI.Position = UDim2.new(0.66, 0, -0.1, 0)
+Shown_Hidden_UI.Position = UDim2.new(0.94, 0, 0, 0)
 Shown_Hidden_UI.Size = UDim2.new(0.05, 0, 0.1, 0)
 Shown_Hidden_UI.TextScaled = true
 Shown_Hidden_UI.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -223,4 +235,4 @@ LoopExecute.MouseButton1Click:Connect(function()
     end
 end)
 
-ntf("Paste Inside AnyScript </>")
+ntf("Custom Script Executor!")

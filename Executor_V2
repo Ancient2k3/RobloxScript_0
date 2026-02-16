@@ -1,7 +1,10 @@
 -- Custom Executor: v2.5 --
-local ws, plrs, core
+-- Now RE:Named to Scripts Editor --
+
+local ws, plrs, starterui, core
 ws = game:GetService("Workspace")
 plrs = game:GetService("Players")
+starterui = game:GetService("StarterGui")
 core = game:GetService("CoreGui")
 
 local ui_data, funcs = {
@@ -16,7 +19,8 @@ local ui_data, funcs = {
   },
   api_funcs = game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/Scripts.lua")
 }, {
-  corner = function(t, r) Instance.new("UICorner", t).CornerRadius = UDim.new(r, 0) end
+  corner = function(t, r) Instance.new("UICorner", t).CornerRadius = UDim.new(r, 0) end,
+  notify = function(str) starterui:SetCore("SendNotification", {Title = "Scripts Editor", Text = str, Duration = 1.25,}) end
 }
 
 if core:FindFirstChild(ui_data.name) then
@@ -200,8 +204,13 @@ _wait.FocusLost:Connect(function(ep)
     if ep and _wait.Text ~= "" then
       if _wait.Text == "clear" then
         code_box.Text = ""
+        funcs.notify("Đã dọn dẹp toàn bộ codes... !")
+        task.wait(0.02)
+        _wait.Text = ""
       end if not _wait.Text:match("%d+") then return end
       ui_data.vars.delay = tonumber(_wait.Text) or 0.001
       _wait.Text = ""
     end
 end)
+
+funcs.notify("Codes Editor by HoangHienXScripts.")

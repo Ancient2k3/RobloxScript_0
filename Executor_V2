@@ -1,230 +1,207 @@
--- Version2: Re-Write --
-local ExGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("ExecuteTools")
-if ExGui then
-    ExGui:Destroy()
+-- Custom Executor: v2.5 --
+local ws, plrs, core
+ws = game:GetService("Workspace")
+plrs = game:GetService("Players")
+core = game:GetService("CoreGui")
+
+local ui_data, funcs = {
+  folder = nil,
+  name = "CodesEditor_xScripts",
+  vars = {
+    delay = 0.001,
+    show = false,
+    looped = false,
+    loaded_text = false,
+    show_api = 0
+  },
+  api_funcs = readfile("HHxScripts/CustomAPI/Scripts.lua")
+}, {
+  corner = function(t, r) Instance.new("UICorner", t).CornerRadius = UDim.new(r, 0) end
+}
+
+if core:FindFirstChild(ui_data.name) then
+  core[ui_data.name]:FindFirstChildOfClass("ScreenGui"):Destroy()
+else
+  ui_data.folder = Instance.new("Folder", core)
+  ui_data.folder.Name = ui_data.name
 end
 
-local ExScreenGui, DebugConsole, ScriptBox, PressExecute, LoopExecute, Shown_Hidden_UI, LoopDelay
-local default_delay = 0.1
-local NtG = game:GetService("StarterGui")
+repeat task.wait()
+until type(ui_data.api_funcs) == "string" and ui_data.api_funcs ~= ""
 
-function AddUICorner(PT)
-    local CompletedUI = Instance.new("UICorner")
-    CompletedUI.Parent = PT
-    CompletedUI.CornerRadius = UDim.new(0.2, 0)
-end
+local screenui, debug_console, code_box, exec_one, exec_loop, tshow_ui, _wait
+screenui = Instance.new("ScreenGui", core[ui_data.name])
+screenui.Name = "ExecuteTools"
 
-function ntf(msg)
-    NtG:SetCore("SendNotification", {
-        Title = "NganHa2k3 Script",
-        Text = msg,
-        Duration = 2.5,
-    })
-end
+debug_console = Instance.new("TextBox", screenui)
+debug_console.Name = "Codes-Output"
+debug_console.BackgroundTransparency = 0.5
+debug_console.BackgroundColor3 = Color3.new(0, 0, 0)
+debug_console.Position = UDim2.new(0.3, 0, 0.145, 0)
+debug_console.Size = UDim2.new(0.4, 0, 0.1, 0)
+debug_console.TextScaled = true
+debug_console.TextSize = 12
+debug_console.TextColor3 = Color3.new(1, 1, 1)
+debug_console.TextWrapped = true
+debug_console.MultiLine = true
+debug_console.Font = Enum.Font.Code
+debug_console.Text = ""
+debug_console.PlaceholderText = "< result >"
+debug_console.ClearTextOnFocus = false
+debug_console.Visible = false
+funcs.corner(debug_console, 0.1)
 
-ExScreenGui = Instance.new("ScreenGui")
-ExScreenGui.Name = "ExecuteTools"
-ExScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+code_box = Instance.new("TextBox", screenui)
+code_box.Name = "CodingHere"
+code_box.BackgroundTransparency = 0.5
+code_box.BackgroundColor3 = Color3.new(0, 0, 0)
+code_box.Position = UDim2.new(0.3, 0, 0.25, 0)
+code_box.Size = UDim2.new(0.4, 0, 0.4, 0)
+code_box.TextScaled = false
+code_box.TextSize = 12
+code_box.TextColor3 = Color3.new(1, 1, 1)
+code_box.Font = Enum.Font.Code
+code_box.MultiLine = true
+code_box.Text = ""
+code_box.ClearTextOnFocus = false
+code_box.PlaceholderText = "..."
+code_box.ClipsDescendants = true
+code_box.TextXAlignment = "Left"
+code_box.TextYAlignment = "Top"
+code_box.Visible = false
+funcs.corner(code_box, 0.025)
 
-DebugConsole = Instance.new("TextBox")
-DebugConsole.Name = "LP_Console"
-DebugConsole.Parent = ExScreenGui
-DebugConsole.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-DebugConsole.BackgroundTransparency = 0.5
-DebugConsole.Position = UDim2.new(0.3, 0, 0.345, 0)
-DebugConsole.Size = UDim2.new(0.4, 0, 0.1, 0)
-DebugConsole.TextScaled = true
-DebugConsole.TextColor3 = Color3.fromRGB(255, 255, 0)
-DebugConsole.Font = Enum.Font.Code
-DebugConsole.TextSize = 18
-DebugConsole.Text = ""
-DebugConsole.PlaceholderText = "Output:"
-DebugConsole.TextWrapped = true
-DebugConsole.MultiLine = true
-DebugConsole.TextStrokeTransparency = 0.8
-DebugConsole.ClearTextOnFocus = false
-DebugConsole.Visible = false
+exec_one = Instance.new("TextButton", screenui)
+exec_one.Name = "R1Times"
+exec_one.BackgroundTransparency = 0.5
+exec_one.BackgroundColor3 = Color3.new(0, 0, 0)
+exec_one.Position = UDim2.new(0.3, 0, 0.655, 0)
+exec_one.Size = UDim2.new(0.15, 0, 0.06, 0)
+exec_one.TextScaled = true
+exec_one.TextSize = 12
+exec_one.TextColor3 = Color3.new(1, 1, 1)
+exec_one.Font = Enum.Font.Code
+exec_one.Text = "Execute"
+exec_one.Visible = false
+funcs.corner(exec_one, 0.095)
 
-ScriptBox = Instance.new("TextBox")
-ScriptBox.Name = "ExScript"
-ScriptBox.Parent = ExScreenGui
-ScriptBox.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-ScriptBox.BackgroundTransparency = 0.5
-ScriptBox.Position = UDim2.new(0.3, 0, 0.45, 0)
-ScriptBox.Size = UDim2.new(0.4, 0, 0.1, 0)
-ScriptBox.TextScaled = true
-ScriptBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-ScriptBox.Font = Enum.Font.Code
-ScriptBox.TextSize = 18
-ScriptBox.MultiLine = true
-ScriptBox.Text = ""
-ScriptBox.ClearTextOnFocus = false
-ScriptBox.PlaceholderText = "example: print('hello world')"
-ScriptBox.Visible = false
+exec_loop = Instance.new("TextButton", screenui)
+exec_loop.Name = "R2Times"
+exec_loop.BackgroundTransparency = 0.5
+exec_loop.BackgroundColor3 = Color3.new(0, 0, 0)
+exec_loop.Position = UDim2.new(0.452, 0, 0.655, 0)
+exec_loop.Size = UDim2.new(0.15, 0, 0.06, 0)
+exec_loop.TextScaled = true
+exec_loop.TextSize = 12
+exec_loop.TextColor3 = Color3.new(1, 1, 1)
+exec_loop.Font = Enum.Font.Code
+exec_loop.Text = "Loop Execute"
+exec_loop.Visible = false
+funcs.corner(exec_loop, 0.095)
 
-PressExecute = Instance.new("TextButton")
-PressExecute.Name = "Normal_RunScript"
-PressExecute.Parent = ExScreenGui
-PressExecute.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-PressExecute.BackgroundTransparency = 0.5
-PressExecute.Position = UDim2.new(0.3, 0, 0.555, 0)
-PressExecute.Size = UDim2.new(0.15, 0, 0.06, 0)
-PressExecute.TextScaled = true
-PressExecute.TextColor3 = Color3.fromRGB(0, 255, 0)
-PressExecute.Font = Enum.Font.Code
-PressExecute.Text = "Execute"
-PressExecute.TextSize = 18
-PressExecute.Visible = false
+_wait = Instance.new("TextBox", screenui)
+_wait.Name = "Set_Delay"
+_wait.BackgroundTransparency = 0.5
+_wait.BackgroundColor3 = Color3.new(0, 0, 0)
+_wait.Position = UDim2.new(0.65, 0, 0.655, 0)
+_wait.Size = UDim2.new(0.05, 0, 0.06, 0)
+_wait.TextScaled = true
+_wait.TextSize = 12
+_wait.TextColor3 = Color3.new(1, 1, 1)
+_wait.Font = Enum.Font.Code
+_wait.Text = ""
+_wait.ClearTextOnFocus = true
+_wait.PlaceholderText = "int"
+_wait.Visible = false
+funcs.corner(_wait, 0.095)
 
-LoopExecute = Instance.new("TextButton")
-LoopExecute.Name = "Loop_RunScript"
-LoopExecute.Parent = ExScreenGui
-LoopExecute.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-LoopExecute.BackgroundTransparency = 0.5
-LoopExecute.Position = UDim2.new(0.452, 0, 0.555, 0)
-LoopExecute.Size = UDim2.new(0.15, 0, 0.06, 0)
-LoopExecute.TextScaled = true
-LoopExecute.TextColor3 = Color3.fromRGB(0, 255, 0)
-LoopExecute.Font = Enum.Font.Code
-LoopExecute.Text = "Loop Execute"
-LoopExecute.TextSize = 18
-LoopExecute.Visible = false
+tshow_ui = Instance.new("TextButton", screenui)
+tshow_ui.Name = "Executor-Enable"
+tshow_ui.BackgroundTransparency = 0.5
+tshow_ui.BackgroundColor3 = Color3.new(0, 0, 0)
+tshow_ui.Position = UDim2.new(0.94, 0, 0, 0)
+tshow_ui.Size = UDim2.new(0.05, 0, 0.1, 0)
+tshow_ui.TextScaled = true
+tshow_ui.TextSize = 12
+tshow_ui.TextColor3 = Color3.new(1, 1, 1)
+tshow_ui.Font = Enum.Font.Code
+tshow_ui.Text = "XScript"
+tshow_ui.Visible = true
+funcs.corner(tshow_ui, 0.15)
 
-LoopDelay = Instance.new("TextBox")
-LoopDelay.Name = "Set_Execute_Delay"
-LoopDelay.Parent = ExScreenGui
-LoopDelay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-LoopDelay.BackgroundTransparency = 0.5
-LoopDelay.Position = UDim2.new(0.65, 0, 0.555, 0)
-LoopDelay.Size = UDim2.new(0.05, 0, 0.06, 0)
-LoopDelay.TextScaled = true
-LoopDelay.TextColor3 = Color3.fromRGB(0, 255, 255)
-LoopDelay.TextSize = 18
-LoopDelay.Font = Enum.Font.Code
-LoopDelay.Text = ""
-LoopDelay.ClearTextOnFocus = true
-LoopDelay.PlaceholderText = "Default 0.1"
-LoopDelay.Visible = false
-
-Shown_Hidden_UI = Instance.new("TextButton")
-Shown_Hidden_UI.Name = "ImGirl"
-Shown_Hidden_UI.Parent = ExScreenGui
-Shown_Hidden_UI.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-Shown_Hidden_UI.BackgroundTransparency = 0.5
-Shown_Hidden_UI.Position = UDim2.new(0.94, 0, 0, 0)
-Shown_Hidden_UI.Size = UDim2.new(0.05, 0, 0.1, 0)
-Shown_Hidden_UI.TextScaled = true
-Shown_Hidden_UI.TextColor3 = Color3.fromRGB(255, 255, 255)
-Shown_Hidden_UI.Font = Enum.Font.Code
-Shown_Hidden_UI.TextSize = 18
-Shown_Hidden_UI.Text = "Shown"
-Shown_Hidden_UI.Visible = true
-
-AddUICorner(DebugConsole)
-AddUICorner(ScriptBox)
-AddUICorner(PressExecute)
-AddUICorner(LoopExecute)
-AddUICorner(LoopDelay)
-AddUICorner(Shown_Hidden_UI)
-
-function ShowUI()
-    DebugConsole.Visible = true
-    ScriptBox.Visible = true
-    PressExecute.Visible = true
-    LoopExecute.Visible = true
-    LoopDelay.Visible = true
-end
-
-function HideUI()
-    DebugConsole.Visible = false
-    ScriptBox.Visible = false
-    PressExecute.Visible = false
-    LoopExecute.Visible = false
-    LoopDelay.Visible = false
-end
-
-function ExecuteScript()
-    local Code = ScriptBox.Text
-    local output = {}
-    local Old_Print = print
-    local function NewPrint(...)
-        table.insert(output, table.concat({...}, " "))
-        Old_Print(...)
+function fill_text_effect(str)
+  if not ui_data.vars.loaded_text then
+    ui_data.vars.loaded_text = true
+    local rslt = code_box.PlaceholderText or "" .. " "
+    for idx = 1, #str do
+      rslt = rslt .. str:sub(idx, idx)
+      code_box.PlaceholderText = rslt
+      task.wait(0.2)
     end
-    print = NewPrint
-    
-    local success, result = pcall(function()
-        loadstring(Code)()
-    end)
-    
-    print = Old_Print
-    
-    if success then
-        DebugConsole.Text = table.concat(output, "\n")
-    else
-        DebugConsole.Text = "Error: " .. result
-    end
+  end
 end
 
-local Show = false
-local IsActivated = false
+function ui_visible(state)
+  local x = state or false
+  debug_console.Visible = x
+  code_box.Visible = x
+  exec_one.Visible = x
+  exec_loop.Visible = x
+  _wait.Visible = x
+end
 
-Shown_Hidden_UI.MouseButton1Click:Connect(function()
-    if Show then
-        Shown_Hidden_UI.Text = "Shown"
-        HideUI()
-        Show = false
-    else
-        Shown_Hidden_UI.Text = "Hide"
-        ShowUI()
-        Show = true
+function run_script()
+  local codes, output, o_print, result
+  codes = code_box.Text
+  output = {}
+  o_print = print
+  result = ""
+  local n_print = function(...)
+    table.insert(output, table.concat({...}, " "))
+    o_print(...)
+  end print = n_print
+  local ss, err = pcall(function()
+    loadstring(ui_data.api_funcs .. "\n" .. codes)()
+  end) print = o_print
+  if ss then result = result .. table.concat(output, "\n")
+  else result = result .. err
+  end debug_console.Text = tostring(result)
+end
+
+tshow_ui.MouseButton1Click:Connect(function()
+  if not ui_data.vars.show then
+    ui_data.vars.show = true
+    tshow_ui.TextColor3 = Color3.new(0, 1, 0)
+  else ui_data.vars.show = false
+    tshow_ui.TextColor3 = Color3.new(1, 1, 1)
+  end ui_visible(ui_data.vars.show) if ui_data.vars.show_api < 5 then
+    ui_data.vars.show_api = ui_data.vars.show_api + 1
+    if ui_data.vars.show_api >= 2 and ui_data.vars.show_api < 4 then
+      fill_text_effect("use built_in_funcs() to get a list of it.")
+    else code_box.PlaceholderText = "..."
     end
+  end
 end)
 
-PressExecute.MouseButton1Click:Connect(ExecuteScript)
+exec_one.MouseButton1Click:Connect(run_script)
 
-LoopDelay.FocusLost:Connect(function(enterPressed)
-    if enterPressed then
-        local new_delay = LoopDelay.Text
-        LoopDelay.Text = ""
-
-        if new_delay == "clear" or new_delay == "Clear" then
-            ScriptBox.Text = ""
-            DebugConsole.Text = ""
-        elseif new_delay == "destroy" or new_delay == "Destroy" then
-            IsActivated = false
-            local ExGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("ExecuteTools")
-            if ExGui then
-                ExGui:Destroy()
-            end
-        else
-            local delayValue = tonumber(new_delay)
-            if delayValue then
-                if delayValue < 0.01 then
-                    default_delay = 0.1
-                else
-                    default_delay = delayValue
-                end
-            end
-        end
-    end
+exec_loop.MouseButton1Click:Connect(function()
+  if not ui_data.vars.looped then
+    ui_data.vars.looped = true
+    exec_loop.TextColor3 = Color3.new(0, 1, 0)
+  else ui_data.vars.looped = false
+    exec_loop.TextColor3 = Color3.new(1, 1, 1)
+  end while ui_data.vars.looped do wait(ui_data.vars.delay)
+    run_script()
+  end
 end)
 
-LoopExecute.MouseButton1Click:Connect(function()
-    if IsActivated then
-        LoopExecute.Text = "Loop Execute"
-        LoopExecute.TextColor3 = Color3.fromRGB(0, 255, 0)
-        IsActivated = false
-    else
-        LoopExecute.Text = "Is Running"
-        LoopExecute.TextColor3 = Color3.fromRGB(255, 0, 0)
-        IsActivated = true
-        
-        while IsActivated do
-            wait(default_delay)
-            ExecuteScript()
-        end
+_wait.FocusLost:Connect(function(ep)
+    if ep and _wait.Text ~= "" then
+      if _wait.Text == "clear" then
+        code_box.Text = ""
+      end if not _wait.Text:match("%d+") then return end
+      ui_data.vars.delay = tonumber(_wait.Text) or 0.001
+      _wait.Text = ""
     end
 end)
-
-ntf("Custom Script Executor!")

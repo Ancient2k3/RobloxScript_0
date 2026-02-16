@@ -51,6 +51,7 @@ function str_changed_to(str, change)
     end
   end if tbox_found ~= nil then
     if d.o ~= nil and d.c ~= nil then
+      tbox_found.Text = tbox_found.Text:gsub("str_changed_to%b()", "") task.wait(0.02)
       tbox_found.Text = tbox_found.Text:gsub(str, change)
     else print("<str_changed_to: string, new_string>") end
   else print("Failed: function error... ")

@@ -14,7 +14,7 @@ local ui_data, funcs = {
     loaded_text = false,
     show_api = 0
   },
-  api_funcs = readfile("HHxScripts/CustomAPI/Scripts.lua")
+  api_funcs = game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/Scripts.lua")
 }, {
   corner = function(t, r) Instance.new("UICorner", t).CornerRadius = UDim.new(r, 0) end
 }

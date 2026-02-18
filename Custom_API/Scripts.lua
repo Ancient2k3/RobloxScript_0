@@ -113,32 +113,37 @@ function find_plr(method)
 end
 
 function loadscriptfrom_url(url, f_site)
-  local x_site = f_site or nil
-  local x_url = url or nil
+  local x_site = f_site
   local s_time = tick()
   local script_str = ""
-  if url == nil then print("<loadscriptfr...: url string, site>")
+  if not url then
+    print("<loadscriptfr...: url string, site>")
     return "missing argument 1: url string"
-  else
-    if not type(url) == "string" then print("<loadscriptfr...: not a string, ...>")
-      return "argument 1: url must be an string"
-    else
-      if not url:match("https://") then print("<loadscriptfr...: invalid, ...>")
-        return "argument 1: invalid"
-      end
-    end
-  end if x_site ~= nil and x_site:lower():match("git") then
+  end
+  if type(url) ~= "string" then
+    print("<loadscriptfr...: not a string, ...>")
+    return "argument 1: url must be a string"
+  end
+  if x_site and type(x_site) == "string" and x_site:lower():match("git") then
     script_str = game:HttpGet("https://raw.githubusercontent.com/" .. url)
   else
+    if not url:match("^https://") then
+      print("<loadscriptfr...: invalid, ...>")
+      return "argument 1: invalid"
+    end
     script_str = game:HttpGet(url)
   end task.wait(0.02)
   local box = in_script_funcs.find_txt_box("loadscriptfrom_url(")
-  if box ~= nil then
+  if box then
     if script_str:lower():match(" 404") then
-      script_str = "Script does not exist... "
+      script_str = "Script does not exist..."
     end
-    box.Text = "-- Loaded Successfully In " .. tostring(tick() - s_time):sub(1, 4) .. " Seconds --\n" .. script_str
-  else print("Failed: function error... ")
+    box.Text = "-- Loaded Successfully In "
+      .. tostring(tick() - s_time):sub(1,4)
+      .. " Seconds --\n"
+      .. script_str
+  else
+    print("Failed: function error...")
   end
 end
 

@@ -4,13 +4,27 @@ zx = game:GetService("Workspace")
 zc = game:GetService("Players")
 zv = game:GetService("CoreGui")
 
-local xz, built_in
+local xz, built_in, in_script_funcs
 xz = zc.LocalPlayer
 built_in = {
-  "tpos() -- 1: vector3, 2: boolean.",
+  "tpos() -- 1: vector3, 2: boolean?.",
   "find_plr() -- 1: \"self\" or \"near\".",
-  "str_changed_to() -- 1: \"string to change\", 2: \"string changed to\".",
-  "model_pos() -- 1: actual model or character model."
+  "str_changed_to() -- 1: \"string to change\"?, 2: \"string changed to\".",
+  "model_pos() -- 1: actual model or character model.",
+  "checkdescendants() -- 1: from path? *example: workspace or workspace.folder_a*",
+  "find_model() -- 1: \"near\" or \"randomize\", 2: from path?",
+  "loadscriptfrom_url() -- 1: url string *raw code*, 2: from site... \"github\"?"
+}
+
+in_script_funcs = {
+  find_txt_box = function(name_func)
+    local found = nil
+    for _, box in next, zv:GetDescendants() do
+      if box:IsA("TextBox") and box.Text:match(name_func) then
+        found = box
+      end
+    end return found
+  end
 }
 
 function tpos(pos, origin)
@@ -25,13 +39,69 @@ function tpos(pos, origin)
   end
 end
 
+function checkdescendants(_path)
+    local ts_path = _path or nil
+    if not ts_path then print("<checkdescendants: path>")
+        return "missing argument 1: path, example workspace"
+    end local function getstructure(obj, indent)
+        local res = "{\n"
+        local children = obj:GetChildren()
+        for i, c in ipairs(children) do
+            local spaces = string.rep("  ", indent)
+            res = res .. spaces .. c.Name .. " = "
+            if #c:GetChildren() > 0 then
+                res = res .. getstructure(c, indent + 1)
+            else
+                res = res .. "{}"
+            end
+            if i < #children then
+                res = res .. ",\n"
+            else
+                res = res .. "\n"
+            end
+        end
+        res = res .. string.rep("  ", indent - 1) .. "}"
+        return res
+    end
+    local str = getstructure(ts_path, 2)
+    return "{\n  " .. ts_path.Name .. " = " .. str .. "\n}"
+end
+
+function find_model(method, _path)
+    local f_method = method or nil
+    local f_path = _path or nil
+    if not f_method then print("<find_model: \"near\" or \"randomize\", path>")
+        return "missing argument 1: aka some method"
+    else if not f_path then print("<find_model: " .. f_method .. ", path?>")
+            return "missing argument 2: path, example workspace"
+        end
+    end if #f_path:GetChildren() > 0 then
+        if f_method == "near" then
+            local d = {n = nil, m = math.huge}
+            for _, mdl in pairs(_path:GetChildren()) do
+                if mdl:IsA("Model") then
+                    local dst = (mdl:GetBoundingBox().Position - xz.Character.HumanoidRootPart.Position).magnitude
+                    if dst < d.m then
+                        d.m = dst
+                        d.n = mdl
+                    end
+                end
+            end return d.n
+        elseif f_method == "randomize" then
+            return f_path:GetChildren()[math.random(1, #f_path:GetChildren())]
+        end
+    else print("Failed: " .. f_path.Name .. " does not exist any child which is a model.")
+        return "no childrens"
+    end
+end
+
 function find_plr(method)
   if method == "self" then return xz
   elseif method == "near" then
   local d = {f = nil, m = math.huge}
   for _, usr in pairs(zc:GetPlayers()) do
     if usr ~= xz and usr and usr.Character and usr.Character:FindFirstChild("HumanoidRootPart") then
-      local dst= (usr.Character.HumanoidRootPart.Position - xz.Character.HumanoidRootPart.Position).magnitude
+      local dst = (usr.Character.HumanoidRootPart.Position - xz.Character.HumanoidRootPart.Position).magnitude
       if dst < d.m then
         d.m = dst
         d.f = usr
@@ -40,6 +110,36 @@ function find_plr(method)
   end if d.f ~= nil then return d.f
     else print("Failed: found " .. #zc:GetPlayers() .. " players are in the server!")
   end else print("<find_plr: set method \"self\" or \"near\".") end
+end
+
+function loadscriptfrom_url(url, f_site)
+  local x_site = f_site or nil
+  local x_url = url or nil
+  local s_time = tick()
+  local script_str = ""
+  if url == nil then print("<loadscriptfr...: url string, site>")
+    return "missing argument 1: url string"
+  else
+    if not type(url) == "string" then print("<loadscriptfr...: not a string, ...>")
+      return "argument 1: url must be an string"
+    else
+      if not url:match("https://") then print("<loadscriptfr...: invalid, ...>")
+        return "argument 1: invalid"
+      end
+    end
+  end if x_site ~= nil and x_site:lower():match("git") then
+    script_str = game:HttpGet("https://raw.githubusercontent.com/" .. url)
+  else
+    script_str = game:HttpGet(url)
+  end task.wait(0.02)
+  local box = in_script_funcs.find_txt_box("loadscriptfrom_url(")
+  if box ~= nil then
+    if script_str:lower():match(" 404") then
+      script_str = "Script does not exist... "
+    end
+    box.Text = "-- Loaded Successfully In " .. tostring(tick() - s_time):sub(1, 4) .. " Seconds --\n" .. script_str
+  else print("Failed: function error... ")
+  end
 end
 
 function str_changed_to(str, change)

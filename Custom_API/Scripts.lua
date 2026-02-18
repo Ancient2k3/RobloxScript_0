@@ -170,6 +170,26 @@ function model_pos(model)
   end
 end
 
+function find_object_by_name(name, class)
+  if not name then print("<find_object_by_name: name, class?>")
+    return "missing argument 1: object name"
+  end local found = nil
+  for _, obj in pairs(game:GetDescendants()) do
+    if obj.Name == name then
+      if class then
+        if obj:IsA(class) then found = obj
+          break
+        end
+      else found = obj
+        break
+      end
+    end
+  end if found then return found
+  else print("Failed: no object named \"" .. name .. "\" was found.")
+    return "object not found"
+  end
+end
+
 function built_in_funcs()
   local tbox_found = nil
   local text_rs = ""

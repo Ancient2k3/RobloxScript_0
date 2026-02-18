@@ -13,7 +13,8 @@ built_in = {
   "model_pos() -- 1: actual model or character model.",
   "checkdescendants() -- 1: from path? *example: workspace or workspace.folder_a*",
   "find_model() -- 1: \"near\" or \"randomize\", 2: from path?",
-  "loadscriptfrom_url() -- 1: url string *raw code*, 2: from site... \"github\"?"
+  "loadscriptfrom_url() -- 1: url string *raw code*, 2: from site... \"github\"?",
+  "find_object_by_name() -- 1: object name?, 2: which specific class it's, example \"Part\"?"
 }
 
 in_script_funcs = {

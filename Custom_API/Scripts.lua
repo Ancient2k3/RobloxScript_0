@@ -134,7 +134,7 @@ function loadscriptfrom_url(url, f_site)
     end
     script_str = game:HttpGet(url)
   end task.wait(0.02)
-  local box = in_script_funcs.find_txt_box("loadscriptfrom_url(")
+  local box = in_script_funcs.find_txt_box("loadscriptfrom_url%(")
   if box then
     if script_str:lower():match(" 404") then
       script_str = "Script does not exist..."

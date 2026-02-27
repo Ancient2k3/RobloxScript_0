@@ -1,1 +1,21 @@
-return {}
+return {
+  ["Script"] = "📃",
+  ["LocalScript"] = "📄",
+  ["ModuleScript"] = "📑",
+  ["Part"] = "🧩",
+  ["BasePart"] = "🧩",
+  ["MeshPart"] = "🗿",
+  ["Model"] = "📦",
+  ["Folder"] = "📁",
+  ["Tool"] = "🔧",
+  ["Workspace"] = "🌏",
+  ["Players"] = "👥",
+  ["Player"] = "👤",
+  ["Animation"] = "🎞️",
+  ["Camera"] = "📷",
+  ["ScreenGui"] = "🖥️",
+  ["Frame"] = "📼",
+  ["Sound"] = "🎶",
+  ["Handles"] = "🎮",
+  ["Lighting"] = "💡"
+}

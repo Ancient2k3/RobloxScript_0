@@ -22,8 +22,8 @@ local ui_data, funcs = {
     idx_count = 0,
     idx_child = 0
   },
-  api_funcs = readfile("HHxScripts/TestAPI.lua"),
-  for_games_api = ""
+  api_funcs = game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/Scripts.lua"),
+  for_games_api = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/MatchedGames.lua"))()
 }, {
   corner = function(t, r) Instance.new("UICorner", t).CornerRadius = UDim.new(r, 0) end,
   notify = function(str) starterui:SetCore("SendNotification", {Title = "Scripts Editor", Text = str, Duration = 1.25,}) end

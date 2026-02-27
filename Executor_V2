@@ -12,16 +12,55 @@ local ui_data, funcs = {
   name = "CodesEditor_xScripts",
   vars = {
     delay = 0.001,
+    script_version = 2.01,
     show = false,
     looped = false,
     loaded_text = false,
-    show_api = 0
+    dig_into = false,
+    recall = false,
+    show_api = 0,
+    idx_count = 0,
+    idx_child = 0
   },
-  api_funcs = game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/Scripts.lua")
+  api_funcs = readfile("HHxScripts/TestAPI.lua"),
+  for_games_api = ""
 }, {
   corner = function(t, r) Instance.new("UICorner", t).CornerRadius = UDim.new(r, 0) end,
   notify = function(str) starterui:SetCore("SendNotification", {Title = "Scripts Editor", Text = str, Duration = 1.25,}) end
 }
+
+local srvs, ignore_inst = {
+  ["Workspace"] = ws,
+  ["Players"] = plrs,
+  ["ReplicatedStorage"] = game:GetService("ReplicatedStorage"),
+  ["CoreGui"] = core
+}, {}
+
+local inst_icons = {
+  ["Script"] = "📃",
+  ["LocalScript"] = "📄",
+  ["ModuleScript"] = "📑",
+  ["Part"] = "🧩",
+  ["BasePart"] = "🧩",
+  ["MeshPart"] = "🗿",
+  ["Model"] = "📦",
+  ["Folder"] = "📁",
+  ["Tool"] = "🔧",
+  ["Workspace"] = "🌏",
+  ["Players"] = "👥",
+  ["Player"] = "👤",
+  ["Animation"] = "🎞️",
+  ["Camera"] = "📷",
+  ["ScreenGui"] = "🖥️",
+  ["Frame"] = "📼",
+  ["Sound"] = "🎶",
+  ["Handles"] = "🎮",
+  ["Lighting"] = "💡"
+}
+
+for ignore_name, _ in next, srvs do
+  table.insert(ignore_inst, ignore_name:lower())
+end
 
 if core:FindFirstChild(ui_data.name) then
   core[ui_data.name]:FindFirstChildOfClass("ScreenGui"):Destroy()
@@ -33,24 +72,35 @@ end
 repeat task.wait()
 until type(ui_data.api_funcs) == "string" and ui_data.api_funcs ~= ""
 
-local screenui, debug_console, code_box, exec_one, exec_loop, tshow_ui, _wait
+-- Saved Scripts --
+if not isfolder("HHxScripts/Storage") then
+  makefolder("HHxScripts/Storage")
+  if not isfolder("HHxScripts/Storage/Scripts") then
+    makefolder("HHxScripts/Storage/Scripts")
+  end
+end
+-- End --
+
+local screenui, debug_console, code_box, exec_one, exec_loop, tshow_ui, _wait, _listedAPIs, _selectedAPI, _openList
+local credit_label, explorer_scroll
 screenui = Instance.new("ScreenGui", core[ui_data.name])
 screenui.Name = "ExecuteTools"
 
 debug_console = Instance.new("TextBox", screenui)
 debug_console.Name = "Codes-Output"
-debug_console.BackgroundTransparency = 0.5
-debug_console.BackgroundColor3 = Color3.new(0, 0, 0)
+debug_console.BackgroundTransparency = 0.2
+debug_console.BackgroundColor3 = Color3.new(1, 1, 0)
 debug_console.Position = UDim2.new(0.3, 0, 0.145, 0)
 debug_console.Size = UDim2.new(0.4, 0, 0.1, 0)
 debug_console.TextScaled = true
 debug_console.TextSize = 12
-debug_console.TextColor3 = Color3.new(1, 1, 1)
+debug_console.TextColor3 = Color3.new(0, 0, 0)
 debug_console.TextWrapped = true
 debug_console.MultiLine = true
-debug_console.Font = Enum.Font.Code
+debug_console.Font = Enum.Font.Arcade
 debug_console.Text = ""
-debug_console.PlaceholderText = "< result >"
+debug_console.PlaceholderText = "< Output: >"
+debug_console.PlaceholderColor3 = Color3.new(0, 0, 0)
 debug_console.ClearTextOnFocus = false
 debug_console.Visible = false
 funcs.corner(debug_console, 0.1)
@@ -75,84 +125,223 @@ code_box.TextYAlignment = "Top"
 code_box.Visible = false
 funcs.corner(code_box, 0.025)
 
+credit_label = Instance.new("TextLabel", screenui)
+credit_label.Name = "OWNER:HHxScripts"
+credit_label.BackgroundTransparency = 0.2
+credit_label.BackgroundColor3 = Color3.new(1, 1, 0)
+credit_label.Position = UDim2.new(0.598, 0, 0.406, 0)
+credit_label.Size = UDim2.new(0.233, 0, 0.05, 0)
+credit_label.Rotation = 90
+credit_label.TextScaled = false
+credit_label.TextSize = 12
+credit_label.TextColor3 = Color3.new(1, 1, 1)
+credit_label.Font = Enum.Font.Arcade
+credit_label.Text = "[ DEV BY HHxSCRIPTS ]"
+credit_label.Visible = false
+funcs.corner(credit_label, 0.15)
+
 exec_one = Instance.new("TextButton", screenui)
 exec_one.Name = "R1Times"
-exec_one.BackgroundTransparency = 0.5
-exec_one.BackgroundColor3 = Color3.new(0, 0, 0)
+exec_one.BackgroundTransparency = 0.2
+exec_one.BackgroundColor3 = Color3.new(1, 1, 0)
 exec_one.Position = UDim2.new(0.3, 0, 0.655, 0)
 exec_one.Size = UDim2.new(0.15, 0, 0.06, 0)
 exec_one.TextScaled = true
 exec_one.TextSize = 12
 exec_one.TextColor3 = Color3.new(1, 1, 1)
-exec_one.Font = Enum.Font.Code
-exec_one.Text = "Execute"
+exec_one.Font = Enum.Font.Arcade
+exec_one.Text = "RUN"
 exec_one.Visible = false
 funcs.corner(exec_one, 0.095)
 
 exec_loop = Instance.new("TextButton", screenui)
 exec_loop.Name = "R2Times"
-exec_loop.BackgroundTransparency = 0.5
-exec_loop.BackgroundColor3 = Color3.new(0, 0, 0)
+exec_loop.BackgroundTransparency = 0.2
+exec_loop.BackgroundColor3 = Color3.new(1, 1, 0)
 exec_loop.Position = UDim2.new(0.452, 0, 0.655, 0)
 exec_loop.Size = UDim2.new(0.15, 0, 0.06, 0)
 exec_loop.TextScaled = true
 exec_loop.TextSize = 12
 exec_loop.TextColor3 = Color3.new(1, 1, 1)
-exec_loop.Font = Enum.Font.Code
-exec_loop.Text = "Loop Execute"
+exec_loop.Font = Enum.Font.Arcade
+exec_loop.Text = "MULTI-RUN"
 exec_loop.Visible = false
 funcs.corner(exec_loop, 0.095)
 
 _wait = Instance.new("TextBox", screenui)
 _wait.Name = "Set_Delay"
-_wait.BackgroundTransparency = 0.5
-_wait.BackgroundColor3 = Color3.new(0, 0, 0)
+_wait.BackgroundTransparency = 0.2
+_wait.BackgroundColor3 = Color3.new(1, 1, 0)
 _wait.Position = UDim2.new(0.65, 0, 0.655, 0)
 _wait.Size = UDim2.new(0.05, 0, 0.06, 0)
 _wait.TextScaled = true
 _wait.TextSize = 12
 _wait.TextColor3 = Color3.new(1, 1, 1)
-_wait.Font = Enum.Font.Code
+_wait.Font = Enum.Font.Arcade
 _wait.Text = ""
 _wait.ClearTextOnFocus = true
-_wait.PlaceholderText = "int"
+_wait.PlaceholderText = "WAIT"
+_wait.PlaceholderColor3 = Color3.new(0, 0, 0)
 _wait.Visible = false
 funcs.corner(_wait, 0.095)
 
+explorer_scroll = Instance.new("ScrollingFrame", screenui)
+explorer_scroll.Name = "Explorer:Inst_List"
+explorer_scroll.BackgroundTransparency = 0.5
+explorer_scroll.BackgroundColor3 = Color3.new(0, 0, 0)
+explorer_scroll.BorderColor3 = Color3.new(1, 1, 1)
+explorer_scroll.Position = UDim2.new(0.404, 0, 0.145, 0)
+explorer_scroll.Size = UDim2.new(0.297, 0, 0.505, 0)
+explorer_scroll.CanvasSize = UDim2.new(0, 0, 20, 0)
+explorer_scroll.ScrollBarThickness = 1
+explorer_scroll.Visible = false
+funcs.corner(explorer_scroll, 0.02)
+
+_listedAPIs = Instance.new("ScrollingFrame", screenui)
+_listedAPIs.Name = "APIs-List"
+_listedAPIs.BackgroundTransparency = 0.5
+_listedAPIs.BackgroundColor3 = Color3.new(0, 0, 0)
+_listedAPIs.BorderColor3 = Color3.new(1, 1, 1)
+_listedAPIs.Position = UDim2.new(0.3, 0, 0.145, 0)
+_listedAPIs.Size = UDim2.new(0.4, 0, 0.5, 0)
+_listedAPIs.CanvasSize = UDim2.new(0, 0, 20, 0)
+_listedAPIs.ScrollBarThickness = 1
+_listedAPIs.Visible = false
+funcs.corner(_listedAPIs, 0.02)
+
+_selectedAPI = Instance.new("TextButton", screenui)
+_selectedAPI.Name = "API:Info_Label"
+_selectedAPI.BackgroundTransparency = 0.5
+_selectedAPI.BackgroundColor3 = Color3.new(0, 0, 0)
+_selectedAPI.Position = UDim2.new(0.3, 0, 0.45, 0)
+_selectedAPI.Size = UDim2.new(0.4, 0, 0.2, 0)
+_selectedAPI.TextScaled = false
+_selectedAPI.TextWrapped = true
+_selectedAPI.TextSize = 12
+_selectedAPI.TextColor3 = Color3.new(1, 1, 1)
+_selectedAPI.Font = Enum.Font.Code
+_selectedAPI.Text = "[...]"
+_selectedAPI.TextXAlignment = "Left"
+_selectedAPI.TextYAlignment = "Top"
+_selectedAPI.Visible = false
+funcs.corner(_selectedAPI, 0.02)
+
 tshow_ui = Instance.new("TextButton", screenui)
 tshow_ui.Name = "Executor-Enable"
-tshow_ui.BackgroundTransparency = 0.5
-tshow_ui.BackgroundColor3 = Color3.new(0, 0, 0)
+tshow_ui.BackgroundTransparency = 0.2
+tshow_ui.BackgroundColor3 = Color3.new(1, 1, 0)
 tshow_ui.Position = UDim2.new(0.94, 0, 0, 0)
 tshow_ui.Size = UDim2.new(0.05, 0, 0.1, 0)
 tshow_ui.TextScaled = true
 tshow_ui.TextSize = 12
+tshow_ui.TextStrokeTransparency = 0.2
 tshow_ui.TextColor3 = Color3.new(1, 1, 1)
-tshow_ui.Font = Enum.Font.Code
+tshow_ui.Font = Enum.Font.Arcade
 tshow_ui.Text = "XScript"
 tshow_ui.Visible = true
 funcs.corner(tshow_ui, 0.15)
 
-function fill_text_effect(str)
+_openList = Instance.new("TextButton", screenui)
+_openList.Name = "Built-In:Listed_Enable"
+_openList.BackgroundTransparency = 0.2
+_openList.BackgroundColor3 = Color3.new(1, 1, 0)
+_openList.Position = UDim2.new(0.94, 0, 0.12, 0)
+_openList.Size = UDim2.new(0.05, 0, 0.1, 0)
+_openList.TextScaled = true
+_openList.TextSize = 12
+_openList.TextStrokeTransparency = 0.2
+_openList.TextColor3 = Color3.new(1, 1, 1)
+_openList.Font = Enum.Font.Arcade
+_openList.Text = "Built-In"
+_openList.Visible = false
+funcs.corner(_openList, 0.15)
+
+function fill_text_effect(subject, sub_prop, str)
   if not ui_data.vars.loaded_text then
     ui_data.vars.loaded_text = true
-    local rslt = code_box.PlaceholderText or "" .. " "
+    local rslt = (subject[sub_prop] or "") .. " "
     for idx = 1, #str do
       rslt = rslt .. str:sub(idx, idx)
-      code_box.PlaceholderText = rslt
-      task.wait(0.2)
-    end
+      subject[sub_prop] = rslt
+      task.wait(0.05)
+    end --ui_data.vars.loaded_text = false
   end
 end
 
-function ui_visible(state)
+function slowly_filling_text(str)
+  local rslt = ""
+  ui_data.vars.recall = true task.wait(0.5)
+  ui_data.vars.recall = false
+  for idx = 1, #str do
+    rslt = rslt .. str:sub(idx, idx)
+    _selectedAPI.Text = "[ " .. rslt .. " ]"
+    if ui_data.vars.recall then
+      _selectedAPI.Text = "[...]"
+      break
+    end task.wait(0.05)
+  end
+end
+
+function str_convert(str)
+  if str == "" then return {"", {["Chả có gì hết..."] = "Trò chơi này hiện tại tôi chưa có hỗ trợ hàm dựng sẵn..."}} end
+  local x_codes = string.split(str, "-- APIs Listed --\n")
+  local y_info = string.split(x_codes[2], "@\n")
+  local z_listed = {}
+  for idx = 1, #y_info do
+    local witness = string.split(y_info[idx], "~")
+    z_listed[witness[1]] = witness[2]
+  end
+  return {x_codes[1], z_listed}
+end
+
+function ui_visible(state, int)
   local x = state or false
+  local zp = int or 0
   debug_console.Visible = x
   code_box.Visible = x
-  exec_one.Visible = x
-  exec_loop.Visible = x
-  _wait.Visible = x
+  if zp <= 0 then
+    exec_one.Visible = x
+    exec_loop.Visible = x
+    credit_label.Visible = x
+    _wait.Visible = x
+    _openList.Visible = x
+  end
 end
+
+function explorer_reset_state()
+  explorer_scroll.Visible = false
+  debug_console.Size = UDim2.new(0.4, 0, 0.1, 0)
+  code_box.Size = UDim2.new(0.4, 0, 0.4, 0)
+  _listedAPIs.Size = UDim2.new(0.4, 0, 0.5, 0)
+end
+
+function explorer_visible()
+  local current_state = explorer_scroll.Visible
+  if not current_state then
+    if debug_console.Visible then
+      debug_console.Size = UDim2.new(0.102, 0, 0.1, 0)
+      code_box.Size = UDim2.new(0.102, 0, 0.4, 0)
+    elseif _listedAPIs.Visible then
+      _listedAPIs.Size = UDim2.new(0.102, 0, 0.5, 0)
+    end explorer_scroll.Visible = true
+  else
+    explorer_reset_state()
+  end
+end
+
+function api_list_visible()
+  local current_state = _listedAPIs.Visible
+  if not current_state then
+    _listedAPIs.Visible = true
+  else
+    _listedAPIs.Visible = false
+  end ui_visible(current_state, 1)
+end
+
+local bif = {
+  def = str_convert(ui_data.api_funcs),
+  exp = str_convert(ui_data.for_games_api)
+}
 
 function run_script()
   local codes, output, o_print, result
@@ -165,11 +354,244 @@ function run_script()
     o_print(...)
   end print = n_print
   local ss, err = pcall(function()
-    loadstring(ui_data.api_funcs .. "\n" .. codes)()
+    loadstring(bif.def[1] .. "\n" .. bif.exp[1] .. "\n" .. codes)()
   end) print = o_print
   if ss then result = result .. table.concat(output, "\n")
   else result = result .. err
   end debug_console.Text = tostring(result)
+end
+
+local pos_index = 0
+local explorer_btn = 0
+
+function add_display_label(str)
+  local holder = Instance.new("TextLabel", _listedAPIs)
+  holder.Name = "DP:" .. tostring(ui_data.vars.idx_count)
+  holder.BackgroundTransparency = 0.1
+  holder.BackgroundColor3 = Color3.new(1, 1, 0)
+  holder.BorderColor3 = Color3.new(1, 1, 1)
+  holder.BorderSizePixel = 1
+  holder.Position = UDim2.new(0, 0, pos_index, 0)
+  holder.Size = UDim2.new(1, 0, 0.003, 0)
+  holder.TextScaled = true
+  holder.TextSize = 8
+  holder.TextColor3 = Color3.new(0, 0, 0)
+  holder.Text = str
+  holder.Font = Enum.Font.Arcade
+  holder.Visible = true
+  pos_index = pos_index + 0.0038
+end
+
+function add_info_labels(t)
+  if type(t) ~= "table" then funcs.notify("Script hiện đang gặp lỗi... !") return end
+  for name, desc in pairs(t) do ui_data.vars.idx_count = ui_data.vars.idx_count + 1
+    local holder = Instance.new("TextLabel", _listedAPIs)
+    holder.Name = "RE:" .. tostring(ui_data.vars.idx_count) .. "_BuiltInFUNC"
+    holder.BackgroundTransparency = 1
+    holder.BackgroundColor3 = Color3.new(0, 0, 0)
+    holder.Position = UDim2.new(0, 0, pos_index, 0)
+    holder.Size = UDim2.new(1, 0, 0.003, 0)
+    holder.TextScaled = false
+    holder.TextSize = 14
+    holder.TextColor3 = Color3.new(1, 1, 1)
+    holder.Text = name
+    holder.TextXAlignment = "Left"
+    holder.TextYAlignment = "Top"
+    holder.Font = Enum.Font.Code
+    holder.Visible = true
+    -- Show Info Stuff --
+    local info_1 = Instance.new("TextButton", holder)
+    info_1.Name = "INFO-FOR:" .. holder.Name
+    info_1.BackgroundTransparency = 0.2
+    info_1.BackgroundColor3 = Color3.new(1, 1, 0)
+    info_1.BorderColor3 = Color3.new(1, 1, 1)
+    info_1.Position = UDim2.new(0.89, 0, 0.02, 0)
+    info_1.Size = UDim2.new(0.098, 0, 0.98, 0)
+    info_1.TextScaled = false
+    info_1.TextWrapped = true
+    info_1.TextSize = 9
+    info_1.TextColor3 = Color3.new(1, 1, 1)
+    info_1.TextStrokeColor3 = Color3.new(1, 0, 0)
+    info_1.Text = "Info.. ?"
+    info_1.Font = Enum.Font.Arcade
+    info_1.Visible = true
+    -- For Decoration --
+    local decor_1 = Instance.new("TextLabel", holder)
+    decor_1.Name = "Decoration-On:" .. holder.Name
+    decor_1.BackgroundTransparency = 0.2
+    decor_1.BackgroundColor3 = Color3.new(1, 1, 0)
+    decor_1.BorderColor3 = Color3.new(1, 1, 0)
+    decor_1.Position = UDim2.new(0, 0, 0.99, 0)
+    decor_1.Size = UDim2.new(0.88, 0, 0.003, 0)
+    decor_1.TextScaled = false
+    decor_1.TextSize = 9
+    decor_1.TextColor3 = Color3.new(1, 1, 1)
+    decor_1.Text = ""
+    decor_1.Font = Enum.Font.Code
+    decor_1.Visible = true
+    pos_index = pos_index + 0.0038
+    -- Connections --
+    info_1.MouseButton1Click:Connect(function()
+      _listedAPIs.Size = UDim2.new(0.4, 0, 0.3, 0)
+      if not _selectedAPI.Visible then
+        _selectedAPI.Visible = true
+      end slowly_filling_text(desc)
+    end)
+  end
+end
+
+function clear_inst_label()
+  for _, inst in pairs(explorer_scroll:GetChildren()) do
+    if inst:IsA("TextLabel") then
+      inst:Destroy()
+    end
+  end
+end
+
+function new_table_inst(_path)
+  local childs = {}
+  if #_path:GetChildren() == 0 then return childs end
+  for _, inst in pairs(_path:GetChildren()) do
+    local selected_icon = inst_icons[inst.ClassName] or "?"
+    childs[inst.Name .. " - " .. selected_icon] = inst
+  end return childs
+end
+
+function previous_table_inst(_path)
+  local previous_childs = {}
+  local inst_parent = _path.Parent
+  for _, inst in pairs(inst_parent.Parent:GetChildren()) do
+    local selected_icon = inst_icons[inst.ClassName] or "?"
+    previous_childs[inst.Name .. " - " .. selected_icon] = inst
+  end return previous_childs
+end
+
+function add_inst_label(t)
+  if type(t) ~= "table" then funcs.notify("Script hiện đang gặp lỗi... !") return end
+  for name_inst, _path in pairs(t) do ui_data.vars.idx_child = ui_data.vars.idx_child + 1
+    local path_childs = #_path:GetChildren()
+    local info_0, info_1, info_2
+    local need_return_yet = nil
+    local holder = Instance.new("TextLabel", explorer_scroll)
+    holder.Name = "RE:" .. tostring(ui_data.vars.idx_child) .. "_InstSpec"
+    holder.BackgroundTransparency = 1
+    holder.BackgroundColor3 = Color3.new(0, 0, 0)
+    holder.Position = UDim2.new(0, 0, explorer_btn, 0)
+    holder.Size = UDim2.new(1, 0, 0.003, 0)
+    holder.TextScaled = false
+    holder.TextSize = 14
+    holder.TextColor3 = Color3.new(1, 1, 1)
+    holder.Text = name_inst
+    holder.TextXAlignment = "Left"
+    holder.TextYAlignment = "Top"
+    holder.Font = Enum.Font.Code
+    holder.Visible = true
+    -- Show Info Stuff --
+    if path_childs ~= 0 then
+      info_1 = Instance.new("TextButton", holder)
+      info_1.Name = "DIG-IN:" .. holder.Name
+      info_1.BackgroundTransparency = 0.2
+      info_1.BackgroundColor3 = Color3.new(1, 1, 0)
+      info_1.BorderColor3 = Color3.new(1, 1, 1)
+      info_1.Position = UDim2.new(0.89, 0, 0.02, 0)
+      info_1.Size = UDim2.new(0.098, 0, 0.98, 0)
+      info_1.TextScaled = false
+      info_1.TextWrapped = true
+      info_1.TextSize = 9
+      info_1.TextColor3 = Color3.new(1, 1, 1)
+      info_1.TextStrokeColor3 = Color3.new(1, 0, 0)
+      info_1.Text = ">"
+      info_1.Font = Enum.Font.Arcade
+      info_1.Visible = true
+      if not table.find(ignore_inst, _path.Name:lower()) then
+        info_0 = Instance.new("TextButton", holder)
+        info_0.Name = "GO-BACK:" .. holder.Name
+        info_0.BackgroundTransparency = 0.2
+        info_0.BackgroundColor3 = Color3.new(1, 1, 0)
+        info_0.BorderColor3 = Color3.new(1, 1, 1)
+        info_0.Position = UDim2.new(0.779, 0, 0.02, 0)
+        info_0.Size = UDim2.new(0.098, 0, 0.98, 0)
+        info_0.TextScaled = false
+        info_0.TextWrapped = true
+        info_0.TextSize = 9
+        info_0.TextColor3 = Color3.new(1, 1, 1)
+        info_0.TextStrokeColor3 = Color3.new(1, 0, 0)
+        info_0.Text = "<"
+        info_0.Font = Enum.Font.Arcade
+        info_0.Visible = true
+        need_return_yet = info_0
+        -- Return Button --
+        info_0.MouseButton1Click:Connect(function()
+          if not ui_data.vars.dig_into then ui_data.vars.dig_into = true
+            clear_inst_label() task.wait(0.02)
+            explorer_btn = 0 task.wait(0.02)
+            add_inst_label(previous_table_inst(_path))
+            ui_data.vars.dig_into = false
+          else
+            funcs.notify("Xin đợi một chút để load lại các childrens cũ... ")
+          end
+        end)
+      end
+    else
+      info_2 = Instance.new("TextButton", holder)
+      info_2.Name = "RETURN:" .. holder.Name
+      info_2.BackgroundTransparency = 0.2
+      info_2.BackgroundColor3 = Color3.new(1, 1, 0)
+      info_2.BorderColor3 = Color3.new(1, 1, 1)
+      info_2.Position = UDim2.new(0.89, 0, 0.02, 0)
+      info_2.Size = UDim2.new(0.098, 0, 0.98, 0)
+      info_2.TextScaled = false
+      info_2.TextWrapped = true
+      info_2.TextSize = 9
+      info_2.TextColor3 = Color3.new(1, 1, 1)
+      info_2.TextStrokeColor3 = Color3.new(1, 0, 0)
+      info_2.Text = "<"
+      info_2.Font = Enum.Font.Arcade
+      info_2.Visible = true
+    end
+    -- For Decoration --
+    local decor_1 = Instance.new("TextLabel", holder)
+    decor_1.Name = "Decoration-On:" .. holder.Name
+    decor_1.BackgroundTransparency = 0.2
+    decor_1.BackgroundColor3 = Color3.new(1, 1, 0)
+    decor_1.BorderColor3 = Color3.new(1, 1, 0)
+    decor_1.Position = UDim2.new(0, 0, 0.99, 0)
+    decor_1.Size = UDim2.new(0.88, 0, 0.003, 0)
+    decor_1.TextScaled = false
+    decor_1.TextSize = 9
+    decor_1.TextColor3 = Color3.new(1, 1, 1)
+    decor_1.Text = ""
+    decor_1.Font = Enum.Font.Code
+    decor_1.Visible = true
+    explorer_btn = explorer_btn + 0.0038
+    -- Connections --
+    if need_return_yet ~= nil then
+      decor_1.Size = UDim2.new(0.765, 0, 0.003, 0)
+    end
+    if path_childs ~= 0 then
+      info_1.MouseButton1Click:Connect(function()
+        if not ui_data.vars.dig_into then ui_data.vars.dig_into = true
+          clear_inst_label() task.wait(0.02)
+          explorer_btn = 0 task.wait(0.02)
+          add_inst_label(new_table_inst(_path))
+          ui_data.vars.dig_into = false
+        else
+          funcs.notify("Xin đợi một chút để load hết các childrens... \n Trước khi tiếp tục.")
+        end
+      end)
+    else
+      info_2.MouseButton1Click:Connect(function()
+        if not ui_data.vars.dig_into then ui_data.vars.dig_into = true
+          clear_inst_label() task.wait(0.02)
+          explorer_btn = 0 task.wait(0.02)
+          add_inst_label(previous_table_inst(_path))
+          ui_data.vars.dig_into = false
+        else
+          funcs.notify("Xin đợi một chút để load lại các childrens trước... ")
+        end
+      end)
+    end
+  end
 end
 
 tshow_ui.MouseButton1Click:Connect(function()
@@ -178,17 +600,33 @@ tshow_ui.MouseButton1Click:Connect(function()
     tshow_ui.TextColor3 = Color3.new(0, 1, 0)
   else ui_data.vars.show = false
     tshow_ui.TextColor3 = Color3.new(1, 1, 1)
+    if _listedAPIs.Visible then
+      _listedAPIs.Visible = false
+      _selectedAPI.Visible = false
+      if _listedAPIs.Size == UDim2.new(0.4, 0, 0.3, 0) then
+        _listedAPIs.Size = UDim2.new(0.4, 0, 0.5, 0)
+      end
+    end explorer_reset_state()
   end ui_visible(ui_data.vars.show) if ui_data.vars.show_api < 5 then
     ui_data.vars.show_api = ui_data.vars.show_api + 1
-    if ui_data.vars.show_api >= 2 and ui_data.vars.show_api < 4 then
-      fill_text_effect("use built_in_funcs() to get a list of it.")
+    if ui_data.vars.show_api >= 2 and ui_data.vars.show_api < 20 then
+      fill_text_effect(code_box, "PlaceholderText", " Phiên bản: " .. tostring(ui_data.vars.script_version))
     else code_box.PlaceholderText = "..."
     end
   end
 end)
+_openList.MouseButton1Click:Connect(api_list_visible)
 
-exec_one.MouseButton1Click:Connect(run_script)
-
+exec_one.MouseButton1Click:Connect(function()
+  exec_one.TextColor3 = Color3.new(0, 1, 0) task.wait(0.02)
+  exec_one.TextColor3 = Color3.new(1, 1, 1) run_script()
+end)
+_selectedAPI.MouseButton1Click:Connect(function()
+  _selectedAPI.Visible = false
+  if _listedAPIs.Size == UDim2.new(0.4, 0, 0.3, 0) then
+    _listedAPIs.Size = UDim2.new(0.4, 0, 0.5, 0)
+  end _selectedAPI.Text = "[...]"
+end)
 exec_loop.MouseButton1Click:Connect(function()
   if not ui_data.vars.looped then
     ui_data.vars.looped = true
@@ -205,12 +643,26 @@ _wait.FocusLost:Connect(function(ep)
       if _wait.Text == "clear" then
         code_box.Text = ""
         funcs.notify("Đã dọn dẹp toàn bộ codes... !")
-        task.wait(0.02)
-        _wait.Text = ""
+        task.wait(0.02) _wait.Text = ""
+      elseif _wait.Text == "api" then
+        api_list_visible()
+        funcs.notify("Bảng hàm dựng sẵn... !")
+        task.wait(0.02) _wait.Text = ""
+      elseif _wait.Text == "explorer" then
+        explorer_visible()
+        funcs.notify("Bảng Explorer... !")
+        task.wait(0.02) _wait.Text = ""
       end if not _wait.Text:match("%d+") then return end
       ui_data.vars.delay = tonumber(_wait.Text) or 0.001
       _wait.Text = ""
     end
 end)
+
+add_display_label("Hàm có sẵn: Mặc định.")
+add_info_labels(bif.def[2])
+add_display_label("Hàm hỗ trợ: Tùy trò chơi.")
+add_info_labels(bif.exp[2])
+add_display_label("Phiên bản: " .. tostring(ui_data.vars.script_version))
+add_inst_label(srvs)
 
 funcs.notify("Codes Editor by HoangHienXScripts.")

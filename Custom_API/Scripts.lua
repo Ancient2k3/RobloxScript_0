@@ -206,4 +206,13 @@ function built_in_funcs()
   end
 end
 
--- Hehe --
+-- APIs Listed --
+tpos()~Teleport user to specific position then return to origin... <argument: #1 position : vector3, #2 reverse to origin : boolean>@
+find_plr()~Return specific player... <argument: #1 "near" or "self" : string>@
+str_changed_to()~Change a string inside codes editor to something else... <argument: #1 current_string : string, #2 new_string : string>@
+model_pos()~Return position of a model... <argument: #1 model or user-character : instance>@
+checkdescendants()~Return string structured of path childrens... <argument: #1 path : instance>@
+find_model()~Return specific model from path... <argument: #1 "near" or "randomize" : string, #2 path : instance>@
+loadscriptfrom_url()~Load source into codes editor from url, site... <argument: #1 url : string, #2 "git" or nil : string> if having argument 2 "git" then argument 1 can start from user-name to main-source.@
+find_object_by_name()~Return object by name and which class... <argument: #1 name of an object : string, #2 class name : string>@
+built_in_funcs()~<OLD VERSION FUNC> Load built in func tutorial into codes editor... <void>@

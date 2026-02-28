@@ -1,6 +1,7 @@
 local lists = {
   [994732206] = "BloxFruits",
-  [3754482795] = "ElementalTycoons"
+  [3754482795] = "ElementalTycoons",
+  [3808081382] = "TSB"
 }
 
 local url = lists[game.GameId] or ""

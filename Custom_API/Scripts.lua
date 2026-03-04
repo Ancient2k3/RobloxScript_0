@@ -191,6 +191,13 @@ function find_object_by_name(name, class)
   end
 end
 
+function play_sound(name)
+  local inGame_Folder = zx:FindFirstChild("HHxScripts")
+  if inGame_Folder then
+    inGame_Folder.Assets.Audios[name]:Play()
+  end
+end
+
 function built_in_funcs()
   local tbox_found = nil
   local text_rs = ""
@@ -216,3 +223,4 @@ find_model()~Return specific model from path... <argument: #1 "near" or "randomi
 loadscriptfrom_url()~Load source into codes editor from url, site... <argument: #1 url : string, #2 "git" or nil : string> if having argument 2 "git" then argument 1 can start from user-name to main-source.@
 find_object_by_name()~Return object by name and which class... <argument: #1 name of an object : string, #2 class name : string>@
 built_in_funcs()~<OLD VERSION FUNC> Load built in func tutorial into codes editor... <void>@
+play_sound()~Playing a sound-track inside my own folder created on games... <argument: #1 sound name : string>@

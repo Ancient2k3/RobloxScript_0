@@ -193,8 +193,12 @@ end
 
 function play_sound(name)
   local inGame_Folder = zx:FindFirstChild("HHxScripts")
+  local sound = nil
   if inGame_Folder then
-    inGame_Folder.Assets.Audios[name]:Play()
+    sound = inGame_Folder.Assets.Audios:FindFirstChild(name)
+  end if sound then return sound else
+    print("Could not find: " .. name .. " sound obj... ")
+    return "Mismatch..."
   end
 end
 

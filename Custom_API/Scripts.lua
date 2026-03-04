@@ -14,7 +14,8 @@ built_in = {
   "checkdescendants() -- 1: from path? *example: workspace or workspace.folder_a*",
   "find_model() -- 1: \"near\" or \"randomize\", 2: from path?",
   "loadscriptfrom_url() -- 1: url string *raw code*, 2: from site... \"github\"?",
-  "find_object_by_name() -- 1: object name?, 2: which specific class it's, example \"Part\"?"
+  "find_object_by_name() -- 1: object name?, 2: which specific class it's, example \"Part\"?",
+  "find_sound() -- 1: sound name?"
 }
 
 in_script_funcs = {
@@ -27,6 +28,13 @@ in_script_funcs = {
     end return found
   end
 }
+
+local mt_table = {}
+mt_table.__index = mt_table
+
+function mt_table:Play()
+  print("Play? what play.... i could not find your sound-track name!")
+end
 
 function tpos(pos, origin)
   local hrp = xz.Character:FindFirstChild("HumanoidRootPart")
@@ -191,14 +199,14 @@ function find_object_by_name(name, class)
   end
 end
 
-function play_sound(name)
+function find_sound(name)
   local inGame_Folder = zx:FindFirstChild("HHxScripts")
   local sound = nil
   if inGame_Folder then
     sound = inGame_Folder.Assets.Audios:FindFirstChild(name)
   end if sound then return sound else
     print("Could not find: " .. name .. " sound obj... ")
-    return "Mismatch..."
+    return setmetatable({}, mt_table)
   end
 end
 
@@ -227,4 +235,4 @@ find_model()~Return specific model from path... <argument: #1 "near" or "randomi
 loadscriptfrom_url()~Load source into codes editor from url, site... <argument: #1 url : string, #2 "git" or nil : string> if having argument 2 "git" then argument 1 can start from user-name to main-source.@
 find_object_by_name()~Return object by name and which class... <argument: #1 name of an object : string, #2 class name : string>@
 built_in_funcs()~<OLD VERSION FUNC> Load built in func tutorial into codes editor... <void>@
-play_sound()~Playing a sound-track inside my own folder created on games... <argument: #1 sound name : string>@
+find_sound()~Return a sound-track sound object from inside my own folder created on games... <argument: #1 sound name : string>@

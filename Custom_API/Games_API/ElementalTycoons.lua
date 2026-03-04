@@ -6,25 +6,23 @@ local type_of_items = {
   "Part", "MeshPart", "BasePart"
 }
 
-local plr, magic, tycoons
+local plr, magic
 plr = plrs.LocalPlayer
 magic = rls.Remotes.DoMagic
-tycoons = ws:FindFirstChild("Tycoons")
 
 function receive_turrets()
-  local listed = {}
-  for _, tr in pairs(tycoons:GetDescendants()) do
-    if tr:IsA("Model") and tr.Name == "XYZGuns" then
-      local left, right = tr:FindFirstChild("Left"), right:FindFirstChild("Right")
-      if left and right then
-        table.insert(listed, tr)
+  local turrets = {}
+  if #plrs:GetPlayers() < 1 then return end
+  for _, user in pairs(plrs:GetPlayers()) do
+    local basement = ws.Tycoons[user.Name]
+    for _, xyz in next, basement:GetDescendants() do
+      if xyz:IsA("Model") and xyz.Name == "XYZGuns" and tostring(xyz.Parent) == "Turret" then
+        if xyz:FindFirstChild("Left") or xyz:FindFirstChild("Right") then  
+          table.insert(turrets, xyz)
+        end    
       end
     end
-  end if #listed > 0 then
-    for index = 1, #listed do
-      print(listed[index]:GetFullName())
-    end
-  end return listed
+  end return turrets
 end
 
 function receive_dollars()

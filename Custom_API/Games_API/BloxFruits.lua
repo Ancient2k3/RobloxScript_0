@@ -9,7 +9,7 @@ local funcs = {
   aimbot_skill = function(p)
     local t = plr.Character and plr.Character:FindFirstChildOfClass("Tool")
     if t and t:FindFirstChild("RemoteEvent") then
-      t.RemoteEvent(p)
+      t.RemoteEvent:FireServer(p)
     end
   end,
   uid = function(str)

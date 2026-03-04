@@ -18,7 +18,7 @@ function no_mesh()
     new_folder:SetAttribute("NO_MESH", true)
     new_folder.Name = "Thrown"
     new_folder.ChildAdded:Connect(function(child)
-      if new_folder:GetAttribute("NO_MESH") == tru e then
+      if new_folder:GetAttribute("NO_MESH") == true then
       if vars.debug_pr then
         print("Removed Item: " .. child.Name .. " from " .. child.Parent.Name)
       end child:Destroy()

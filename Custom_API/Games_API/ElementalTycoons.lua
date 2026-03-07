@@ -2,9 +2,9 @@ local ws = game:GetService("Workspace")
 local plrs = game:GetService("Players")
 local rls = game:GetService("ReplicatedStorage")
 
-local type_of_items = {
+local type_of_items, muzzles = {
   "Part", "MeshPart", "BasePart"
-}
+}, {"Left", "Right"}
 
 local plr, magic
 plr = plrs.LocalPlayer
@@ -34,6 +34,36 @@ function receive_dollars()
   end return dollars
 end
 
+function shoot_rmt(t, g)
+  magic:FireServer("Turret", "Energy Ball", {
+    ["Mouse"] = t, ["Camera"] = CFrame.new(0, 0, 0) * CFrame.Angles(0, 0, 0), ["Gun"] = g
+  })
+end
+
+function use_turret(t, p)
+  local tds = t or nil
+  local position = p or nil
+  if tds ~= nil and position then
+    if typeof(tds) == "table" then
+      if #tds > 0 then
+        shoot_rmt(p, tds[math.random(1, #tds)][muzzles[math.random(1, #muzzles)]])
+      end
+    else
+      if typeof(tds):lower() == "instance" then
+        shoot_rmt(p, tds[muzzles[math.random(#muzzles)]])
+      end
+    end
+  else
+    if not position then
+      print("Missing argument: #2")
+    end
+    print("Missing argument: #1")
+    return nil
+  end
+end
+
 -- APIs Listed --
 receive_turrets()~Return a table storing turret model instance... <void>@
 receive_dollars()~Return a table of a bunch of dollar object... <void>@
+shoot_rmt()~Using turret to shooting at specific position... <argument: #1 position : vector3, #2 turret model : instance>@
+use_turret()~Using turret models, working same as shoot_rmt... <argument: #1 turret? : instance or table storing instance, #2 position : vector3>

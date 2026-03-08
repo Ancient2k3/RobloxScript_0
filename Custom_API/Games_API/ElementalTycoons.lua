@@ -6,9 +6,10 @@ local type_of_items, muzzles = {
   "Part", "MeshPart", "BasePart"
 }, {"Left", "Right"}
 
-local plr, magic
+local plr, magic, slap
 plr = plrs.LocalPlayer
 magic = rls.Remotes.DoMagic
+slap = rls.Slap.RemoteEvent
 
 function receive_turrets()
   local turrets = {}
@@ -62,8 +63,16 @@ function use_turret(t, p)
   end
 end
 
+function aura(t, dmg)
+  if t then
+    slap:FireServer(t, dmg or 2, 0, 0, "Jay")
+  else print("Missing argument: #1 target important. !")
+  end
+end
+
 -- APIs Listed --
 receive_turrets()~Return a table storing turret model instance... <void>@
 receive_dollars()~Return a table of a bunch of dollar object... <void>@
 shoot_rmt()~Using turret to shooting at specific position... <argument: #1 position : vector3, #2 turret model : instance>@
-use_turret()~Using turret models, working same as shoot_rmt... <argument: #1 turret? : instance or table storing instance, #2 position : vector3>
+use_turret()~Using turret models, working same as shoot_rmt... <argument: #1 turret? : instance or table storing instance, #2 position : vector3>@
+aura()~Instantly [eliminating or damage] a specific target... <argument: #1 target : instance, #2 damage : numberic>

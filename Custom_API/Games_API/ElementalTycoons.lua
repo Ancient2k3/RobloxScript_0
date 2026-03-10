@@ -6,10 +6,11 @@ local type_of_items, muzzles = {
   "Part", "MeshPart", "BasePart"
 }, {"Left", "Right"}
 
-local plr, magic, slap
+local plr, magic, slap, rmt
 plr = plrs.LocalPlayer
 magic = rls.Remotes.DoMagic
 slap = rls.Slap.RemoteEvent
+rmt = rls.RemoteEvent
 
 function receive_turrets()
   local turrets = {}
@@ -70,9 +71,17 @@ function aura(t, dmg)
   end
 end
 
+function power(name)
+  if name and type(name) == "string" then
+    rmt:FireServer("equip_mystery_spell", name)
+  else print("Missing argument: #1 spell name. !")
+  end
+end
+
 -- APIs Listed --
 receive_turrets()~Return a table storing turret model instance... <void>@
 receive_dollars()~Return a table of a bunch of dollar object... <void>@
 shoot_rmt()~Using turret to shooting at specific position... <argument: #1 position : vector3, #2 turret model : instance>@
 use_turret()~Using turret models, working same as shoot_rmt... <argument: #1 turret? : instance or table storing instance, #2 position : vector3>@
-aura()~Instantly [eliminating or damage] a specific target... <argument: #1 target : instance, #2 damage : numberic>
+aura()~Instantly [eliminating or damage] a specific target... <argument: #1 target : instance, #2 damage : numberic>@
+power()~Receive specific spell items... <argument: #1 spell name : string>

@@ -72,9 +72,18 @@ function aura(t, dmg)
 end
 
 function power(name)
-  if name and type(name) == "string" then
-    rmt:FireServer("equip_mystery_spell", name)
-  else print("Missing argument: #1 spell name. !")
+  local items = name or nil
+  local spell = "equip_mystery_spell"
+  if items ~= nil then
+    if type(items) == "table" then
+      for index = 1, #items do
+        rmt:FireServer(spell, items[index]) task.wait(0.2)
+      end
+    else
+      rmt:FireServer(spell, items)
+    end
+  else print("Missing argument: #1")
+    return "Missing argument: #1"
   end
 end
 
@@ -84,4 +93,4 @@ receive_dollars()~Return a table of a bunch of dollar object... <void>@
 shoot_rmt()~Using turret to shooting at specific position... <argument: #1 position : vector3, #2 turret model : instance>@
 use_turret()~Using turret models, working same as shoot_rmt... <argument: #1 turret? : instance or table storing instance, #2 position : vector3>@
 aura()~Instantly [eliminating or damage] a specific target... <argument: #1 target : instance, #2 damage : numberic>@
-power()~Receive specific spell items... <argument: #1 spell name : string>
+power()~Receive specific spell items... <argument: #1 spell name : string OR list of spell : table>

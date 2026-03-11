@@ -111,8 +111,9 @@ function find_model(method, _path)
     end
 end
 
-function find_plr(method)
+function find_plr(method, incl)
   local is_method = method or nil
+  local sec_argument = incl or nil
   if method == "self" then return xz
   elseif method == "near" then
   local d = {f = nil, m = math.huge}
@@ -127,16 +128,20 @@ function find_plr(method)
   end if d.f ~= nil then return d.f
     else print("Failed: found " .. #zc:GetPlayers() .. " players are in the server!")
   end else if is_method and type(is_method) == "string" then
-      local user_founded = nil
+      local user_founded, alt_found = nil, {}
       if sec_argument and type(sec_argument) == "string" then
+        local target_usr = in_script_funcs.find_full_name(is_method)
+        if not target_usr then return nil end
+        table.insert(alt_found, target_usr)
         for _, usr_alt in pairs(zc:GetPlayers()) do
-          if usr_alt and usr_alt:IsFriendsWith(in_script_funcs.find_full_name(is_method).UserId) then
+          if usr_alt and usr_alt:IsFriendsWith(target_usr.UserId) then
             table.insert(alt_found, usr_alt)
           end
-        end
+        end return alt_found
       else
         user_founded = in_script_funcs.find_full_name(is_method)
-      end return user_founded
+        return user_founded
+      end
     else print("Missing argument: #1 \"near\" or \"self\" or player-name.")
     end
   end
@@ -248,7 +253,7 @@ end
 
 -- APIs Listed --
 tpos()~Teleport user to specific position then return to origin... <argument: #1 position : vector3, #2 reverse to origin : boolean>@
-find_plr()~Return specific player... <argument: #1 "near" or "self" : string>@
+find_plr()~Return specific player... <argument: #1 "near" or "self" or player-name : string, #2 any string to include alt : string>@
 str_changed_to()~Change a string inside codes editor to something else... <argument: #1 current_string : string, #2 new_string : string>@
 model_pos()~Return position of a model... <argument: #1 model or user-character : instance>@
 checkdescendants()~Return string structured of path childrens... <argument: #1 path : instance>@

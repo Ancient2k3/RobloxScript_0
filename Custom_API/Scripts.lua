@@ -112,6 +112,7 @@ function find_model(method, _path)
 end
 
 function find_plr(method)
+  local is_method = method or nil
   if method == "self" then return xz
   elseif method == "near" then
   local d = {f = nil, m = math.huge}
@@ -125,7 +126,20 @@ function find_plr(method)
     end
   end if d.f ~= nil then return d.f
     else print("Failed: found " .. #zc:GetPlayers() .. " players are in the server!")
-  end else print("<find_plr: set method \"self\" or \"near\".") end
+  end else if is_method and type(is_method) == "string" then
+      local user_founded = nil
+      if sec_argument and type(sec_argument) == "string" then
+        for _, usr_alt in pairs(zc:GetPlayers()) do
+          if usr_alt and usr_alt:IsFriendsWith(in_script_funcs.find_full_name(is_method).UserId) then
+            table.insert(alt_found, usr_alt)
+          end
+        end
+      else
+        user_founded = in_script_funcs.find_full_name(is_method)
+      end return user_founded
+    else print("Missing argument: #1 \"near\" or \"self\" or player-name.")
+    end
+  end
 end
 
 function loadscriptfrom_url(url, f_site)

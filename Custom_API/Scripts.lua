@@ -26,6 +26,9 @@ in_script_funcs = {
         found = box
       end
     end return found
+  end,
+  find_full_name = function(_input)
+
   end
 }
 

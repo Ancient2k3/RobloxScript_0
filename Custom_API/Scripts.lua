@@ -55,18 +55,21 @@ function tpos(pos, origin)
   end
 end
 
-function checkdescendants(_path)
+function checkdescendants(_path, depth_mode)
     local ts_path = _path or nil
-    if not ts_path then print("<checkdescendants: path>")
+    local d_mode = depth_mode or 0
+    if not ts_path then print("<checkdescendants: path, depth_mode?>")
         return "missing argument 1: path, example workspace"
-    end local function getstructure(obj, indent)
+    end 
+    
+    local function getstructure(obj, indent, is_shallow)
         local res = "{\n"
         local children = obj:GetChildren()
         for i, c in ipairs(children) do
             local spaces = string.rep("  ", indent)
             res = res .. spaces .. c.Name .. " = "
-            if #c:GetChildren() > 0 then
-                res = res .. getstructure(c, indent + 1)
+            if #c:GetChildren() > 0 and is_shallow == 0 then
+                res = res .. getstructure(c, indent + 1, is_shallow)
             else
                 res = res .. "{}"
             end
@@ -79,7 +82,7 @@ function checkdescendants(_path)
         res = res .. string.rep("  ", indent - 1) .. "}"
         return res
     end
-    local str = getstructure(ts_path, 2)
+    local str = getstructure(ts_path, 2, d_mode)
     return "{\n  " .. ts_path.Name .. " = " .. str .. "\n}"
 end
 
@@ -256,7 +259,7 @@ tpos()~Teleport user to specific position then return to origin... <argument: #1
 find_plr()~Return specific player... <argument: #1 "near" or "self" or player-name : string, #2 any string to include alt : string>@
 str_changed_to()~Change a string inside codes editor to something else... <argument: #1 current_string : string, #2 new_string : string>@
 model_pos()~Return position of a model... <argument: #1 model or user-character : instance>@
-checkdescendants()~Return string structured of path childrens... <argument: #1 path : instance>@
+checkdescendants()~Return string structured of path childrens... <argument: #1 path : instance, #2 mode : numberic>@
 find_model()~Return specific model from path... <argument: #1 "near" or "randomize" : string, #2 path : instance>@
 loadscriptfrom_url()~Load source into codes editor from url, site... <argument: #1 url : string, #2 "git" or nil : string> if having argument 2 "git" then argument 1 can start from user-name to main-source.@
 find_object_by_name()~Return object by name and which class... <argument: #1 name of an object : string, #2 class name : string>@

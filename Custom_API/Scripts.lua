@@ -28,7 +28,11 @@ in_script_funcs = {
     end return found
   end,
   find_full_name = function(_input)
-
+    for _, usr in pairs(zc:GetPlayers()) do
+      if (usr.Name:lower():sub(1, #_input) or usr.DisplayName:lower():sub(1, #_input)) == _input:lower() then
+        return usr
+      end
+    end
   end
 }
 

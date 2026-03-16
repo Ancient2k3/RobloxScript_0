@@ -15,7 +15,8 @@ built_in = {
   "find_model() -- 1: \"near\" or \"randomize\", 2: from path?",
   "loadscriptfrom_url() -- 1: url string *raw code*, 2: from site... \"github\"?",
   "find_object_by_name() -- 1: object name?, 2: which specific class it's, example \"Part\"?",
-  "find_sound() -- 1: sound name?"
+  "find_sound() -- 1: sound name?",
+  "server() -- 1: which remote instance, inf: anything as an argument."
 }
 
 in_script_funcs = {
@@ -239,6 +240,19 @@ function find_sound(name)
   end
 end
 
+function server(ins, ...)
+  local is_instance = ins or nil
+  if is_instance ~= nil then
+    if is_instance.ClassName == "RemoteEvent" then
+      is_instance:FireServer(...)
+    elseif is_instance.ClassName == "RemoteFunction" then
+      is_instance:InvokeServer(...)
+    else print("Argument: #1 Invalid... must be an Remote(Event/Function) !")
+    end
+  else print("Missing argument: #1")
+  end
+end
+
 function built_in_funcs()
   local tbox_found = nil
   local text_rs = ""
@@ -265,3 +279,4 @@ loadscriptfrom_url()~Load source into codes editor from url, site... <argument: 
 find_object_by_name()~Return object by name and which class... <argument: #1 name of an object : string, #2 class name : string>@
 built_in_funcs()~<OLD VERSION FUNC> Load built in func tutorial into codes editor... <void>@
 find_sound()~Return a sound-track sound object from inside my own folder created on games... <argument: #1 sound name : string>@
+server()~Sending items to server... <argument: #1 remote event or function : instance, #inf anything : any>@

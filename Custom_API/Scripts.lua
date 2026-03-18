@@ -17,7 +17,8 @@ built_in = {
   "loadscriptfrom_url() -- 1: url string *raw code*, 2: from site... \"github\"?",
   "find_object_by_name() -- 1: object name?, 2: which specific class it's, example \"Part\"?",
   "find_sound() -- 1: sound name?",
-  "server() -- 1: which remote instance, inf: anything as an argument."
+  "server() -- 1: which remote instance, inf: anything as an argument.",
+  "new_tool() -- 1: tool name : string."
 }
 
 in_script_funcs = {
@@ -254,6 +255,13 @@ function server(ins, ...)
   end
 end
 
+function new_tool(name)
+  local xtool = Instance.new("Tool", plr.Backpack)
+  xtool.Name = name or "unknown item"
+  xtool.RequiresHandle = false
+  return xtool
+end
+
 function built_in_funcs()
   local tbox_found = nil
   local text_rs = ""
@@ -281,3 +289,4 @@ find_object_by_name()~Return object by name and which class... <argument: #1 nam
 built_in_funcs()~<OLD VERSION FUNC> Load built in func tutorial into codes editor... <void>@
 find_sound()~Return a sound-track sound object from inside my own folder created on games... <argument: #1 sound name : string>@
 server()~Sending items to server... <argument: #1 remote event or function : instance, #inf anything : any>@
+new_tool()~Return a tool object into backpack... no handles require. <argument: #1 tool name : string>@

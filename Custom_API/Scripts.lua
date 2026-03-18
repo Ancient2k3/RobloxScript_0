@@ -1,11 +1,12 @@
 -- Custom Built+In_Functions --
-local zx, zc, zv
-zx = game:GetService("Workspace")
-zc = game:GetService("Players")
-zv = game:GetService("CoreGui")
+local ws, plrs, core, reps
+ws = game:GetService("Workspace")
+plrs = game:GetService("Players")
+core = game:GetService("CoreGui")
+reps = game:GetService("ReplicatedStorage")
 
-local xz, built_in, in_script_funcs
-xz = zc.LocalPlayer
+local plr, built_in, in_script_funcs
+plr = plrs.LocalPlayer
 built_in = {
   "tpos() -- 1: vector3, 2: boolean?.",
   "find_plr() -- 1: \"self\" or \"near\".",
@@ -22,14 +23,14 @@ built_in = {
 in_script_funcs = {
   find_txt_box = function(name_func)
     local found = nil
-    for _, box in next, zv:GetDescendants() do
+    for _, box in next, core:GetDescendants() do
       if box:IsA("TextBox") and box.Text:match(name_func) then
         found = box
       end
     end return found
   end,
   find_full_name = function(_input)
-    for _, usr in pairs(zc:GetPlayers()) do
+    for _, usr in pairs(plrs:GetPlayers()) do
       if (usr.Name:lower():sub(1, #_input) or usr.DisplayName:lower():sub(1, #_input)) == _input:lower() then
         return usr
       end
@@ -45,7 +46,7 @@ function mt_table:Play()
 end
 
 function tpos(pos, origin)
-  local hrp = xz.Character:FindFirstChild("HumanoidRootPart")
+  local hrp = plr.Character:FindFirstChild("HumanoidRootPart")
   local d = {o = hrp.Position, p = pos or nil, t = origin or false}
   if d.p ~= nil and typeof(d.p):lower() == "vector3" then
     hrp.CFrame = CFrame.new(d.p)
@@ -100,7 +101,7 @@ function find_model(method, _path)
             local d = {n = nil, m = math.huge}
             for _, mdl in pairs(_path:GetChildren()) do
                 if mdl:IsA("Model") then
-                    local dst = (mdl:GetBoundingBox().Position - xz.Character.HumanoidRootPart.Position).magnitude
+                    local dst = (mdl:GetBoundingBox().Position - plr.Character.HumanoidRootPart.Position).magnitude
                     if dst < d.m then
                         d.m = dst
                         d.n = mdl
@@ -118,26 +119,26 @@ end
 function find_plr(method, incl)
   local is_method = method or nil
   local sec_argument = incl or nil
-  if method == "self" then return xz
+  if method == "self" then return plr
   elseif method == "near" then
   local d = {f = nil, m = math.huge}
-  for _, usr in pairs(zc:GetPlayers()) do
-    if usr ~= xz and usr and usr.Character and usr.Character:FindFirstChild("HumanoidRootPart") then
-      local dst = (usr.Character.HumanoidRootPart.Position - xz.Character.HumanoidRootPart.Position).magnitude
+  for _, usr in pairs(plrs:GetPlayers()) do
+    if usr ~= plr and usr and usr.Character and usr.Character:FindFirstChild("HumanoidRootPart") then
+      local dst = (usr.Character.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).magnitude
       if dst < d.m then
         d.m = dst
         d.f = usr
       end
     end
   end if d.f ~= nil then return d.f
-    else print("Failed: found " .. #zc:GetPlayers() .. " players are in the server!")
+    else print("Failed: found " .. #plrs:GetPlayers() .. " players are in the server!")
   end else if is_method and type(is_method) == "string" then
       local user_founded, alt_found = nil, {}
       if sec_argument and type(sec_argument) == "string" then
         local target_usr = in_script_funcs.find_full_name(is_method)
         if not target_usr then return nil end
         table.insert(alt_found, target_usr)
-        for _, usr_alt in pairs(zc:GetPlayers()) do
+        for _, usr_alt in pairs(plrs:GetPlayers()) do
           if usr_alt and usr_alt:IsFriendsWith(target_usr.UserId) then
             table.insert(alt_found, usr_alt)
           end
@@ -189,7 +190,7 @@ end
 function str_changed_to(str, change)
   local tbox_found = nil
   local d = {o = str or nil, c = change or nil}
-  for _, tbox in next, zv:GetDescendants() do
+  for _, tbox in next, core:GetDescendants() do
     if tbox:IsA("TextBox") and tbox.Text:match("str_changed_to") then
       tbox_found = tbox
     end
@@ -230,7 +231,7 @@ function find_object_by_name(name, class)
 end
 
 function find_sound(name)
-  local inGame_Folder = zx:FindFirstChild("HHxScripts")
+  local inGame_Folder = ws:FindFirstChild("HHxScripts")
   local sound = nil
   if inGame_Folder then
     sound = inGame_Folder.Assets.Audios:FindFirstChild(name)
@@ -256,7 +257,7 @@ end
 function built_in_funcs()
   local tbox_found = nil
   local text_rs = ""
-  for _, tbox in next, zv:GetDescendants() do
+  for _, tbox in next, core:GetDescendants() do
     if tbox:IsA("TextBox") and tbox.Text:match("built_in_funcs()") then
       tbox_found = tbox
     end

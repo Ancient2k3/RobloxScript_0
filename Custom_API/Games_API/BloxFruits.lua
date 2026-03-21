@@ -1,12 +1,17 @@
+local ws = game:GetService("Workspace")
 local plrs = game:GetService("Players")
 local rls = game:GetService("ReplicatedStorage")
 
-local plr, uid
+local plr, uid, register_hit, register_atk, enms
 plr = plrs.LocalPlayer
 uid = plr.UserId
+register_hit = rls.Modules.Net["RE/RegisterHit"]
+register_atk = rls.Modules.Net["RE/RegisterAttack"]
+enms = ws.Enemies:GetChildren()
+
 
 local funcs = {
-  aimbot_skill = function(p)
+  attack_moved = function(p)
     local t = plr.Character and plr.Character:FindFirstChildOfClass("Tool")
     if t and t:FindFirstChild("RemoteEvent") then
       t.RemoteEvent:FireServer(p)
@@ -31,6 +36,6 @@ local funcs = {
 }
 
 -- APIs Listed --
-funcs.aimbot_skill()~Make the items ability moving to specific position... <argument: #1 position : vector3>@
+funcs.attack_moved()~Make the items ability moving to specific position, idk what to say... <argument: #1 position : vector3>@
 funcs.uid()~Return user-id as string... <argument: #1 numberic start - numberic end : string>@
 Hehe...❤~Nothing to see here.@

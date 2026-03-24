@@ -5,9 +5,9 @@ plrs = game:GetService("Players")
 core = game:GetService("CoreGui")
 reps = game:GetService("ReplicatedStorage")
 
-local plr, built_in, in_script_funcs
+local plr, built_in, x_numbers, in_script_funcs
 plr = plrs.LocalPlayer
-built_in = {
+built_in, x_numbers = {
   "tpos() -- 1: vector3, 2: boolean?.",
   "find_plr() -- 1: \"self\" or \"near\".",
   "str_changed_to() -- 1: \"string to change\"?, 2: \"string changed to\".",
@@ -19,7 +19,7 @@ built_in = {
   "find_sound() -- 1: sound name?",
   "server() -- 1: which remote instance, inf: anything as an argument.",
   "new_tool() -- 1: tool name : string."
-}
+}, {-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
 in_script_funcs = {
   find_txt_box = function(name_func)

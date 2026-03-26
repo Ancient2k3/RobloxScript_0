@@ -18,7 +18,8 @@ built_in, x_numbers = {
   "find_object_by_name() -- 1: object name?, 2: which specific class it's, example \"Part\"?",
   "find_sound() -- 1: sound name?",
   "server() -- 1: which remote instance, inf: anything as an argument.",
-  "new_tool() -- 1: tool name : string."
+  "new_tool() -- 1: tool name : string.",
+  "return_table_structure() -- 1: table : table, 2: indent : number."
 }, {-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
 in_script_funcs = {
@@ -43,7 +44,11 @@ local mt_table = {}
 mt_table.__index = mt_table
 
 function mt_table:Play()
-  print("Play? what play.... i could not find your sound-track name!")
+  print("Play? what play.... i could not find your sound-track name!") return nil
+end
+
+function mt_table:Pause()
+  print("Pause what... ?") return nil
 end
 
 function tpos(pos, origin)
@@ -87,6 +92,21 @@ function checkdescendants(_path, depth_mode)
     end
     local str = getstructure(ts_path, 2, d_mode)
     return "{\n  " .. ts_path.Name .. " = " .. str .. "\n}"
+end
+
+function return_table_structure(t, time)
+    time = time or 0 local structure = string.rep(" ", time) .. "{\n"
+    for a, b in pairs(t) do local _istype = type(b)
+        if _istype == "table" then structure = structure .. string.rep(" ", time + 4) .. a .. " = {\n"
+            structure = structure .. _return_structure(b, time + 8)
+            structure = structure .. string.rep(" ", time + 4) .. "}\n"
+        elseif _istype == "function" then structure = structure .. string.rep(" ", time + 4) .. a .. " = function: " .. tostring(b) .. "\n"
+        elseif _istype == "boolean" then structure = structure .. string.rep(" ", time + 4) .. a .. " = " .. tostring(b) .. "\n"
+        elseif _istype == "number" then structure = structure .. string.rep(" ", time + 4) .. a .. " = " .. b .. "\n"
+        elseif _istype == "string" then structure = structure .. string.rep(" ", time + 4) .. a .. " = \"" .. b .. "\"\n"
+        elseif _istype == "nil" then structure = structure .. string.rep(" ", time + 4) .. a .. " = nil\n"
+        end end structure = structure .. string.rep(" ", time) .. "}\n"
+    return structure
 end
 
 function find_model(method, _path)
@@ -290,3 +310,4 @@ built_in_funcs()~<OLD VERSION FUNC> Load built in func tutorial into codes edito
 find_sound()~Return a sound-track sound object from inside my own folder created on games... <argument: #1 sound name : string>@
 server()~Sending items to server... <argument: #1 remote event or function : instance, #inf anything : any>@
 new_tool()~Return a tool object into backpack... no handles require. <argument: #1 tool name : string>@
+return_table_structure()~Return what inside a table, structure as a string... <argument: #1 table to check : table, #2 spaces : numberic>@

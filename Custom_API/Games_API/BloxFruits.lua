@@ -2,14 +2,15 @@ local ws = game:GetService("Workspace")
 local plrs = game:GetService("Players")
 local rls = game:GetService("ReplicatedStorage")
 
-local plr, uid, register_hit, register_atk, enms
+local plr, uid, register_hit, register_atk, enms, inventory
 plr = plrs.LocalPlayer
 uid = plr.UserId
 register_hit = rls.Modules.Net["RE/RegisterHit"]
 register_atk = rls.Modules.Net["RE/RegisterAttack"]
 enms = ws.Enemies:GetChildren()
+inventory = rls.Remotes.CommF_:InvokeServer("getInventory")
 
-
+local args_name = {"LoadItem", "StoreItem"}
 local funcs = {
   attack_moved = function(p)
     local t = plr.Character and plr.Character:FindFirstChildOfClass("Tool")

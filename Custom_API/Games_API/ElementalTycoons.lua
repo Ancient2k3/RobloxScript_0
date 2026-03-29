@@ -77,7 +77,7 @@ function power(name)
   if items ~= nil then
     if type(items) == "table" then
       for index = 1, #items do
-        rmt:FireServer(spell, items[index]) task.wait(0.2)
+        rmt:FireServer(spell, items[index]) task.wait(4.5)
       end
     else
       rmt:FireServer(spell, items)

@@ -1,9 +1,10 @@
 -- Custom Built+In_Functions --
-local ws, plrs, core, reps
+local ws, plrs, core, reps, tws
 ws = game:GetService("Workspace")
 plrs = game:GetService("Players")
 core = game:GetService("CoreGui")
 reps = game:GetService("ReplicatedStorage")
+tws = game:GetService("TweenService")
 
 local plr, built_in, x_numbers, in_script_funcs
 plr = plrs.LocalPlayer
@@ -20,7 +21,8 @@ built_in, x_numbers = {
   "server() -- 1: which remote instance, inf: anything as an argument.",
   "new_tool() -- 1: tool name : string.",
   "inspect_element() -- 1: table : table, 2: indent : number.",
-  "raycast() -- 1: start position : vector3, 2: end position : vector3, 3: settings : table."
+  "raycast() -- 1: start position : vector3, 2: end position : vector3, 3: settings : table.",
+  "create_tweeb() -- I'm lazy to writing more tutorials... read it from info buttons."
 }, {-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
 local v3, cframe = {
@@ -309,6 +311,16 @@ function raycast(pos, direction, datas)
     end
 end
 
+function create_tween(...)
+  local tween_info = {...}
+  if #tween_info > 0 then
+    return tws:Create(tween_info[1], TweenInfo.new(tween_info[2], Enum.EasingStyle[tween_info[3]], Enum.EasingDirection[tween_info[4]]), tween_info[5])
+  else
+    print("Missing argument: #1 Tweening Object : instance, #2 Tweening finish in seconds : numberic, #3 Tweening Style : string, #4 Tweening Direction : string, #5 Tweening Property : table.")
+    return nil
+  end
+end
+
 function built_in_funcs()
   local tbox_found = nil
   local text_rs = ""
@@ -339,3 +351,4 @@ server()~Sending items to server... <argument: #1 remote event or function : ins
 new_tool()~Return a tool object into backpack... no handles require. <argument: #1 tool name : string>@
 inspect_element()~Return what inside a table, structure as a string... <argument: #1 table to check : table, #2 spaces : numberic>@
 raycast()~Return raycastresult... <argument: #1 start position : vector3, #2 end position : vector3, #3 settings : table>@
+create_tween()~Return tweening progress... tws:Create(...) but make it as a function just for short <argument: #1 object to tweening : instance, #2 finish in seconds : numberic, #3 tweening style : string, #4 tweening direction : string, #5 tweening property : table>@

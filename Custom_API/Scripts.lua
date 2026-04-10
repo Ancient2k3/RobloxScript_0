@@ -9,7 +9,7 @@ local plr, built_in, x_numbers, in_script_funcs
 plr = plrs.LocalPlayer
 built_in, x_numbers = {
   "tpos() -- 1: vector3, 2: boolean?.",
-  "find_plr() -- 1: \"self\" or \"near\".",
+  "find_plr() -- 1: \"self\" or \"near\" or \"randomize\".",
   "str_changed_to() -- 1: \"string to change\"?, 2: \"string changed to\".",
   "model_pos() -- 1: actual model or character model.",
   "checkdescendants() -- 1: from path? *example: workspace or workspace.folder_a*",
@@ -151,6 +151,8 @@ function find_plr(method, incl)
   local is_method = method or nil
   local sec_argument = incl or nil
   if method == "self" then return plr
+  elseif method == "randomize" then
+    return plrs:GetPlayers()[math.random(1, #plrs:GetPlayers())]
   elseif method == "near" then
   local d = {f = nil, m = math.huge}
   for _, usr in pairs(plrs:GetPlayers()) do
@@ -178,7 +180,7 @@ function find_plr(method, incl)
         user_founded = in_script_funcs.find_full_name(is_method)
         return user_founded
       end
-    else print("Missing argument: #1 \"near\" or \"self\" or player-name.")
+    else print("Missing argument: #1 \"near\" or \"self\" or \"randomize\" or player-name.")
     end
   end
 end
@@ -324,7 +326,7 @@ end
 
 -- APIs Listed --
 tpos()~Teleport user to specific position then return to origin... <argument: #1 position : vector3, #2 reverse to origin : boolean>@
-find_plr()~Return specific player... <argument: #1 "near" or "self" or player-name : string, #2 any string to include alt : string>@
+find_plr()~Return specific player... <argument: #1 "near" or "self" or "randomize" or player-name : string, #2 any string to include alt : string>@
 str_changed_to()~Change a string inside codes editor to something else... <argument: #1 current_string : string, #2 new_string : string>@
 model_pos()~Return position of a model... <argument: #1 model or user-character : instance>@
 checkdescendants()~Return string structured of path childrens... <argument: #1 path : instance, #2 mode : numberic>@

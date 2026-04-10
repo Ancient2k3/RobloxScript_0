@@ -25,8 +25,8 @@ built_in, x_numbers = {
 
 local v3, cframe = {
   random = Vector3.new(x_numbers[math.random(#x_numbers)], x_numbers[math.random(#x_numbers)], x_numbers[math.random(#x_numbers)]),
-  zero = Vector3.new(0, 0, 0)
-  inf = Vector3.new(999999999, 999999999, 999999999)
+  zero = Vector3.new(0, 0, 0),
+  inf = Vector3.new(999999999, 999999999, 999999999),
   own = plr.Character:GetBoundingBox().Position
 }, {
   zero = CFrame.new(0, 0, 0)

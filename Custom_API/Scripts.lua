@@ -63,12 +63,12 @@ function mt_table:Pause()
   print("Pause what... ?") return nil
 end
 
-function tpos(pos, origin)
+function tpos(pos, origin, delay_time)
   local hrp = plr.Character:FindFirstChild("HumanoidRootPart")
-  local d = {o = hrp.Position, p = pos or nil, t = origin or false}
+  local d = {o = hrp.Position, p = pos or nil, t = origin or false, s = delay_time or 0.02}
   if d.p ~= nil and typeof(d.p):lower() == "vector3" then
     hrp.CFrame = CFrame.new(d.p)
-    if d.t ~= false then task.wait(0.02)
+    if d.t ~= false then task.wait(d.s)
       hrp.CFrame = CFrame.new(d.o)
     end
   else print("<tpos: vector3, boolean>")

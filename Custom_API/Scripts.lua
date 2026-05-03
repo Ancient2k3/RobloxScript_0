@@ -9,7 +9,7 @@ tws = game:GetService("TweenService")
 local plr, built_in, x_numbers, in_script_funcs
 plr = plrs.LocalPlayer
 built_in, x_numbers = {
-  "tpos() -- 1: vector3, 2: boolean?.",
+  "tpos() -- 1: vector3, 2: boolean?, 3: number.",
   "find_plr() -- 1: \"self\" or \"near\" or \"randomize\".",
   "str_changed_to() -- 1: \"string to change\"?, 2: \"string changed to\".",
   "model_pos() -- 1: actual model or character model.",
@@ -22,7 +22,7 @@ built_in, x_numbers = {
   "new_tool() -- 1: tool name : string.",
   "inspect_element() -- 1: table : table, 2: indent : number.",
   "raycast() -- 1: start position : vector3, 2: end position : vector3, 3: settings : table.",
-  "create_tweeb() -- I'm lazy to writing more tutorials... read it from info buttons."
+  "create_tween() -- I'm lazy to writing more tutorials... read it from info buttons."
 }, {-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
 local v3, cframe = {
@@ -337,7 +337,7 @@ function built_in_funcs()
 end
 
 -- APIs Listed --
-tpos()~Teleport user to specific position then return to origin... <argument: #1 position : vector3, #2 reverse to origin : boolean>@
+tpos()~Teleport user to specific position then return to origin... <argument: #1 position : vector3, #2 reverse to origin : boolean, #3 delayed time : number>@
 find_plr()~Return specific player... <argument: #1 "near" or "self" or "randomize" or player-name : string, #2 any string to include alt : string>@
 str_changed_to()~Change a string inside codes editor to something else... <argument: #1 current_string : string, #2 new_string : string>@
 model_pos()~Return position of a model... <argument: #1 model or user-character : instance>@

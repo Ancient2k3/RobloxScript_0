@@ -187,6 +187,15 @@ function find_plr(method, incl)
   end
 end
 
+function inst(name)
+  local instances_list = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/QuickInstances.lua"))()
+  local box = in_script_funcs.find_txt_box("inst%(")
+  local name_instance = instances_list[name:lower()] or "empty"
+  if box then
+    box.Text = box.Text:gsub("inst%b()", name_instance)
+  end
+end
+
 function loadscriptfrom_url(url, f_site)
   local x_site = f_site
   local s_time = tick()
@@ -352,3 +361,4 @@ new_tool()~Return a tool object into backpack... no handles require. <argument: 
 inspect_element()~Return what inside a table, structure as a string... <argument: #1 table to check : table, #2 spaces : numberic>@
 raycast()~Return raycastresult... <argument: #1 start position : vector3, #2 end position : vector3, #3 settings : table>@
 create_tween()~Return tweening progress... tws:Create(...) but make it as a function just for short <argument: #1 object to tweening : instance, #2 finish in seconds : numberic, #3 tweening style : string, #4 tweening direction : string, #5 tweening property : table>@
+inst()~Basically an Instance.new(...) and properties... on code editor. <argument: #1 class name : string>@

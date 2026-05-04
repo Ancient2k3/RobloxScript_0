@@ -1,0 +1,2 @@
+-- This pattern will return anything after +Inst: and before ! --
+-- "%+Inst:%s*(.-)%s*!" --

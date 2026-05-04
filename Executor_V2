@@ -638,6 +638,28 @@ _wait.FocusLost:Connect(function(ep)
     end
 end)
 
+code_box:GetPropertyChangedSignal("Text"):Connect(function()
+  local max_string = #code_box.Text
+  local _position, _total, _string = string.find(code_box.Text, "%+Inst:%s*(.-)%s*!")
+  if _position ~= nil then
+    local result_count = 0
+    for i = 1, max_string do
+      _position = _position - 1
+      local _str_spot = code_box.Text:sub(_position, _position)
+      if _str_spot == " " then
+        result_count = result_count + 1
+      elseif _str_spot == "\n" then
+        break
+      end
+    end local spaces = ""
+    local arguments = _string:split(",")
+    local inst = 
+    for _i = 1, result_count do
+      spaces = spaces .. " "
+    end -- this
+  end
+end)
+
 add_display_label("Hàm có sẵn: Mặc định.")
 add_info_labels(bif.def[2])
 add_display_label("Hàm hỗ trợ: Tùy trò chơi.")

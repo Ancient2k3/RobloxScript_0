@@ -1,4 +1,4 @@
 return {
-  ["screengui"] = "local -Name- = Instance.new(\"ScreenGui\", -Parent-)\n-Name-.Name = \"Name?\"",
-  ["frame"] = "local -Name- = Instance.new(\"Frame\", -Parent-)\n-Name-.Name = \"Name?\"\n-Name-.BackgroundTransparency = 0\n-Name-.BackgroundColor3 = Color3.fromRGB(0, 0, 0)\n-Name-.Position = UDim2.new(0.5, 0, 0.45, 0)\n-Name-.Size = UDim2.new(0.05, 0, 0.1, 0)\n-Name-.Active = true\n-Name-.Draggable = false\n-Name-.Visible = true\n"
+  ["screengui"] = "local AK = Instance.new(\"ScreenGui\", EF)\nAK.Name = \"Name?\"",
+  ["frame"] = "local AK = Instance.new(\"Frame\", EF)\nAK.Name = \"Name?\"\nAK.BackgroundTransparency = 0\nAK.BackgroundColor3 = Color3.fromRGB(0, 0, 0)\nAK.Position = UDim2.new(0.5, 0, 0.45, 0)\nAK.Size = UDim2.new(0.05, 0, 0.1, 0)\nAK.Active = true\nAK.Draggable = false\nAK.Visible = true\n"
 }

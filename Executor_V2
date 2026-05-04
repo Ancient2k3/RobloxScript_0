@@ -656,11 +656,11 @@ code_box:GetPropertyChangedSignal("Text"):Connect(function()
     local _args = _string:split(",")
     local str_inst = ""
     if #_args > 0 then
-      str_inst = ui_data.store_instances_name[_args[1]:lower()]:gsub("AK", _args[1]:upper()):gsub("EF", "Parented-With?")
+      str_inst = ui_data.store_instances_name[_args[1]:lower()]:gsub("AK", _args[1]:upper()):gsub("EF", "REPLACE_PARENT")
       if _args[2] then
         str_inst = str_inst:gsub(_args[1]:upper(), _args[2])
         if _args[3] then
-          str_inst = str_inst:gsub("Parented-With?", _args[3])
+          str_inst = str_inst:gsub("REPLACE_PARENT", _args[3])
         end
       end
     end

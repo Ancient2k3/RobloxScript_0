@@ -463,6 +463,7 @@ function add_inst_label(t)
   if type(t) ~= "table" then funcs.notify("Script hiện đang gặp lỗi... !") return end
   for name_inst, _path in pairs(t) do ui_data.vars.idx_child = ui_data.vars.idx_child + 1
     local path_childs = #_path:GetChildren()
+    local path_have_parent = _path.Parent or false
     local info_0, info_1, info_2
     local need_return_yet = nil
     local holder = Instance.new("TextLabel", explorer_scroll)
@@ -496,7 +497,7 @@ function add_inst_label(t)
       info_1.Text = ">"
       info_1.Font = Enum.Font.Arcade
       info_1.Visible = true
-      if not table.find(ignore_inst, _path.Name:lower()) then
+      if not table.find(ignore_inst, _path.Name:lower()) and path_have_parent then
         info_0 = Instance.new("TextButton", holder)
         info_0.Name = "GO-BACK:" .. holder.Name
         info_0.BackgroundTransparency = 0.2
@@ -527,21 +528,23 @@ function add_inst_label(t)
         end)
       end
     else
-      info_2 = Instance.new("TextButton", holder)
-      info_2.Name = "RETURN:" .. holder.Name
-      info_2.BackgroundTransparency = 0.2
-      info_2.BackgroundColor3 = Color3.new(1, 1, 0)
-      info_2.BorderColor3 = Color3.new(1, 1, 1)
-      info_2.Position = UDim2.new(0.89, 0, 0.02, 0)
-      info_2.Size = UDim2.new(0.098, 0, 0.98, 0)
-      info_2.TextScaled = false
-      info_2.TextWrapped = true
-      info_2.TextSize = 9
-      info_2.TextColor3 = Color3.new(1, 1, 1)
-      info_2.TextStrokeColor3 = Color3.new(1, 0, 0)
-      info_2.Text = "<"
-      info_2.Font = Enum.Font.Arcade
-      info_2.Visible = true
+      if path_have_parent then
+        info_2 = Instance.new("TextButton", holder)
+        info_2.Name = "RETURN:" .. holder.Name
+        info_2.BackgroundTransparency = 0.2
+        info_2.BackgroundColor3 = Color3.new(1, 1, 0)
+        info_2.BorderColor3 = Color3.new(1, 1, 1)
+        info_2.Position = UDim2.new(0.89, 0, 0.02, 0)
+        info_2.Size = UDim2.new(0.098, 0, 0.98, 0)
+        info_2.TextScaled = false
+        info_2.TextWrapped = true
+        info_2.TextSize = 9
+        info_2.TextColor3 = Color3.new(1, 1, 1)
+        info_2.TextStrokeColor3 = Color3.new(1, 0, 0)
+        info_2.Text = "<"
+        info_2.Font = Enum.Font.Arcade
+        info_2.Visible = true
+      end
     end
     -- For Decoration --
     local decor_1 = Instance.new("TextLabel", holder)
@@ -575,17 +578,19 @@ function add_inst_label(t)
         end
       end)
     else
-      info_2.MouseButton1Click:Connect(function()
-        if not ui_data.vars.dig_into then ui_data.vars.dig_into = true
-          clear_inst_label() task.wait(0.02)
-          explorer_btn = 0
-          _listedAPIs.CanvasPosition = UDim.new(0, 0) task.wait(0.02)
-          add_inst_label(previous_table_inst(_path))
-          ui_data.vars.dig_into = false
-        else
-          funcs.notify("Xin đợi một chút để load lại các childrens trước... ")
-        end
-      end)
+      if path_have_parent then
+        info_2.MouseButton1Click:Connect(function()
+          if not ui_data.vars.dig_into then ui_data.vars.dig_into = true
+            clear_inst_label() task.wait(0.02)
+            explorer_btn = 0
+            _listedAPIs.CanvasPosition = UDim.new(0, 0) task.wait(0.02)
+            add_inst_label(previous_table_inst(_path))
+            ui_data.vars.dig_into = false
+          else
+            funcs.notify("Xin đợi một chút để load lại các childrens trước... ")
+          end
+        end)
+      end
     end
   end
 end

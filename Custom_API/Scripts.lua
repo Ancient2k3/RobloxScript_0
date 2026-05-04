@@ -197,11 +197,11 @@ function inst(class_name, local_name, parent_name)
   }
   if box then
     if name_instance ~= "empty" and args.name == nil and args.parent == nil then
-      box.Text = box.Text:gsub("inst%b()", name_instance:gsub("-Name-", class_name):gsub("-Parent-", "Parented-With?"))
+      box.Text = box.Text:gsub("inst%b()", name_instance:gsub("AK", class_name):gsub("EF", "Parented-With?"))
     elseif name_instance ~= "empty" and args.name ~= nil and args.parent == nil then
-      box.Text = box.Text:gsub("inst%b()", name_instance:gsub("-Name-", args.name):gsub("-Parent-", "Parented-With?"))
+      box.Text = box.Text:gsub("inst%b()", name_instance:gsub("AK", args.name):gsub("EF", "Parented-With?"))
     elseif name_instance ~= "empty" and args.name ~= nil and args.parent ~= nil then
-      box.Text = box.Text:gsub("inst%b()", name_instance:gsub("-Name-", args.name):gsub("-Parent-", args.parent))
+      box.Text = box.Text:gsub("inst%b()", name_instance:gsub("AK", args.name):gsub("EF", args.parent))
     end
   end
 end

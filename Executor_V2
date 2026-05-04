@@ -642,7 +642,7 @@ end)
 code_box:GetPropertyChangedSignal("Text"):Connect(function()
   local max_string = #code_box.Text
   local _position, _total, _string = string.find(code_box.Text, "%+Inst:%s*(.-)%s*!")
-  if _position ~= nil then
+  if _position ~= nil and type(_position) == "number" then
     local result_count = 0
     for i = 1, max_string do
       _position = _position - 1
@@ -653,11 +653,24 @@ code_box:GetPropertyChangedSignal("Text"):Connect(function()
         break
       end
     end local spaces = ""
-    local arguments = _string:split(",")
-    local inst = 
+    local _args = _string:split(",")
+    local str_inst = ""
+    if #_args > 0 then
+      str_inst = ui_data.store_instances_name[_args[1]:lower()]:gsub("AK", _args[1]:upper()):gsub("EF", "Parented-With?")
+      if _args[2] then
+        str_inst = str_inst:gsub(_args[1]:upper(), _args[2])
+        if _args[3] then
+          str_inst = str_inst:gsub("Parented-With?", _args[3])
+        end
+      end
+    end
     for _i = 1, result_count do
-      spaces = spaces .. " "
-    end -- this
+      if result_count > 0 then
+        spaces = spaces .. " "
+      else break
+      end
+    end str_inst = str_inst:gsub("NLS", spaces)
+    code_box.Text = code_box.Text:gsub("%+Inst:%s*(.-)%s*!", str_inst)
   end
 end)
 

@@ -1,3 +1,3 @@
 return {
-  ["screengui"] = "local ScreenGui = Instance.new(\"ScreenGui\", Parent?)\nScreenGui.Name = \"Name?\""
+  ["screengui"] = "local -Name- = Instance.new(\"ScreenGui\", -Parent-)\n-Name-.Name = \"Name?\""
 }

@@ -187,12 +187,22 @@ function find_plr(method, incl)
   end
 end
 
-function inst(name)
+function inst(class_name, local_name, parent_name)
   local instances_list = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/QuickInstances.lua"))()
   local box = in_script_funcs.find_txt_box("inst%(")
-  local name_instance = instances_list[name:lower()] or "empty"
+  local name_instance = instances_list[class_name:lower()] or "empty"
+  local args = {
+    name = local_name or nil,
+    parent = parent_name or nil
+  }
   if box then
-    box.Text = box.Text:gsub("inst%b()", name_instance)
+    if name_instance ~= "empty" and args.name == nil and args.parent == nil then
+      box.Text = box.Text:gsub("inst%b()", name_instance:gsub("-Name-", class_name):gsub("-Parent-", "Parented-With?"))
+    elseif name_instance ~= "empty" and args.name ~= nil and args.parent == nil then
+      box.Text = box.Text:gsub("inst%b()", name_instance:gsub("-Name-", args.name):gsub("-Parent-", "Parented-With?"))
+    elseif name_instance ~= "empty" and args.name ~= nil and args.parent ~= nil then
+      box.Text = box.Text:gsub("inst%b()", name_instance:gsub("-Name-", args.name):gsub("-Parent-", args.parent))
+    end
   end
 end
 

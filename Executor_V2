@@ -519,7 +519,7 @@ function add_inst_label(t)
           if not ui_data.vars.dig_into then ui_data.vars.dig_into = true
             clear_inst_label() task.wait(0.02)
             explorer_btn = 0
-            _listedAPIs.CanvasPosition = UDim.new(0, 0) task.wait(0.02)
+            _listedAPIs.CanvasPosition = Vector2.new(0, 0) task.wait(0.02)
             add_inst_label(previous_table_inst(_path))
             ui_data.vars.dig_into = false
           else
@@ -570,7 +570,7 @@ function add_inst_label(t)
         if not ui_data.vars.dig_into then ui_data.vars.dig_into = true
           clear_inst_label() task.wait(0.02)
           explorer_btn = 0
-          _listedAPIs.CanvasPosition = UDim.new(0, 0) task.wait(0.02)
+          _listedAPIs.CanvasPosition = Vector2.new(0, 0) task.wait(0.02)
           add_inst_label(new_table_inst(_path))
           ui_data.vars.dig_into = false
         else
@@ -583,7 +583,7 @@ function add_inst_label(t)
           if not ui_data.vars.dig_into then ui_data.vars.dig_into = true
             clear_inst_label() task.wait(0.02)
             explorer_btn = 0
-            _listedAPIs.CanvasPosition = UDim.new(0, 0) task.wait(0.02)
+            _listedAPIs.CanvasPosition = Vector2.new(0, 0) task.wait(0.02)
             add_inst_label(previous_table_inst(_path))
             ui_data.vars.dig_into = false
           else

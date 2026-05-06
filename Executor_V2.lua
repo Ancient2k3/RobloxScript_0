@@ -481,7 +481,7 @@ function add_inst_label(t)
     holder.TextYAlignment = "Top"
     holder.Font = Enum.Font.Code
     holder.Visible = true
-    local re_size_progress = tws:Create(holder, TweenInfo.new(0.2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(1, 0, 0.003, 0)})
+    local re_size_progress = tws:Create(holder, TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(1, 0, 0.003, 0)})
     re_size_progress:Play()
     re_size_progress.Completed:Wait()
     holder.Text = name_inst
@@ -524,7 +524,7 @@ function add_inst_label(t)
           if not ui_data.vars.dig_into then ui_data.vars.dig_into = true
             clear_inst_label() task.wait(0.02)
             explorer_btn = 0
-            _listedAPIs.CanvasPosition = Vector2.new(0, 0) task.wait(0.02)
+            explorer_scroll.CanvasPosition = Vector2.new(0, 0) task.wait(0.02)
             add_inst_label(previous_table_inst(_path))
             ui_data.vars.dig_into = false
           else
@@ -575,7 +575,7 @@ function add_inst_label(t)
         if not ui_data.vars.dig_into then ui_data.vars.dig_into = true
           clear_inst_label() task.wait(0.02)
           explorer_btn = 0
-          _listedAPIs.CanvasPosition = Vector2.new(0, 0) task.wait(0.02)
+          explorer_scroll.CanvasPosition = Vector2.new(0, 0) task.wait(0.02)
           add_inst_label(new_table_inst(_path))
           ui_data.vars.dig_into = false
         else
@@ -588,7 +588,7 @@ function add_inst_label(t)
           if not ui_data.vars.dig_into then ui_data.vars.dig_into = true
             clear_inst_label() task.wait(0.02)
             explorer_btn = 0
-            _listedAPIs.CanvasPosition = Vector2.new(0, 0) task.wait(0.02)
+            explorer_scroll.CanvasPosition = Vector2.new(0, 0) task.wait(0.02)
             add_inst_label(previous_table_inst(_path))
             ui_data.vars.dig_into = false
           else

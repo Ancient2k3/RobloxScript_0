@@ -373,4 +373,4 @@ new_tool()~Return a tool object into backpack... no handles require. <argument: 
 inspect_element()~Return what inside a table, structure as a string... <argument: #1 table to check : table, #2 spaces : numberic>@
 raycast()~Return raycastresult... <argument: #1 start position : vector3, #2 end position : vector3, #3 settings : table>@
 create_tween()~Return tweening progress... tws:Create(...) but make it as a function just for short <argument: #1 object to tweening : instance, #2 finish in seconds : numberic, #3 tweening style : string, #4 tweening direction : string, #5 tweening property : table>@
-inst()~Basically an Instance.new(...) and properties... on code editor. <argument: #1 class name : string>
+inst()~Basically an Instance.new(...) and properties... on code editor. <argument: #1 class name : string>@

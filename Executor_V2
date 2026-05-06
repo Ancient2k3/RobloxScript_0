@@ -1,11 +1,12 @@
 -- Custom Executor: v2.5 --
 -- Now RE:Named to Scripts Editor --
 
-local ws, plrs, starterui, core
+local ws, plrs, starterui, core, tws
 ws = game:GetService("Workspace")
 plrs = game:GetService("Players")
 starterui = game:GetService("StarterGui")
 core = game:GetService("CoreGui")
+tws = game:GetService("TweenService")
 
 local ui_data, funcs = {
   folder = nil,
@@ -471,15 +472,19 @@ function add_inst_label(t)
     holder.BackgroundTransparency = 1
     holder.BackgroundColor3 = Color3.new(0, 0, 0)
     holder.Position = UDim2.new(0, 0, explorer_btn, 0)
-    holder.Size = UDim2.new(1, 0, 0.003, 0)
+    holder.Size = UDim2.new(0, 0, 0.003, 0)
     holder.TextScaled = false
     holder.TextSize = 14
     holder.TextColor3 = Color3.new(1, 1, 1)
-    holder.Text = name_inst
+    holder.Text = ""
     holder.TextXAlignment = "Left"
     holder.TextYAlignment = "Top"
     holder.Font = Enum.Font.Code
     holder.Visible = true
+    local re_size_progress = tws:Create(holder, TweenInfo.new(0.2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(1, 0, 0.003, 0)})
+    re_size_progress:Play()
+    re_size_progress.Completed:Wait()
+    holder.Text = name_inst
     -- Show Info Stuff --
     if path_childs ~= 0 then
       info_1 = Instance.new("TextButton", holder)

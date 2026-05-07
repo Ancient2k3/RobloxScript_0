@@ -13,7 +13,7 @@ local ui_data, funcs = {
   name = "CodesEditor_xScripts",
   vars = {
     delay = 0.001,
-    script_version = 2.45,
+    script_version = 2.52,
     show = false,
     looped = false,
     loaded_text = false,
@@ -21,7 +21,8 @@ local ui_data, funcs = {
     recall = false,
     show_api = 0,
     idx_count = 0,
-    idx_child = 0
+    idx_child = 0,
+    inst_obj_num = 0
   },
   api_funcs = game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/Scripts.lua"),
   for_games_api = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/MatchedGames.lua"))(),
@@ -31,12 +32,12 @@ local ui_data, funcs = {
   notify = function(str) starterui:SetCore("SendNotification", {Title = "Scripts Editor", Text = str, Duration = 1.25,}) end
 }
 
-local srvs, ignore_inst = {
+local srvs, ignore_inst, shades = {
   ["Workspace"] = ws,
   ["Players"] = plrs,
   ["ReplicatedStorage"] = game:GetService("ReplicatedStorage"),
   ["CoreGui"] = core
-}, {}
+}, {}, {}
 
 local inst_icons = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/Icons.lua"))()
 
@@ -460,6 +461,17 @@ function previous_table_inst(_path)
   end return previous_childs
 end
 
+function removing_shades()
+  local idx = {}
+  for i, _ in next, shades do
+    table.insert(idx, i)
+  end for i = 1, #idx do
+    shades["object_" .. tostring(i)]:Play()
+    task.wait(0.5)
+  end shades = {}
+  ui_data.vars.inst_obj_num = 0
+end
+
 function add_inst_label(t)
   if type(t) ~= "table" then funcs.notify("Script hiện đang gặp lỗi... !") return end
   for name_inst, _path in pairs(t) do ui_data.vars.idx_child = ui_data.vars.idx_child + 1
@@ -476,15 +488,34 @@ function add_inst_label(t)
     holder.TextScaled = false
     holder.TextSize = 14
     holder.TextColor3 = Color3.new(1, 1, 1)
-    holder.Text = ""
+    holder.Text = name_inst
     holder.TextXAlignment = "Left"
     holder.TextYAlignment = "Top"
     holder.Font = Enum.Font.Code
     holder.Visible = true
-    local re_size_progress = tws:Create(holder, TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(1, 0, 0.003, 0)})
-    re_size_progress:Play()
-    re_size_progress.Completed:Wait()
-    holder.Text = name_inst
+    holder.ZIndex = 0
+    local shade = Instance.new("TextLabel", holder)
+    shade.Name = "SHADE:" .. tostring(ui_data.vars.inst_obj_num)
+    shade.BackgroundTransparency = 0
+    shade.BackgroundColor3 = Color3.new(1, 1, 0)
+    shade.Position = UDim2.new(0, 0, 0, 0)
+    shade.Size = UDim2.new(1, 0, 1, 0)
+    shade.TextScaled = false
+    shade.TextSize = 14
+    shade.TextColor3 = Color3.new(1, 1, 1)
+    shade.Text = ""
+    shade.TextXAlignment = "Left"
+    shade.TextYAlignment = "Top"
+    shade.Font = Enum.Font.Code
+    shade.Visible = true
+    shade.ZIndex = 2
+    
+    local re_size_progress = tws:Create(shade, TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(1, 0, 0, 0)})
+    --table.insert(shades, "object_" .. tostring(ui_data.vars.inst_obj_num))
+    
+    shades["object_" .. tostring(ui_data.vars.inst_obj_num)] = re_size_progress
+    ui_data.vars.inst_obj_num += 1
+    
     -- Show Info Stuff --
     if path_childs ~= 0 then
       info_1 = Instance.new("TextButton", holder)
@@ -526,6 +557,7 @@ function add_inst_label(t)
             explorer_btn = 0
             explorer_scroll.CanvasPosition = Vector2.new(0, 0) task.wait(0.02)
             add_inst_label(previous_table_inst(_path))
+            removing_shades()
             ui_data.vars.dig_into = false
           else
             funcs.notify("Xin đợi một chút để load lại các childrens cũ... ")
@@ -577,6 +609,7 @@ function add_inst_label(t)
           explorer_btn = 0
           explorer_scroll.CanvasPosition = Vector2.new(0, 0) task.wait(0.02)
           add_inst_label(new_table_inst(_path))
+          removing_shades()
           ui_data.vars.dig_into = false
         else
           funcs.notify("Xin đợi một chút để load hết các childrens... \n Trước khi tiếp tục.")
@@ -590,6 +623,7 @@ function add_inst_label(t)
             explorer_btn = 0
             explorer_scroll.CanvasPosition = Vector2.new(0, 0) task.wait(0.02)
             add_inst_label(previous_table_inst(_path))
+            removing_shades()
             ui_data.vars.dig_into = false
           else
             funcs.notify("Xin đợi một chút để load lại các childrens trước... ")
@@ -708,6 +742,8 @@ add_info_labels({
   ["+Inst:---!"] = "(PUT INSIDE CODES EDITOR): +Inst:<ClassName : string>,<IstanceName : string>,<Parent : string>!"
 })
 add_display_label("Code Editor Version: " .. tostring(ui_data.vars.script_version))
-add_inst_label(srvs)
+add_inst_label(srvs) removing_shades()
 
 funcs.notify("Codes Editor by HoangHienXScripts.")
+print("[HHxScripts: Custom Code Editors, Loaded!]")
+-- Update: 2.52 --

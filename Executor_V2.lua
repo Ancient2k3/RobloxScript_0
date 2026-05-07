@@ -514,13 +514,9 @@ function add_inst_label(t)
     shade.Font = Enum.Font.Code
     shade.Visible = true
     shade.ZIndex = 2
-    
-    local re_size_progress = tws:Create(shade, TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(1, 0, 0, 0)})
-    --table.insert(shades, "object_" .. tostring(ui_data.vars.inst_obj_num))
-    
-    shades["object_" .. tostring(ui_data.vars.inst_obj_num)] = re_size_progress
-    ui_data.vars.inst_obj_num += 1
-    
+    table.insert(shades, "object_" .. tostring(ui_data.vars.inst_obj_num))
+    shades["object_" .. tostring(ui_data.vars.inst_obj_num)] = tws:Create(shade, TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(1, 0, 0, 0)})
+    ui_data.vars.inst_obj_num = ui_data.vars.inst_obj_num + 1
     -- Show Info Stuff --
     if path_childs ~= 0 then
       info_1 = Instance.new("TextButton", holder)

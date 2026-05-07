@@ -58,7 +58,6 @@ repeat task.wait()
 until type(ui_data.api_funcs) == "string" and ui_data.api_funcs ~= ""
 
 -- Saved Scripts --
-saved_codes[tostring(game.GameId)] = ""
 if not isfolder("HHxScripts/Storage") then
   makefolder("HHxScripts/Storage")
   if not isfolder("HHxScripts/Storage/Scripts") then
@@ -68,6 +67,7 @@ if not isfolder("HHxScripts/Storage") then
     end
   end
 end saved_codes = htps:JSONDecode(readfile("HHxScripts/Storage/Scripts/LastTimeCoding.json"))
+print(saved_codes[tostring(game.GameId)])
 task.wait()
 -- End --
 
@@ -471,12 +471,12 @@ end
 function removing_shades()
   local idx = {}
   for i, _ in next, shades do
-    print("[Shade: " .. i)
+    print("[Shade: " .. i .. " ]")
     table.insert(idx, i)
   end task.wait()
   print(#idx)
   for i = 1, #idx do
-    print(typeof(tostring(shades[ui_data.name_1 .. tostring(i)])))
+    print(shades[ui_data.name_1 .. tostring(i)])
     task.wait(0.5)
   end shades = {}
   ui_data.vars.inst_obj_num = 1
@@ -519,9 +519,10 @@ function add_inst_label(t)
     shade.Font = Enum.Font.Code
     shade.Visible = true
     shade.ZIndex = 2
-    table.insert(shades, "object_" .. tostring(ui_data.vars.inst_obj_num))
+    
     shades[ui_data.name_1 .. tostring(ui_data.vars.inst_obj_num)] = tws:Create(shade, TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(1, 0, 0, 0)})
     ui_data.vars.inst_obj_num = ui_data.vars.inst_obj_num + 1
+    
     -- Show Info Stuff --
     if path_childs ~= 0 then
       info_1 = Instance.new("TextButton", holder)

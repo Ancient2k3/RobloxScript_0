@@ -186,6 +186,7 @@ explorer_scroll.Size = UDim2.new(0.297, 0, 0.505, 0)
 explorer_scroll.CanvasSize = UDim2.new(0, 0, 20, 0)
 explorer_scroll.ScrollBarThickness = 1
 explorer_scroll.Visible = false
+explorer_scroll.ZIndex = 0
 funcs.corner(explorer_scroll, 0.02)
 
 _listedAPIs = Instance.new("ScrollingFrame", screenui)
@@ -502,7 +503,7 @@ function add_inst_label(t)
     holder.TextYAlignment = "Top"
     holder.Font = Enum.Font.Code
     holder.Visible = true
-    holder.ZIndex = 0
+    holder.ZIndex = 2
     local shade = Instance.new("TextLabel", holder)
     shade.Name = "SHADE:" .. tostring(ui_data.vars.inst_obj_num)
     shade.BackgroundTransparency = 0
@@ -517,9 +518,9 @@ function add_inst_label(t)
     shade.TextYAlignment = "Top"
     shade.Font = Enum.Font.Code
     shade.Visible = true
-    shade.ZIndex = 2
+    shade.ZIndex = 4
     
-    shades[ui_data.name_1 .. tostring(ui_data.vars.inst_obj_num)] = tws:Create(shade, TweenInfo.new(ui_data.vars.speed, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(1, 0, 0, 0)})
+    shades[ui_data.name_1 .. tostring(ui_data.vars.inst_obj_num)] = tws:Create(shade, TweenInfo.new(ui_data.vars.speed, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 0, 1, 0)})
     ui_data.vars.inst_obj_num = ui_data.vars.inst_obj_num + 1
     
     -- Show Info Stuff --

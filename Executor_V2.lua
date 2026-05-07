@@ -1,12 +1,13 @@
 -- Custom Executor: v2.5 --
 -- Now RE:Named to Scripts Editor --
 
-local ws, plrs, starterui, core, tws
+local ws, plrs, starterui, core, tws, htps
 ws = game:GetService("Workspace")
 plrs = game:GetService("Players")
 starterui = game:GetService("StarterGui")
 core = game:GetService("CoreGui")
 tws = game:GetService("TweenService")
+htps = game:GetService("HttpService")
 
 local ui_data, funcs = {
   folder = nil,
@@ -32,12 +33,12 @@ local ui_data, funcs = {
   notify = function(str) starterui:SetCore("SendNotification", {Title = "Scripts Editor", Text = str, Duration = 1.25,}) end
 }
 
-local srvs, ignore_inst, shades = {
+local srvs, ignore_inst, shades, saved_codes = {
   ["Workspace"] = ws,
   ["Players"] = plrs,
   ["ReplicatedStorage"] = game:GetService("ReplicatedStorage"),
   ["CoreGui"] = core
-}, {}, {}
+}, {}, {}, {}
 
 local inst_icons = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/Icons.lua"))()
 
@@ -56,12 +57,16 @@ repeat task.wait()
 until type(ui_data.api_funcs) == "string" and ui_data.api_funcs ~= ""
 
 -- Saved Scripts --
+saved_codes[game.GameId] = ""
 if not isfolder("HHxScripts/Storage") then
   makefolder("HHxScripts/Storage")
   if not isfolder("HHxScripts/Storage/Scripts") then
     makefolder("HHxScripts/Storage/Scripts")
+    if not isfile("HHxScripts/Storage/Scripts/LastTimeCoding.json") then
+      writefile("HHxScripts/Storage/Scripts/LastTimeCoding.json", htps:JSONEncode(saved_codes))
+    end
   end
-end
+end saved_codes = htps:JSONDecode(readfile("HHxScripts/Storage/Scripts/LastTimeCoding.json"))
 -- End --
 
 local screenui, debug_console, code_box, exec_one, exec_loop, tshow_ui, _wait, _listedAPIs, _selectedAPI, _openList, _properties_board
@@ -99,7 +104,7 @@ code_box.TextSize = 12
 code_box.TextColor3 = Color3.new(1, 1, 1)
 code_box.Font = Enum.Font.Code
 code_box.MultiLine = true
-code_box.Text = ""
+code_box.Text = saved_codes[game.GameId] or ""
 code_box.ClearTextOnFocus = false
 code_box.PlaceholderText = "..."
 code_box.ClipsDescendants = true
@@ -660,6 +665,7 @@ _openList.MouseButton1Click:Connect(api_list_visible)
 exec_one.MouseButton1Click:Connect(function()
   exec_one.TextColor3 = Color3.new(0, 1, 0) task.wait(0.02)
   exec_one.TextColor3 = Color3.new(1, 1, 1) run_script()
+  writefile("HHxScripts/Storage/Scripts/LastTimeCoding.json", htps:JSONEncode(saved_codes))
 end)
 _selectedAPI.MouseButton1Click:Connect(function()
   _selectedAPI.Visible = false
@@ -700,6 +706,7 @@ end)
 
 code_box:GetPropertyChangedSignal("Text"):Connect(function()
   local max_string = #code_box.Text
+  saved_codes[game.GameId] = code_box.Text
   local _position, _total, _string = string.find(code_box.Text, "%+Inst:%s*(.-)%s*!")
   if _position ~= nil and type(_position) == "number" then
     local result_count = 0

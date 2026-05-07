@@ -23,7 +23,7 @@ local ui_data, funcs = {
     show_api = 0,
     idx_count = 0,
     idx_child = 0,
-    inst_obj_num = 0
+    inst_obj_num = 1
   },
   api_funcs = game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/Scripts.lua"),
   for_games_api = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/MatchedGames.lua"))(),
@@ -474,7 +474,7 @@ function removing_shades()
     shades["object_" .. tostring(i)]:Play()
     task.wait(0.5)
   end shades = {}
-  ui_data.vars.inst_obj_num = 0
+  ui_data.vars.inst_obj_num = 1
 end
 
 function add_inst_label(t)

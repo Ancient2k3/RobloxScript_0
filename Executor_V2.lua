@@ -476,7 +476,9 @@ function removing_shades()
   end task.wait()
   print(#idx)
   for i = 1, #idx do
-    print(shades[ui_data.name_1 .. tostring(i)])
+    local tween = shades[ui_data.name_1 .. tostring(i)]
+    print(tween)
+    tween:Play()
     task.wait(0.5)
   end shades = {}
   ui_data.vars.inst_obj_num = 1
@@ -494,7 +496,7 @@ function add_inst_label(t)
     holder.BackgroundTransparency = 1
     holder.BackgroundColor3 = Color3.new(0, 0, 0)
     holder.Position = UDim2.new(0, 0, explorer_btn, 0)
-    holder.Size = UDim2.new(0, 0, 0.003, 0)
+    holder.Size = UDim2.new(1, 0, 0.003, 0)
     holder.TextScaled = false
     holder.TextSize = 14
     holder.TextColor3 = Color3.new(1, 1, 1)

@@ -15,7 +15,7 @@ local ui_data, funcs = {
   name_1 = "OBJECT_",
   vars = {
     delay = 0.001,
-    script_version = 2.52,
+    script_version = 3.0,
     show = false,
     looped = false,
     loaded_text = false,
@@ -471,14 +471,10 @@ end
 function removing_shades()
   local idx = {}
   for i, _ in next, shades do
-    print("[Shade: " .. i .. " ]")
     table.insert(idx, i)
   end task.wait()
-  print(#idx)
   for i = 1, #idx do
-    local tween = shades[ui_data.name_1 .. tostring(i)]
-    print(tween)
-    tween:Play()
+    shades[ui_data.name_1 .. tostring(i)]:Play()
     task.wait(0.5)
   end shades = {}
   ui_data.vars.inst_obj_num = 1
@@ -668,8 +664,8 @@ _openList.MouseButton1Click:Connect(api_list_visible)
 
 exec_one.MouseButton1Click:Connect(function()
   exec_one.TextColor3 = Color3.new(0, 1, 0) task.wait(0.02)
-  exec_one.TextColor3 = Color3.new(1, 1, 1) run_script()
-  writefile("HHxScripts/Storage/Scripts/LastTimeCoding.json", htps:JSONEncode(saved_codes))
+  exec_one.TextColor3 = Color3.new(1, 1, 1) writefile("HHxScripts/Storage/Scripts/LastTimeCoding.json", htps:JSONEncode(saved_codes))
+  run_script()
 end)
 _selectedAPI.MouseButton1Click:Connect(function()
   _selectedAPI.Visible = false
@@ -757,4 +753,4 @@ add_inst_label(srvs) removing_shades()
 
 funcs.notify("Codes Editor by HoangHienXScripts.")
 print("[HHxScripts: Custom Code Editors, Loaded!]")
--- Update: 2.52 --
+-- Update: 3.0, Last Fix --

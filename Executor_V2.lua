@@ -12,6 +12,7 @@ htps = game:GetService("HttpService")
 local ui_data, funcs = {
   folder = nil,
   name = "CodesEditor_xScripts",
+  name_1 = "OBJECT_",
   vars = {
     delay = 0.001,
     script_version = 2.52,
@@ -57,7 +58,7 @@ repeat task.wait()
 until type(ui_data.api_funcs) == "string" and ui_data.api_funcs ~= ""
 
 -- Saved Scripts --
-saved_codes[game.GameId] = ""
+saved_codes[tostring(game.GameId)] = ""
 if not isfolder("HHxScripts/Storage") then
   makefolder("HHxScripts/Storage")
   if not isfolder("HHxScripts/Storage/Scripts") then
@@ -67,6 +68,7 @@ if not isfolder("HHxScripts/Storage") then
     end
   end
 end saved_codes = htps:JSONDecode(readfile("HHxScripts/Storage/Scripts/LastTimeCoding.json"))
+task.wait()
 -- End --
 
 local screenui, debug_console, code_box, exec_one, exec_loop, tshow_ui, _wait, _listedAPIs, _selectedAPI, _openList, _properties_board
@@ -104,7 +106,7 @@ code_box.TextSize = 12
 code_box.TextColor3 = Color3.new(1, 1, 1)
 code_box.Font = Enum.Font.Code
 code_box.MultiLine = true
-code_box.Text = saved_codes[game.GameId] or ""
+code_box.Text = saved_codes[tostring(game.GameId)] or ""
 code_box.ClearTextOnFocus = false
 code_box.PlaceholderText = "..."
 code_box.ClipsDescendants = true
@@ -469,9 +471,12 @@ end
 function removing_shades()
   local idx = {}
   for i, _ in next, shades do
+    print("[Shade: " .. i)
     table.insert(idx, i)
-  end for i = 1, #idx do
-    shades["object_" .. tostring(i)]:Play()
+  end task.wait()
+  print(#idx)
+  for i = 1, #idx do
+    print(typeof(tostring(shades[ui_data.name_1 .. tostring(i)])))
     task.wait(0.5)
   end shades = {}
   ui_data.vars.inst_obj_num = 1
@@ -515,7 +520,7 @@ function add_inst_label(t)
     shade.Visible = true
     shade.ZIndex = 2
     table.insert(shades, "object_" .. tostring(ui_data.vars.inst_obj_num))
-    shades["object_" .. tostring(ui_data.vars.inst_obj_num)] = tws:Create(shade, TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(1, 0, 0, 0)})
+    shades[ui_data.name_1 .. tostring(ui_data.vars.inst_obj_num)] = tws:Create(shade, TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(1, 0, 0, 0)})
     ui_data.vars.inst_obj_num = ui_data.vars.inst_obj_num + 1
     -- Show Info Stuff --
     if path_childs ~= 0 then
@@ -702,7 +707,7 @@ end)
 
 code_box:GetPropertyChangedSignal("Text"):Connect(function()
   local max_string = #code_box.Text
-  saved_codes[game.GameId] = code_box.Text
+  saved_codes[tostring(game.GameId)] = code_box.Text
   local _position, _total, _string = string.find(code_box.Text, "%+Inst:%s*(.-)%s*!")
   if _position ~= nil and type(_position) == "number" then
     local result_count = 0

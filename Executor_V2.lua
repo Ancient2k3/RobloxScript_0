@@ -68,7 +68,7 @@ if not isfolder("HHxScripts/Storage") then
     end
   end
 end saved_codes = htps:JSONDecode(readfile("HHxScripts/Storage/Scripts/LastTimeCoding.json"))
-print(saved_codes[tostring(game.GameId)])
+--print(saved_codes[tostring(game.GameId)])
 task.wait()
 -- End --
 

@@ -22,7 +22,8 @@ built_in, x_numbers = {
   "new_tool() -- 1: tool name : string.",
   "inspect_element() -- 1: table : table, 2: indent : number.",
   "raycast() -- 1: start position : vector3, 2: end position : vector3, 3: settings : table.",
-  "create_tween() -- I'm lazy to writing more tutorials... read it from info buttons."
+  "create_tween() -- I'm lazy to writing more tutorials... read it from info buttons.",
+  "-- this function is useless for now... --"
 }, {-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
 local v3, cframe = {
@@ -266,6 +267,20 @@ function model_pos(model)
   end
 end
 
+function anim_id(humanoid)
+  if humanoid ~= nil then
+    return humanoid:GetPlayingAnimationTracks()[1].Animation.AnimationId
+  else
+    print("<anim_id: humanoid, can't be nil>")
+  end
+end
+
+function my_module(_path)
+  if typeof(_path) == "string" then
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/" .. _path))()
+  end
+end
+
 function find_object_by_name(name, class)
   if not name then print("<find_object_by_name: name, class?>")
     return "missing argument 1: object name"
@@ -374,3 +389,4 @@ inspect_element()~Return what inside a table, structure as a string... <argument
 raycast()~Return raycastresult... <argument: #1 start position : vector3, #2 end position : vector3, #3 settings : table>@
 create_tween()~Return tweening progress... tws:Create(...) but make it as a function just for short <argument: #1 object to tweening : instance, #2 finish in seconds : numberic, #3 tweening style : string, #4 tweening direction : string, #5 tweening property : table>@
 inst()~Basically an Instance.new(...) and properties... on code editor. <argument: #1 class name : string>@
+anim_id()~Return AnimationId get from an Humanoid... <argument: #1 character humanoid : instance>@

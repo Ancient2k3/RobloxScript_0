@@ -1,10 +1,11 @@
 -- Custom Built+In_Functions --
-local ws, plrs, core, reps, tws
+local ws, plrs, core, reps, tws, vim
 ws = game:GetService("Workspace")
 plrs = game:GetService("Players")
 core = game:GetService("CoreGui")
 reps = game:GetService("ReplicatedStorage")
 tws = game:GetService("TweenService")
+vim = game:GetService("VirtualInputManager")
 
 local plr, built_in, x_numbers, in_script_funcs
 plr = plrs.LocalPlayer
@@ -347,6 +348,15 @@ function raycast(pos, direction, datas)
     end
 end
 
+function simulate_input(name)
+  vim:SendKeyEvent(true, Enum.KeyCode[name], false, game) task.wait(0.02)
+  vim:SendKeyEvent(false, Enum.KeyCode[name], false, game)
+end
+
+function find_root(target)
+  return target and target.Character and target.Character:FindFirstChild("HumanoidRootPart")
+end
+
 function create_tween(...)
   local tween_info = {...}
   if #tween_info > 0 then
@@ -390,3 +400,5 @@ raycast()~Return raycastresult... <argument: #1 start position : vector3, #2 end
 create_tween()~Return tweening progress... tws:Create(...) but make it as a function just for short <argument: #1 object to tweening : instance, #2 finish in seconds : numberic, #3 tweening style : string, #4 tweening direction : string, #5 tweening property : table>@
 inst()~Basically an Instance.new(...) and properties... on code editor. <argument: #1 class name : string>@
 anim_id()~Return AnimationId get from an Humanoid... <argument: #1 character humanoid : instance>@
+simulate_input()~Simulating a specific key pressing... <argument: #1 keycode : string>@
+find_root()~Return HumanoidRootPart... <argument: #1 player : instance>@

@@ -1,11 +1,12 @@
 -- Custom Built+In_Functions --
-local ws, plrs, core, reps, tws, vim
+local ws, plrs, core, reps, tws, vim, txcs
 ws = game:GetService("Workspace")
 plrs = game:GetService("Players")
 core = game:GetService("CoreGui")
 reps = game:GetService("ReplicatedStorage")
 tws = game:GetService("TweenService")
 vim = game:GetService("VirtualInputManager")
+txcs = game:GetService("TextChatService")
 
 local plr, built_in, x_numbers, in_script_funcs
 plr = plrs.LocalPlayer
@@ -353,8 +354,18 @@ function simulate_input(name)
   vim:SendKeyEvent(false, Enum.KeyCode[name], false, game)
 end
 
-function find_root(target)
-  return target and target.Character and target.Character:FindFirstChild("HumanoidRootPart")
+function find_root(target, root_name)
+  return target and target.Character and target.Character:FindFirstChild(root_name) or nil
+end
+
+function chat_str(str)
+  local is_legacy_chat = txcs.ChatVersion == Enum.ChatVersion.LegacyChatService
+  local message = tostring(str)
+  if not is_legacy_chat then
+    txcs.TextChannels.RBXGeneral:SendAsync(message)
+  else
+    reps.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
+  end
 end
 
 function create_tween(...)
@@ -401,4 +412,5 @@ create_tween()~Return tweening progress... tws:Create(...) but make it as a func
 inst()~Basically an Instance.new(...) and properties... on code editor. <argument: #1 class name : string>@
 anim_id()~Return AnimationId get from an Humanoid... <argument: #1 character humanoid : instance>@
 simulate_input()~Simulating a specific key pressing... <argument: #1 keycode : string>@
-find_root()~Return HumanoidRootPart... <argument: #1 player : instance>@
+find_root()~Return an character basepart... <argument: #1 player : instance, #2 basepart name : string>@
+chat_str()~Sending an string into chatbox... <argument: #1 message : string>@

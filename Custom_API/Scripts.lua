@@ -28,6 +28,12 @@ built_in, x_numbers = {
   "-- this function is useless for now... --"
 }, {-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
+local HHxScripts = _G.HHxScripts or getgenv().HHxScripts
+local Encoder
+if HHxScripts then
+  Encoder = HHxScripts.Encoder
+end
+
 local v3, cframe = {
   random = Vector3.new(x_numbers[math.random(#x_numbers)], x_numbers[math.random(#x_numbers)], x_numbers[math.random(#x_numbers)]),
   zero = Vector3.new(0, 0, 0),

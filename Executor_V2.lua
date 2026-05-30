@@ -765,6 +765,10 @@ add_display_label("Special Commands")
 add_info_labels({
   ["+Inst:---!"] = "(PUT INSIDE CODES EDITOR): +Inst:<ClassName : string>,<IstanceName : string>,<Parent : string>!"
 })
+add_display_label("Modules")
+add_info_labels({
+  ["Encoder"] = ".encode(<string>), .decode(<string>)"
+})
 add_display_label("Code Editor Version: " .. tostring(ui_data.vars.script_version))
 add_inst_label(srvs) removing_shades()
 

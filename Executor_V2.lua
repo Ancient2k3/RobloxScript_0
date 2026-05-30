@@ -9,6 +9,21 @@ core = game:GetService("CoreGui")
 tws = game:GetService("TweenService")
 htps = game:GetService("HttpService")
 
+-- new stuff --
+local modules = {
+  "https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/Notes/Encoder_v1.lua"
+}
+if getgenv then
+  getgenv().HHxScripts = {
+    Encoder = loadstring(game:HttpGet(modules[1]))()
+  }
+else
+  _G.HHxScripts = {
+    Encoder = loadstring(game:HttpGet(modules[1]))()
+  }
+end
+-- new stuff --
+
 local ui_data, funcs = {
   folder = nil,
   name = "CodesEditor_xScripts",

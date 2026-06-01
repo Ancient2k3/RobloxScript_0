@@ -68,6 +68,10 @@ if core:FindFirstChild(ui_data.name) then
 else
   ui_data.folder = Instance.new("Folder", core)
   ui_data.folder.Name = ui_data.name
+  local assets_inst = Instance.new("Folder", ui_data.folder)
+  assets_inst.Name = "Assets"
+  Instance.new("Animation", assets_inst).Name = "_Animation_Instance"
+  Instance.new("Sound", assets_inst).Name = "_Sound_Instance"
 end
 
 repeat task.wait()

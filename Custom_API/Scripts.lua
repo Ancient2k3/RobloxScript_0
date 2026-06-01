@@ -389,11 +389,8 @@ function from_url(url)
   end
 end
 
-function through(t, script)
-  for i, v in next, t do
-    script(i, v)
-  end
-end
+function through(t, s) for i, v in next, t do s(i, v) end end
+function is(t, s, es) if t then s() else es() end end
 
 function play_anim(t, anim_id)
   if t ~= nil and t.ClassName == "Humanoid" then
@@ -408,6 +405,7 @@ function play_anim(t, anim_id)
     print("<argument: #1 humanoid : instance, #2 animation id : string>")
   end
 end
+--// End //--
 
 function create_tween(...)
   local tween_info = {...}
@@ -457,3 +455,5 @@ find_root()~Return an character basepart... <argument: #1 player : instance, #2 
 chat_str()~Sending an string into chatbox... <argument: #1 message : string>@
 from_url()~Return anything you want from an url... <argument: #1 json data : string>@
 play_anim()~Play animation on humanoid... <argument: #1 humanoid : instance, #2 animation id : string>@
+through()~Just for short, this is for i,v loop through table... <argument: #1 table to loop through : table, #2 function with i and v as first and second argument : function>@
+is()~Same as through() just for short this is if-statement... <argument: #1 condition : anything, #2 function if true : function, #3 function if false : function>@

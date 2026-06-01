@@ -64,10 +64,15 @@ function use_turret(t, p)
   end
 end
 
-function aura(t, dmg)
-  if t then
-    slap:FireServer(t, dmg or 2, 0, 0, "Jay")
-  else print("Missing argument: #1 target important. !")
+function aura(t, ...)
+  local args = {...}
+  if t and type(args) == "table" then
+    if args and args.dmg and args.ragdoll and args.force then
+      slap:FireServer(t, args.dmg, args.ragdoll, args.force, "Jay")
+    else
+      print("Kind of table: {dmg = 0, ragdoll = 0, force = 0}.")
+    end
+  else print("Missing argument: #1 target, #2 table important. !")
   end
 end
 

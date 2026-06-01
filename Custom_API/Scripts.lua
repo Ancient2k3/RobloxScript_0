@@ -1,5 +1,5 @@
 -- Custom Built+In_Functions --
-local ws, plrs, core, reps, tws, vim, txcs, htps
+local ws, plrs, core, reps, tws, vim, txcs, htps, tps
 ws = game:GetService("Workspace")
 plrs = game:GetService("Players")
 core = game:GetService("CoreGui")
@@ -8,6 +8,7 @@ tws = game:GetService("TweenService")
 vim = game:GetService("VirtualInputManager")
 txcs = game:GetService("TextChatService")
 htps = game:GetService("HttpService")
+tps = game:GetService("TeleportService")
 
 local plr, built_in, x_numbers, in_script_funcs
 plr = plrs.LocalPlayer
@@ -387,8 +388,18 @@ function json_decode(url)
   end
 end
 
-function load_anim()
-  return nil
+function play_anim(t, anim_id)
+  if t ~= nil and t.ClassName == "Humanoid" then
+    if anim_id ~= nil and type(anim_id) == "string" then
+      local obj = core["CodesEditor_xScripts"].Assets._Animation_Instance
+      obj.AnimationId = anim_id
+      t:LoadAnimation(obj):Play()
+    else
+      print("Invalid argument: #2 not a string.")
+    end
+  else
+    print("<argument: #1 humanoid : instance, #2 animation id : string>")
+  end
 end
 
 function create_tween(...)
@@ -438,3 +449,4 @@ simulate_input()~Simulating a specific key pressing... <argument: #1 keycode : s
 find_root()~Return an character basepart... <argument: #1 player : instance, #2 basepart name : string>@
 chat_str()~Sending an string into chatbox... <argument: #1 message : string>@
 json_decode()~Return a table from json data... <argument: #1 json data : string>@
+play_anim()~Play animation on humanoid... <argument: #1 humanoid : instance, #2 animation id : string>@

@@ -376,7 +376,8 @@ function chat_str(str)
   end
 end
 
-function json_decode(url)
+--// Gonna updating this soon //--
+function from_url(url)
   if type(url) == "string" then
     if url:sub(1, 8) == "https://" then
       return htps:JSONDecode(game:HttpGet(url))
@@ -385,6 +386,12 @@ function json_decode(url)
     end
   else
     print("<argument: #1 url : string>")
+  end
+end
+
+function through(t, script)
+  for i, v in next, t do
+    script(i, v)
   end
 end
 
@@ -448,5 +455,5 @@ anim_id()~Return AnimationId get from an Humanoid... <argument: #1 character hum
 simulate_input()~Simulating a specific key pressing... <argument: #1 keycode : string>@
 find_root()~Return an character basepart... <argument: #1 player : instance, #2 basepart name : string>@
 chat_str()~Sending an string into chatbox... <argument: #1 message : string>@
-json_decode()~Return a table from json data... <argument: #1 json data : string>@
+from_url()~Return anything you want from an url... <argument: #1 json data : string>@
 play_anim()~Play animation on humanoid... <argument: #1 humanoid : instance, #2 animation id : string>@

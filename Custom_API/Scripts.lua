@@ -1,5 +1,5 @@
 -- Custom Built+In_Functions --
-local ws, plrs, core, reps, tws, vim, txcs
+local ws, plrs, core, reps, tws, vim, txcs, htps
 ws = game:GetService("Workspace")
 plrs = game:GetService("Players")
 core = game:GetService("CoreGui")
@@ -7,6 +7,7 @@ reps = game:GetService("ReplicatedStorage")
 tws = game:GetService("TweenService")
 vim = game:GetService("VirtualInputManager")
 txcs = game:GetService("TextChatService")
+htps = game:GetService("HttpService")
 
 local plr, built_in, x_numbers, in_script_funcs
 plr = plrs.LocalPlayer
@@ -374,6 +375,22 @@ function chat_str(str)
   end
 end
 
+function json_decode(url)
+  if type(url) == "string" then
+    if url:sub(1, 8) == "https://" then
+      return htps:JSONDecode(game:HttpGet(url))
+    else
+      print("Invalid type, only accept \"https\" kind of...")
+    end
+  else
+    print("<argument: #1 url : string>")
+  end
+end
+
+function load_anim()
+  return nil
+end
+
 function create_tween(...)
   local tween_info = {...}
   if #tween_info > 0 then
@@ -420,3 +437,4 @@ anim_id()~Return AnimationId get from an Humanoid... <argument: #1 character hum
 simulate_input()~Simulating a specific key pressing... <argument: #1 keycode : string>@
 find_root()~Return an character basepart... <argument: #1 player : instance, #2 basepart name : string>@
 chat_str()~Sending an string into chatbox... <argument: #1 message : string>@
+json_decode()~Return a table from json data... <argument: #1 json data : string>@

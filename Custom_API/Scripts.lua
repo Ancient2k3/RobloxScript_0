@@ -162,40 +162,50 @@ function find_model(method, _path)
     end
 end
 
-function find_plr(method, incl)
-  local is_method = method or nil
-  local sec_argument = incl or nil
-  if method == "self" then return plr
-  elseif method == "randomize" then
-    return plrs:GetPlayers()[math.random(1, #plrs:GetPlayers())]
-  elseif method == "near" then
-  local d = {f = nil, m = math.huge}
-  for _, usr in pairs(plrs:GetPlayers()) do
-    if usr ~= plr and usr and usr.Character and usr.Character:FindFirstChild("HumanoidRootPart") then
-      local dst = (usr.Character.HumanoidRootPart.Position - plr.Character.HumanoidRootPart.Position).magnitude
-      if dst < d.m then
-        d.m = dst
-        d.f = usr
-      end
-    end
-  end if d.f ~= nil then return d.f
-    else print("Failed: found " .. #plrs:GetPlayers() .. " players are in the server!")
-  end else if is_method and type(is_method) == "string" then
-      local user_founded, alt_found = nil, {}
-      if sec_argument and type(sec_argument) == "string" then
-        local target_usr = in_script_funcs.find_full_name(is_method)
-        if not target_usr then return nil end
-        table.insert(alt_found, target_usr)
-        for _, usr_alt in pairs(plrs:GetPlayers()) do
-          if usr_alt and usr_alt:IsFriendsWith(target_usr.UserId) then
-            table.insert(alt_found, usr_alt)
-          end
-        end return alt_found
+function find_plr(targeted, objection)
+  local t, obj = targeted or nil, objection or nil
+  local everyone = plrs:GetPlayers()
+  if type(t) == "string" then
+    if t == "near" then
+      local nearest_from = nil
+      if obj == nil then
+        nearest_from = plr
       else
-        user_founded = in_script_funcs.find_full_name(is_method)
-        return user_founded
+        if obj and type(obj) == "userdata" then
+          nearest_from = obj
+        elseif obj and type(obj) == "number" then
+          if obj == 1 then
+            print("Idk what to making yet... this for now, does nothing.")
+            nearest_from = plr
+          end
+        else
+          print("Invalid type of argument: #2\n• player or number expected.")
+        end
+      end local atlas = {near = nil, best_dist = math.huge}
+      for _, out in pairs(everyone) do
+        if out and out.Character then
+          local dist = (out.Character:GetBoundingBox().Position - nearest_from.Character:GetBoundingBox().Position).magnitude
+          if dist < atlas.best_dist then
+            atlas.best_dist = dist
+            atlas.near = out
+          end
+        end
+      end if atlas.near then return atlas.near else print("No nearest target can be found!") end
+    elseif t == "randomize" then
+      return everyone[math.random(1, #everyone)]
+    else
+      if obj and type(obj) == "number" and obj > 0 then
+        local these = {}
+        local this_guy = plrs[in_script_funcs.find_full_name(t).Name]
+        if not this_guy then print("Player naming started with keys " .. t .. ", it seem like doesnt exist in the server.") return end
+        for _, out in pairs(everyone) do
+          if out and out:IsFriendsWith(this_guy.UserId) then
+            table.insert(these, out)
+          end
+        end table.insert(these, this_guy)
+        return these[math.random(1, #these)]
       end
-    else print("Missing argument: #1 \"near\" or \"self\" or \"randomize\" or player-name.")
+      return plrs[in_script_funcs.find_full_name(t).Name]
     end
   end
 end
@@ -434,7 +444,7 @@ end
 
 -- APIs Listed --
 tpos()~Teleport user to specific position then return to origin... <argument: #1 position : vector3, #2 reverse to origin : boolean, #3 delayed time : number>@
-find_plr()~Return specific player... <argument: #1 "near" or "self" or "randomize" or player-name : string, #2 any string to include alt : string>@
+find_plr()~Return specific player... <argument: #1 "near" or "randomize" or player-name : string, #2 player-instance or number 1 = include alt : anything>@
 str_changed_to()~Change a string inside codes editor to something else... <argument: #1 current_string : string, #2 new_string : string>@
 model_pos()~Return position of a model... <argument: #1 model or user-character : instance>@
 checkdescendants()~Return string structured of path childrens... <argument: #1 path : instance, #2 mode : numberic>@

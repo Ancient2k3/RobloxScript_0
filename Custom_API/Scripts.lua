@@ -123,7 +123,7 @@ function inspect_element(t, time)
     time = time or 0 local structure = string.rep(" ", time) .. "{\n"
     for a, b in pairs(t) do local _istype = type(b)
         if _istype == "table" then structure = structure .. string.rep(" ", time + 4) .. a .. " = {\n"
-            structure = structure .. _return_structure(b, time + 8)
+            structure = structure .. inspect_element(b, time + 8)
             structure = structure .. string.rep(" ", time + 4) .. "}\n"
         elseif _istype == "function" then structure = structure .. string.rep(" ", time + 4) .. a .. " = function: " .. tostring(b) .. "\n"
         elseif _istype == "boolean" then structure = structure .. string.rep(" ", time + 4) .. a .. " = " .. tostring(b) .. "\n"

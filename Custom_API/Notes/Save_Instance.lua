@@ -14,7 +14,7 @@ module.save_map = function(_path, t)
         }, rotation = {
           r.X, r.Y, r.Z
         }, class = c,
-        color = {clr.R, clr.G, clr.B}, material = tostring(_mat), transparency = tonumber(_trans)
+        color = {clr.R, clr.G, clr.B}, material = tostring(_mat):split(".")[3], transparency = tonumber(_trans)
       } counts = counts + 1
       task.wait(0.01)
     end

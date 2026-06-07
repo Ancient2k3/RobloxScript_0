@@ -31,9 +31,10 @@ built_in, x_numbers = {
 }, {-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
 local HHxScripts = _G.HHxScripts or getgenv().HHxScripts
-local Encoder
+local Encoder, Map
 if HHxScripts then
   Encoder = HHxScripts.Encoder
+  Map = HHxScripts.Map
 end
 
 local v3, cframe = {
@@ -299,11 +300,6 @@ function my_module(_path)
   if typeof(_path) == "string" then
     return loadstring(game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/" .. _path))()
   end
-end
-
-function use_module(name)
-  my_module("RobloxScript_0/refs/heads/main/Custom_API/Notes/" .. name)
-  print("Loaded module... ")
 end
 
 function find_object_by_name(name, class)

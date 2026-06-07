@@ -2,12 +2,17 @@
 local htps = game:GetService("HttpService")
 local module = {}
 
-module.save_map = function(_path, t)
-  local counts, kind_of = 1, {"Part", "MeshPart", "TrussPart"}
+module.save_map = function(_path)
+  local counts, kind_of, data_map, start_tick = 1, {"Part", "MeshPart", "TrussPart"}, {}, tick()
+  for _, valid_obj in pairs(_path:GetDescendants()) do
+    if valid_obj and table.find(kind_of, valid_obj.ClassName) then
+      valid_obj.Parent = _path
+    end
+  end task.wait(0.2)
   for _, obj in pairs(_path:GetChildren()) do
     if obj and table.find(kind_of, obj.ClassName) then
       local p, s, r, c, clr, _mat, _trans = obj.Position, obj.Size, obj.Rotation, obj.ClassName, obj.Color, obj.Material, obj.Transparency
-      t["object_" .. tostring(counts)] = {
+      data_map["object_" .. tostring(counts)] = {
         position = {
           p.X, p.Y, p.Z
         }, size = {
@@ -19,11 +24,15 @@ module.save_map = function(_path, t)
       } counts = counts + 1
       task.wait(0.01)
     end
-  end return htps:JSONEncode(t)
+  end local out = htps:JSONEncode(data_map)
+  print("It's finished in " .. tostring(tick() - start_tick) .. " seconds !\nOutput: " .. out:sub(1, 1000) .. "...and more.")
+  return out
 end
 
 module.load_map = function(_parent, t)
   local counts = 0
+  if type(t) ~= "string" then return "argument 2 not a string." end
+  t = htps:JSONDecode(t)
   for i, _ in pairs(t) do
     counts = counts + 1
   end task.wait(0.02)
@@ -40,7 +49,7 @@ module.load_map = function(_parent, t)
     new_obj.Size = Vector3.new(unpack(s))
     new_obj.Color = Color3.fromRGB(unpack(clr))
     new_obj.Transparency = _trans
-    task.wait(0.02)
+    task.wait(0.01)
   end
 end
 

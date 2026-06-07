@@ -2,7 +2,7 @@
 local htps = game:GetService("HttpService")
 local module = {}
 
-module.save_map = function(_path)
+module.save_map = function(_path, from_point)
   local counts, kind_of, data_map, start_tick = 1, {"Part", "MeshPart", "TrussPart"}, {}, tick()
   for _, valid_obj in pairs(_path:GetDescendants()) do
     if valid_obj and table.find(kind_of, valid_obj.ClassName) then
@@ -11,7 +11,7 @@ module.save_map = function(_path)
   end task.wait(0.2)
   for _, obj in pairs(_path:GetChildren()) do
     if obj and table.find(kind_of, obj.ClassName) then
-      local p, s, r, c, clr, _mat, _trans = obj.Position, obj.Size, obj.Rotation, obj.ClassName, obj.Color, obj.Material, obj.Transparency
+      local p, s, r, c, clr, _mat, _trans = obj.Position - from_point.Position, obj.Size, obj.Rotation, obj.ClassName, obj.Color, obj.Material, obj.Transparency
       data_map["object_" .. tostring(counts)] = {
         position = {
           p.X, p.Y, p.Z
@@ -29,7 +29,7 @@ module.save_map = function(_path)
   return out
 end
 
-module.load_map = function(_parent, t)
+module.load_map = function(_parent, t, at_point)
   local counts = 0
   if type(t) ~= "string" then return "argument 2 not a string." end
   t = htps:JSONDecode(t)
@@ -44,7 +44,7 @@ module.load_map = function(_parent, t)
     new_obj.Material = Enum.Material[_mat]
     new_obj.Anchored = true
     new_obj.CanCollide = true
-    new_obj.Position = Vector3.new(unpack(p))
+    new_obj.Position = at_point.Position + Vector3.new(unpack(p))
     new_obj.Rotation = Vector3.new(unpack(r))
     new_obj.Size = Vector3.new(unpack(s))
     new_obj.Color = Color3.fromRGB(unpack(clr))

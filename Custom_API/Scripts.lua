@@ -301,6 +301,11 @@ function my_module(_path)
   end
 end
 
+function use_module(name)
+  my_module("RobloxScript_0/refs/heads/main/Custom_API/Notes/" .. name)
+  print("Loaded module... ")
+end
+
 function find_object_by_name(name, class)
   if not name then print("<find_object_by_name: name, class?>")
     return "missing argument 1: object name"

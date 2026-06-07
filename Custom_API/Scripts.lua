@@ -184,7 +184,7 @@ function find_plr(targeted, objection)
         end
       end local atlas = {near = nil, best_dist = math.huge}
       for _, out in pairs(everyone) do
-        if out and out.Character then
+        if out ~= nearest_from and out and out.Character then
           local dist = (out.Character:GetBoundingBox().Position - nearest_from.Character:GetBoundingBox().Position).magnitude
           if dist < atlas.best_dist then
             atlas.best_dist = dist

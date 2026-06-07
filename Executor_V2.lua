@@ -11,15 +11,18 @@ htps = game:GetService("HttpService")
 
 -- new stuff --
 local modules = {
-  "https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/Notes/Encoder_v1.lua"
+  "https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/Notes/Encoder_v1.lua",
+  "https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/Notes/Save_Instance.lua"
 }
 if getgenv then
   getgenv().HHxScripts = {
-    Encoder = loadstring(game:HttpGet(modules[1]))()
+    Encoder = loadstring(game:HttpGet(modules[1]))(),
+    Map = loadstring(game:HttpGet(modules[2]))()
   }
 else
   _G.HHxScripts = {
-    Encoder = loadstring(game:HttpGet(modules[1]))()
+    Encoder = loadstring(game:HttpGet(modules[1]))(),
+    Map = loadstring(game:HttpGet(modules[2]))()
   }
 end
 -- new stuff --

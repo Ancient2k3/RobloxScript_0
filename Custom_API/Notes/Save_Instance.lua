@@ -1,6 +1,23 @@
 -- Saving & Reload: Baseparts --
+local ws = game:GetService("Workspace")
 local htps = game:GetService("HttpService")
 local module = {}
+local folder_1, _object
+
+if not ws:FindFirstChild("_ScriptFolder") then
+  folder_1 = Instance.new("Folder", ws)
+  folder_1.Name = "_ScriptFolder"
+
+  _object = Instance.new("Part", folder_1)
+  _object.Name = "Origin_Point"
+  _object.Transparency = 1
+  _object.Anchored = true
+  _object.CanCollide = false
+  _object.Material = "Neon"
+  _object.Color = Color3.new(1, 0, 1)
+  _object.Size = Vector3.new(0.5, 0.5, 0.5)
+  _object.Position = Vector3.new(0, 9999, 0)
+end
 
 module.save_map = function(_path, from_point)
   local counts, kind_of, data_map, start_tick = 1, {"Part", "MeshPart", "TrussPart"}, {}, tick()

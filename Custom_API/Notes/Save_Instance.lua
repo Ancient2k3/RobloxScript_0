@@ -43,9 +43,10 @@ module.save_map = function(_path)
       valid_obj.Parent = _path
     end
   end task.wait(0.2)
+  local amount_of_child = #_path:GetChildren()
   for _, obj in pairs(_path:GetChildren()) do
     if obj and table.find(kind_of, obj.ClassName) then
-      local p, s, r, c, clr, _mat, _trans = obj.Position - from_point.Position, obj.Size, obj.Rotation, obj.ClassName, obj.Color, obj.Material, obj.Transparency
+      local p, s, r, c, clr, _mat, _trans = obj.Position - _object.Position, obj.Size, obj.Rotation, obj.ClassName, obj.Color, obj.Material, obj.Transparency
       data_map["object_" .. tostring(counts)] = {
         position = {
           p.X, p.Y, p.Z
@@ -56,7 +57,7 @@ module.save_map = function(_path)
         }, class = c,
         color = {clr.R * 255, clr.G * 255, clr.B * 255}, material = tostring(_mat):split(".")[3], transparency = tonumber(_trans)
       } counts = counts + 1
-      task.wait(0.01)
+      _set_transparenvy(counts / amount_of_child) task.wait(0.01)
     end
   end local out = htps:JSONEncode(data_map)
   print("It's finished in " .. tostring(tick() - start_tick) .. " seconds !\nOutput: " .. out:sub(1, 1000) .. "...and more.")
@@ -64,10 +65,11 @@ module.save_map = function(_path)
   return out
 end
 
-module.load_map = function(_parent, t, at_point)
+module.load_map = function(_parent, t)
   local counts = 0
   if type(t) ~= "string" then return "argument 2 not a string." end
   t = htps:JSONDecode(t)
+  _idk_man(1)
   for i, _ in pairs(t) do
     counts = counts + 1
   end task.wait(0.02)
@@ -79,13 +81,13 @@ module.load_map = function(_parent, t, at_point)
     new_obj.Material = Enum.Material[_mat]
     new_obj.Anchored = true
     new_obj.CanCollide = true
-    new_obj.Position = at_point.Position + Vector3.new(unpack(p))
+    new_obj.Position = _object.Position + Vector3.new(unpack(p))
     new_obj.Rotation = Vector3.new(unpack(r))
     new_obj.Size = Vector3.new(unpack(s))
     new_obj.Color = Color3.fromRGB(unpack(clr))
     new_obj.Transparency = _trans
-    task.wait(0.01)
-  end
+    _set_transparency(idx / counts) task.wait(0.01)
+  end _idk_man(0)
 end
 
 return module

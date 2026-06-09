@@ -1,13 +1,16 @@
 -- Saving & Reload: Baseparts --
 local ws = game:GetService("Workspace")
+local plrs = game:GetService("Players")
 local htps = game:GetService("HttpService")
+
 local module = {}
-local folder_1, _object
+local plr, folder_1, _object
+plr = plrs.LocalPlayer
 
 if not ws:FindFirstChild("_ScriptFolder") then
   folder_1 = Instance.new("Folder", ws)
   folder_1.Name = "_ScriptFolder"
-
+  -- Nothing here... --
   _object = Instance.new("Part", folder_1)
   _object.Name = "Origin_Point"
   _object.Transparency = 1
@@ -19,8 +22,22 @@ if not ws:FindFirstChild("_ScriptFolder") then
   _object.Position = Vector3.new(0, 9999, 0)
 end
 
-module.save_map = function(_path, from_point)
+function _idk_man(is_num)
+  local char = plr and plr.Character
+  if char then
+    if is_num > 0 then
+      _object.Position = char:GetBoundingBox().Position
+      _object.Transparency = 0.25
+    else
+      _object.Position = Vector3.new(0, 9999, 0)
+      _object.Transparency = 1
+    end
+  end
+end function _set_transparency(num) _object.Transparency = num end
+
+module.save_map = function(_path)
   local counts, kind_of, data_map, start_tick = 1, {"Part", "MeshPart", "TrussPart"}, {}, tick()
+  _idk_man(1)
   for _, valid_obj in pairs(_path:GetDescendants()) do
     if valid_obj and table.find(kind_of, valid_obj.ClassName) then
       valid_obj.Parent = _path
@@ -43,6 +60,7 @@ module.save_map = function(_path, from_point)
     end
   end local out = htps:JSONEncode(data_map)
   print("It's finished in " .. tostring(tick() - start_tick) .. " seconds !\nOutput: " .. out:sub(1, 1000) .. "...and more.")
+  _idk_man(0)
   return out
 end
 

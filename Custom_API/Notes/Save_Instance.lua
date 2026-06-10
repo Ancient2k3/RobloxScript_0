@@ -57,7 +57,7 @@ module.save_map = function(_path)
         }, class = c,
         color = {clr.R * 255, clr.G * 255, clr.B * 255}, material = tostring(_mat):split(".")[3], transparency = tonumber(_trans)
       } counts = counts + 1
-      _set_transparenvy(counts / amount_of_child) task.wait(0.01)
+      _set_transparency(counts / amount_of_child) task.wait(0.01)
     end
   end local out = htps:JSONEncode(data_map)
   print("It's finished in " .. tostring(tick() - start_tick) .. " seconds !\nOutput: " .. out:sub(1, 1000) .. "...and more.")

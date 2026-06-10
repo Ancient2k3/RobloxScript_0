@@ -27,7 +27,7 @@ function _split(str)
   end return out
 end
 
-function _module.encode(str)
+function _module.EN(str)
   local out = ""
   for i = 1, #str do
     local number = tostring(_reverse(str:sub(i, i)))
@@ -38,7 +38,7 @@ function _module.encode(str)
   end return out:sub(1, #out - 1)
 end
 
-function _module.decode(str)
+function _module.DE(str)
   local out = ""
   local codes = _split(str)
   for _, number in ipairs(codes) do

@@ -416,6 +416,12 @@ function play_anim(t, anim_id)
     print("<argument: #1 humanoid : instance, #2 animation id : string>")
   end
 end
+
+function chatted(t, s)
+  if type(t) ~= "userdata" then print("argument: #1 must be a player...") return end
+  if type(s) ~= "function" then print("argument: #2 must be a function...") return end
+  t.Chatted:Connect(function(v) s(v) end)
+end
 --// End //--
 
 function create_tween(...)
@@ -468,3 +474,4 @@ from_url()~Return anything you want from an url... <argument: #1 json data : str
 play_anim()~Play animation on humanoid... <argument: #1 humanoid : instance, #2 animation id : string>@
 through()~Just for short, this is for i,v loop through table... <argument: #1 table to loop through : table, #2 function with i and v as first and second argument : function>@
 is()~Same as through() just for short this is if-statement... <argument: #1 condition : anything, #2 function if true : function, #3 function if false : function>@
+chatted()~It's user.Chatted:Connect(func()) but for short... <argument: #1 player : userdata, #2 function, first argument is returning a string : function>@

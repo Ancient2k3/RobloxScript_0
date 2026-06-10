@@ -20,6 +20,8 @@ if not ws:FindFirstChild("_ScriptFolder") then
   _object.Color = Color3.new(1, 0, 1)
   _object.Size = Vector3.new(0.5, 0.5, 0.5)
   _object.Position = Vector3.new(0, 9999, 0)
+else
+  _object = ws._ScriptFolder.Origin_Point
 end
 
 function _idk_man(is_num)
@@ -62,6 +64,7 @@ module.save_map = function(_path)
   end local out = htps:JSONEncode(data_map)
   print("It's finished in " .. tostring(tick() - start_tick) .. " seconds !\nOutput: " .. out:sub(1, 1000) .. "...and more.")
   _idk_man(0)
+  print("[MAP: ...]")
   return out
 end
 
@@ -88,6 +91,7 @@ module.load_map = function(_parent, t)
     new_obj.Transparency = _trans
     _set_transparency(idx / counts) task.wait(0.01)
   end _idk_man(0)
+  print("[MAP: Finished Loading Map...]")
 end
 
 return module

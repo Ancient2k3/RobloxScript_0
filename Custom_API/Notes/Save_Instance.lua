@@ -37,7 +37,7 @@ function _idk_man(is_num)
   end
 end function _set_transparency(num) _object.Transparency = num end
 
-module.save_map = function(_path)
+module.SAVE = function(_path)
   local counts, kind_of, data_map, start_tick = 1, {"Part", "MeshPart", "TrussPart"}, {}, tick()
   _idk_man(1)
   for _, valid_obj in pairs(_path:GetDescendants()) do
@@ -68,7 +68,7 @@ module.save_map = function(_path)
   return out
 end
 
-module.load_map = function(_parent, t)
+module.LOAD = function(_parent, t)
   local counts = 0
   if type(t) ~= "string" then return "argument 2 not a string." end
   t = htps:JSONDecode(t)

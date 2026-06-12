@@ -37,6 +37,8 @@ function _idk_man(is_num)
   end
 end function _set_transparency(num) _object.Transparency = num end
 
+module.CACHE = {}
+
 module.SAVE = function(_path)
   local counts, kind_of, data_map, start_tick = 1, {"Part", "MeshPart", "TrussPart"}, {}, tick()
   _idk_man(1)
@@ -65,8 +67,9 @@ module.SAVE = function(_path)
     end
   end local out = htps:JSONEncode(data_map)
   print("It's finished in " .. tostring(tick() - start_tick) .. " seconds !\nOutput: " .. out:sub(1, 1000) .. "...and more.")
+  table.insert(module.CACHE, out)
   _idk_man(0)
-  print("[MAP: ...]")
+  print("[MAP: Check #Map.CACHE...]")
   return out
 end
 

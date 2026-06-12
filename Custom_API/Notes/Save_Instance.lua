@@ -83,6 +83,9 @@ module.LOAD = function(_parent, t)
     local p, s, r, c, clr, _mat, _trans = data.position, data.size, data.rotation, data.class, data.color, data.material, data.transparency
     local new_obj = Instance.new(c, _parent)
     new_obj.Name = c
+    if c == "Part" then
+      new_obj.Shape = data.shape
+    end
     new_obj.Material = Enum.Material[_mat]
     new_obj.Anchored = true
     new_obj.CanCollide = true

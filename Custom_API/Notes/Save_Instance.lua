@@ -48,7 +48,7 @@ end
 function _display_progression(i4)
   if ui_setup and ui_setup.progression_displayer then
     local ui_2 = ui_setup.progression_displayer
-    ui_2.Text = " Loading: " .. i4 .. "."
+    ui_2.Text = " " .. i4 .. "."
   end
 end
 
@@ -60,7 +60,9 @@ module.SAVE = function(_path)
   for _, valid_obj in pairs(_path:GetDescendants()) do
     if valid_obj and table.find(kind_of, valid_obj.ClassName) then
       valid_obj.Parent = _path
-    end task.wait(0.01)
+    end _set_layoutsize(0)
+    _display_progression("Setup: 1")
+    task.wait(0.01)
   end task.wait(0.2)
   local amount_of_child = #_path:GetChildren()
   for _, obj in pairs(_path:GetChildren()) do

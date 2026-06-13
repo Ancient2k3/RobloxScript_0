@@ -4,13 +4,14 @@ local plrs = game:GetService("Players")
 local htps = game:GetService("HttpService")
 local coreui = game:GetService("CoreGui")
 
-repeat task.wait()
-until game:IsLoaded() and coreui and coreui:FindFirstChild("CodesEditor_xScripts")
-
 local module = {}
-local plr, folder_1, _object, _main_folder
+local plr, folder_1, _object, folder_2
 plr = plrs.LocalPlayer
-_main_folder = core.CodesEditor_xScripts
+
+if not coreui:FindFirstChild("CodesEditor_xScripts") then
+  folder_2 = Instance.new("Folder", coreui)
+  folder_2.Name = "CodesEditor_xScripts"
+end
 
 if not ws:FindFirstChild("_ScriptFolder") then
   folder_1 = Instance.new("Folder", ws)

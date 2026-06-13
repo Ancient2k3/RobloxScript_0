@@ -8,11 +8,6 @@ local module = {}
 local plr, folder_1, _object, folder_2
 plr = plrs.LocalPlayer
 
-if not coreui:FindFirstChild("CodesEditor_xScripts") then
-  folder_2 = Instance.new("Folder", coreui)
-  folder_2.Name = "CodesEditor_xScripts"
-end
-
 if not ws:FindFirstChild("_ScriptFolder") then
   folder_1 = Instance.new("Folder", ws)
   folder_1.Name = "_ScriptFolder"

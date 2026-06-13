@@ -70,7 +70,7 @@ module.SAVE = function(_path)
   if _OnSave then print("[Wait for previous save progress complete first...]") return end
   _OnSave = true
   local counts, kind_of, data_map, start_tick = 1, {"Part", "MeshPart", "TrussPart"}, {}, tick()
-  if _path == nil then return end
+  if _path == nil then _OnSave = false return end
   local _descendants = _path:GetDescendants()
   local amount_of_child = #_descendants
   _idk_man(1) _visible(true)
@@ -106,11 +106,11 @@ module.LOAD = function(_parent, t)
   if _OnLoad then print("[Wait for previous map loading complete first...]") return end
   _OnLoad = true
   local counts = 0
-  if _parent == nil then return end
+  if _parent == nil then _OnLoad = false return end
   if t == nil then
     if #module.CACHE > 0 then
       t = module.CACHE[1]
-    else return
+    else _OnLoad = false return
     end
   end t = htps:JSONDecode(t)
   _idk_man(1) _visible(true)

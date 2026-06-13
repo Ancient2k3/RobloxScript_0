@@ -56,18 +56,13 @@ module.CACHE = {}
 
 module.SAVE = function(_path)
   local counts, kind_of, data_map, start_tick = 1, {"Part", "MeshPart", "TrussPart"}, {}, tick()
+  if _path == nil then return end
+  local _descendants = _path:GetDescendants()
+  local amount_of_child = #_descendants
   _idk_man(1)
-  for _, valid_obj in pairs(_path:GetDescendants()) do
-    if valid_obj and table.find(kind_of, valid_obj.ClassName) then
-      valid_obj.Parent = _path
-    end _set_layoutsize(0)
-    _display_progression("Setup: 1")
-    task.wait(0.01)
-  end task.wait(0.2)
-  local amount_of_child = #_path:GetChildren()
-  for _, obj in pairs(_path:GetChildren()) do
+  for _, obj in pairs(_descendants) do
     if obj and table.find(kind_of, obj.ClassName) then
-      local p, s, r, c, clr, _mat, _trans = obj.Position - _object.Position, obj.Size, obj.Rotation, obj.ClassName, obj.Color, obj.Material, obj.Transparency
+      local p, s, r, c, cr, m, t = obj.Position - _object.Position, obj.Size, obj.Rotation, obj.ClassName, obj.Color, obj.Material, obj.Transparency
       data_map["object_" .. tostring(counts)] = {
         position = {
           p.X, p.Y, p.Z
@@ -76,7 +71,7 @@ module.SAVE = function(_path)
         }, rotation = {
           r.X, r.Y, r.Z
         }, class = c,
-        color = {clr.R * 255, clr.G * 255, clr.B * 255}, material = tostring(_mat):split(".")[3], transparency = tonumber(_trans)
+        color = {cr.R * 255, cr.G * 255, cr.B * 255}, material = tostring(m):split(".")[3], transparency = tonumber(t)
       } if c == kind_of[1] then 
         data_map["object_" .. tostring(counts)].shape = tostring(obj.Shape):split(".")[3]
       end counts = counts + 1
@@ -101,20 +96,20 @@ module.LOAD = function(_parent, t)
   end task.wait(0.02)
   for idx = 1, counts do
     local data = t["object_" .. tostring(idx)]
-    local p, s, r, c, clr, _mat, _trans = data.position, data.size, data.rotation, data.class, data.color, data.material, data.transparency
+    local p, s, r, c, cr, m, tsp = data.position, data.size, data.rotation, data.class, data.color, data.material, data.transparency
     local new_obj = Instance.new(c, _parent)
     new_obj.Name = c
     if c == "Part" and data and data.shape then
       new_obj.Shape = data.shape
     end
-    new_obj.Material = Enum.Material[_mat]
+    new_obj.Material = Enum.Material[m]
     new_obj.Anchored = true
     new_obj.CanCollide = true
     new_obj.Position = _object.Position + Vector3.new(unpack(p))
     new_obj.Rotation = Vector3.new(unpack(r))
     new_obj.Size = Vector3.new(unpack(s))
-    new_obj.Color = Color3.fromRGB(unpack(clr))
-    new_obj.Transparency = _trans
+    new_obj.Color = Color3.fromRGB(unpack(cr))
+    new_obj.Transparency = tsp
     _set_transparency(idx / counts) task.wait(0.01)
   end _idk_man(0)
   print("[MAP: Finished Loading Map...]")

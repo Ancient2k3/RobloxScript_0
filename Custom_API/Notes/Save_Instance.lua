@@ -5,7 +5,7 @@ local htps = game:GetService("HttpService")
 local coreui = game:GetService("CoreGui")
 
 local module = {}
-local plr, folder_1, _object, folder_2
+local plr, folder_1, _object
 plr = plrs.LocalPlayer
 
 if not ws:FindFirstChild("_ScriptFolder") then

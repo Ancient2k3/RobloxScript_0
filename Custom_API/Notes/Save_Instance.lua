@@ -5,8 +5,10 @@ local htps = game:GetService("HttpService")
 local coreui = game:GetService("CoreGui")
 
 local module, ui_setup = {}, {}
-local plr, folder_1, _object
+local plr, folder_1, _object, _OnSave, _OnLoad
 plr = plrs.LocalPlayer
+_OnSave = false
+_OnLoad = false
 
 if not ws:FindFirstChild("_ScriptFolder") then
   folder_1 = Instance.new("Folder", ws)
@@ -38,6 +40,16 @@ function _idk_man(is_num)
   end
 end function _set_transparency(num) _object.Transparency = num end
 
+function _visible(bl)
+  if ui_setup and ui_setup.main_screen then
+    local ui_0 = ui_setup.main_screen
+    ui_0.Visible = bl
+    if ui_0.Visible == false and ui_setup and ui_setup.loading_bar then
+      ui_setup.loading_bar.Size = UDim2.new(0, 0, 0.45, 0)
+    end
+  end
+end
+
 function _set_layoutsize(s)
   if ui_setup and ui_setup.loading_bar then
     local ui_1 = ui_setup.loading_bar
@@ -55,14 +67,17 @@ end
 module.CACHE = {}
 
 module.SAVE = function(_path)
+  if _OnSave then print("[Wait for previous save progress complete first...]") return end
+  _OnSave = true
   local counts, kind_of, data_map, start_tick = 1, {"Part", "MeshPart", "TrussPart"}, {}, tick()
   if _path == nil then return end
   local _descendants = _path:GetDescendants()
   local amount_of_child = #_descendants
-  _idk_man(1)
+  _idk_man(1) _visible(true)
   for _, obj in pairs(_descendants) do
     if obj and table.find(kind_of, obj.ClassName) then
       local p, s, r, c, cr, m, t = obj.Position - _object.Position, obj.Size, obj.Rotation, obj.ClassName, obj.Color, obj.Material, obj.Transparency
+      _display_progression("ADDED: " .. obj.Name:upper())
       data_map["object_" .. tostring(counts)] = {
         position = {
           p.X, p.Y, p.Z
@@ -75,28 +90,39 @@ module.SAVE = function(_path)
       } if c == kind_of[1] then 
         data_map["object_" .. tostring(counts)].shape = tostring(obj.Shape):split(".")[3]
       end counts = counts + 1
-      _set_transparency(counts / amount_of_child) task.wait(0.01)
+      _set_transparency(counts / amount_of_child)
+      _set_layoutsize(counts / amount_of_child) task.wait(0.01)
     end
   end local out = htps:JSONEncode(data_map)
+  _display_progression("Loading:...")
   print("It's finished in " .. tostring(tick() - start_tick) .. " seconds !\nOutput: " .. out:sub(1, 1000) .. "...and more.")
   table.insert(module.CACHE, out)
-  _idk_man(0)
+  _idk_man(0) _visible(false) _OnSave = false
   print("[MAP: Check #Map.CACHE...]")
   return out
 end
 
 module.LOAD = function(_parent, t)
+  if _OnLoad then print("[Wait for previous map loading complete first...]") return end
+  _OnLoad = true
   local counts = 0
-  if type(t) ~= "string" then return "argument 2 not a string." end
-  t = htps:JSONDecode(t)
-  _idk_man(1)
+  if _parent == nil then return end
+  if t == nil then
+    if #module.CACHE > 0 then
+      t = module.CACHE[1]
+    else return
+    end
+  end t = htps:JSONDecode(t)
+  _idk_man(1) _visible(true)
   for i, _ in pairs(t) do
     counts = counts + 1
+    _display_progression("Loading: Uhhh... " .. tostring(counts))
     task.wait(0.01)
   end task.wait(0.02)
   for idx = 1, counts do
     local data = t["object_" .. tostring(idx)]
     local p, s, r, c, cr, m, tsp = data.position, data.size, data.rotation, data.class, data.color, data.material, data.transparency
+    _display_progression("PLACING: " .. c:upper())
     local new_obj = Instance.new(c, _parent)
     new_obj.Name = c
     if c == "Part" and data and data.shape then
@@ -110,8 +136,9 @@ module.LOAD = function(_parent, t)
     new_obj.Size = Vector3.new(unpack(s))
     new_obj.Color = Color3.fromRGB(unpack(cr))
     new_obj.Transparency = tsp
-    _set_transparency(idx / counts) task.wait(0.01)
-  end _idk_man(0)
+    _set_transparency(idx / counts)
+    _set_layoutsize(idx / counts) task.wait(0.01)
+  end _display_progression("Loading:...") _idk_man(0) _visible(false) _OnLoad = false
   print("[MAP: Finished Loading Map...]")
 end
 
@@ -124,9 +151,10 @@ module.SETUP_UI = function(parent_to)
   LoadingBG.Size = UDim2.new(0.2, 0, 0.1, 0)
   LoadingBG.Active = true
   LoadingBG.Draggable = false
-  LoadingBG.Visible = true
+  LoadingBG.Visible = false
   LoadingBG.ZIndex = 0
   Instance.new("UICorner", LoadingBG).CornerRadius = UDim.new(0.15, 0)
+  ui_setup.main_screen = LoadingBG
 
   local LoadingLayout_0 = Instance.new("Frame", LoadingBG)
   LoadingLayout_0.Name = "Layout_0"

@@ -4,7 +4,7 @@ local plrs = game:GetService("Players")
 local htps = game:GetService("HttpService")
 local coreui = game:GetService("CoreGui")
 
-local module = {}
+local module, ui_setup = {}, {}
 local plr, folder_1, _object
 plr = plrs.LocalPlayer
 
@@ -127,7 +127,7 @@ module.SETUP_UI = function(parent_to)
   LoadingLayout_0.Draggable = false
   LoadingLayout_0.Visible = true
   LoadingLayout_0.ZIndex = 1
-Instance.new("UICorner",   LoadingLayout_0).CornerRadius = UDim.new(0.15, 0)
+  Instance.new("UICorner", LoadingLayout_0).CornerRadius = UDim.new(0.15, 0)
 
   local LoadingLayout_1 = Instance.new("Frame", LoadingBG)
   LoadingLayout_1.Name = "Layout_1"
@@ -140,6 +140,7 @@ Instance.new("UICorner",   LoadingLayout_0).CornerRadius = UDim.new(0.15, 0)
   LoadingLayout_1.Visible = true
   LoadingLayout_1.ZIndex = 2
   Instance.new("UICorner", LoadingLayout_1).CornerRadius = UDim.new(0.15, 0)
+  ui_setup.loading_bar = LoadingLayout_1
 
   local PR = Instance.new("TextLabel", LoadingBG)
   PR.Name = "PROGRESSION_DISPLAY"
@@ -156,6 +157,7 @@ Instance.new("UICorner",   LoadingLayout_0).CornerRadius = UDim.new(0.15, 0)
   PR.Visible = true
   PR.ZIndex = 1
   Instance.new("UICorner", PR).CornerRadius = UDim.new(0.15, 0)
+  ui_setup.progression_displayer = PR
 end
 
 return module

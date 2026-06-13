@@ -104,4 +104,58 @@ module.LOAD = function(_parent, t)
   print("[MAP: Finished Loading Map...]")
 end
 
+module.SETUP_UI = function(parent_to)
+  local LoadingBG = Instance.new("Frame", parent_to)
+  LoadingBG.Name = "LOADING:BG"
+  LoadingBG.BackgroundTransparency = 0.25
+  LoadingBG.BackgroundColor3 = Color3.fromRGB(255, 255, 0)
+  LoadingBG.Position = UDim2.new(0.4, 0, -0.12, 0)
+  LoadingBG.Size = UDim2.new(0.2, 0, 0.1, 0)
+  LoadingBG.Active = true
+  LoadingBG.Draggable = false
+  LoadingBG.Visible = true
+  LoadingBG.ZIndex = 0
+  Instance.new("UICorner", LoadingBG).CornerRadius = UDim.new(0.15, 0)
+
+  local LoadingLayout_0 = Instance.new("Frame", LoadingBG)
+  LoadingLayout_0.Name = "Layout_0"
+  LoadingLayout_0.BackgroundTransparency = 0
+  LoadingLayout_0.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+  LoadingLayout_0.Position = UDim2.new(0.02, 0, 0.1, 0)
+  LoadingLayout_0.Size = UDim2.new(0.96, 0, 0.45, 0)
+  LoadingLayout_0.Active = true
+  LoadingLayout_0.Draggable = false
+  LoadingLayout_0.Visible = true
+  LoadingLayout_0.ZIndex = 1
+Instance.new("UICorner",   LoadingLayout_0).CornerRadius = UDim.new(0.15, 0)
+
+  local LoadingLayout_1 = Instance.new("Frame", LoadingBG)
+  LoadingLayout_1.Name = "Layout_1"
+  LoadingLayout_1.BackgroundTransparency = 0.25
+  LoadingLayout_1.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+  LoadingLayout_1.Position = UDim2.new(0.02, 0, 0.1, 0)
+  LoadingLayout_1.Size = UDim2.new(0, 0, 0.45, 0)
+  LoadingLayout_1.Active = true
+  LoadingLayout_1.Draggable = false
+  LoadingLayout_1.Visible = true
+  LoadingLayout_1.ZIndex = 2
+  Instance.new("UICorner", LoadingLayout_1).CornerRadius = UDim.new(0.15, 0)
+
+  local PR = Instance.new("TextLabel", LoadingBG)
+  PR.Name = "PROGRESSION_DISPLAY"
+  PR.BackgroundTransparency = 0
+  PR.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+  PR.Position = UDim2.new(0.02, 0, 0.6, 0)
+  PR.Size = UDim2.new(0.96, 0, 0.3, 0)
+  PR.TextScaled = false
+  PR.TextSize = 9
+  PR.TextColor3 = Color3.fromRGB(255, 255, 255)
+  PR.TextXAlignment = "Left"
+  PR.Font = Enum.Font.Code
+  PR.Text = " Loading:..."
+  PR.Visible = true
+  PR.ZIndex = 1
+  Instance.new("UICorner", PR).CornerRadius = UDim.new(0.15, 0)
+end
+
 return module

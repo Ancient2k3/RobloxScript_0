@@ -45,7 +45,7 @@ module.SAVE = function(_path)
   for _, valid_obj in pairs(_path:GetDescendants()) do
     if valid_obj and table.find(kind_of, valid_obj.ClassName) then
       valid_obj.Parent = _path
-    end
+    end task.wait(0.01)
   end task.wait(0.2)
   local amount_of_child = #_path:GetChildren()
   for _, obj in pairs(_path:GetChildren()) do
@@ -80,6 +80,7 @@ module.LOAD = function(_parent, t)
   _idk_man(1)
   for i, _ in pairs(t) do
     counts = counts + 1
+    task.wait(0.01)
   end task.wait(0.02)
   for idx = 1, counts do
     local data = t["object_" .. tostring(idx)]

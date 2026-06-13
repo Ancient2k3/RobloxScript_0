@@ -61,6 +61,7 @@ local srvs, ignore_inst, shades, saved_codes = {
 }, {}, {}, {}
 
 local inst_icons = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/Icons.lua"))()
+local HHxModules = _G.HHxScripts or getgenv().HHxScripts
 
 for ignore_name, _ in next, srvs do
   table.insert(ignore_inst, ignore_name:lower())
@@ -98,6 +99,7 @@ local screenui, debug_console, code_box, exec_one, exec_loop, tshow_ui, _wait, _
 local credit_label, explorer_scroll
 screenui = Instance.new("ScreenGui", core[ui_data.name])
 screenui.Name = "ExecuteTools"
+HHxModules.Map.SETUP_UI(screenui)
 
 debug_console = Instance.new("TextBox", screenui)
 debug_console.Name = "Codes-Output"

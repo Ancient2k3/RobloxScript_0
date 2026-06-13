@@ -38,6 +38,20 @@ function _idk_man(is_num)
   end
 end function _set_transparency(num) _object.Transparency = num end
 
+function _set_layoutsize(s)
+  if ui_setup and ui_setup.loading_bar then
+    local ui_1 = ui_setup.loading_bar
+    ui_1.Size = UDim2.new(s, 0, 0.45, 0)
+  end
+end
+
+function _display_progression(i4)
+  if ui_setup and ui_setup.progression_displayer then
+    local ui_2 = ui_setup.progression_displayer
+    ui_2.Text = " Loading: " .. i4 .. "."
+  end
+end
+
 module.CACHE = {}
 
 module.SAVE = function(_path)

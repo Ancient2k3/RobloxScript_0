@@ -116,13 +116,13 @@ module.LOAD = function(_parent, t)
   _idk_man(1) _visible(true)
   for i, _ in pairs(t) do
     counts = counts + 1
-    _display_progression("Loading: Uhhh... " .. tostring(counts))
-    task.wait(0.01)
+    _display_progression("Loading: " .. tostring(i):upper() .. " " .. tostring(counts))
+    task.wait(0.001)
   end task.wait(0.02)
   for idx = 1, counts do
     local data = t["object_" .. tostring(idx)]
     local p, s, r, c, cr, m, tsp = data.position, data.size, data.rotation, data.class, data.color, data.material, data.transparency
-    _display_progression("PLACING: " .. c:upper())
+    _display_progression("PLACING: " .. c:upper() .. "   " .. tostring(idx) .. "/" .. tostring(counts))
     local new_obj = Instance.new(c, _parent)
     new_obj.Name = c
     if c == "Part" and data and data.shape then

@@ -447,7 +447,7 @@ function find_jobid(pid)
   local url = "https://games.roblox.com/v1/games/" .. pid .. "/servers/Public?sortOrder=Asc&limit=100&excludeFullGames=true"
   local map = htps:JSONDecode(game:HttpGet(url))
   local counts, servers_list = {}, {}
-  if map and map.data do
+  if map and map.data then
     for _, body in next, map.data do
       if body.playing then
         table.insert(counts, tonumber(body.playing))

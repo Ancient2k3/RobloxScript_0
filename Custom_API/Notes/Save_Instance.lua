@@ -89,6 +89,8 @@ module.SAVE = function(_path)
         color = {cr.R * 255, cr.G * 255, cr.B * 255}, material = tostring(m):split(".")[3], transparency = tonumber(t)
       } if c == kind_of[1] then 
         data_map["object_" .. tostring(counts)].shape = tostring(obj.Shape):split(".")[3]
+      elseif c == kind_of[2] then
+        data_map["object_" .. tostring(counts)].meshid = tostring(obj.MeshId)
       end counts = counts + 1
       _set_transparency(counts / amount_of_child)
       _set_layoutsize(counts / amount_of_child) task.wait(0.01)
@@ -127,6 +129,8 @@ module.LOAD = function(_parent, t)
     new_obj.Name = c
     if c == "Part" and data and data.shape then
       new_obj.Shape = data.shape
+    elseif c == "MeshPart" and data and data.meshid then
+      new_obj.MeshId = data.meshid
     end
     new_obj.Material = Enum.Material[m]
     new_obj.Anchored = true

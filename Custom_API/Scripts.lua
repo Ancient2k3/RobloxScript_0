@@ -1,5 +1,5 @@
 -- Custom Built+In_Functions --
-local ws, plrs, core, reps, tws, vim, txcs, htps, tps
+local ws, plrs, core, reps, tws, vim, txcs, htps, tps, asts
 ws = game:GetService("Workspace")
 plrs = game:GetService("Players")
 core = game:GetService("CoreGui")
@@ -9,6 +9,7 @@ vim = game:GetService("VirtualInputManager")
 txcs = game:GetService("TextChatService")
 htps = game:GetService("HttpService")
 tps = game:GetService("TeleportService")
+asts = game:GetService("AssetService")
 
 local plr, built_in, x_numbers, in_script_funcs
 plr = plrs.LocalPlayer
@@ -346,6 +347,14 @@ function server(ins, ...)
   end
 end
 
+function list_places()
+  local map = asts:GetGamePlacesAsync():GetCurrentPage()
+  local out = {}
+  for i = 1, #map do
+    out[map[i].Name] = map[i].PlaceId
+  end return out
+end
+
 function new_tool(name)
   local xtool = Instance.new("Tool", plr.Backpack)
   xtool.Name = name or "unknown item"
@@ -475,3 +484,4 @@ play_anim()~Play animation on humanoid... <argument: #1 humanoid : instance, #2 
 through()~Just for short, this is for i,v loop through table... <argument: #1 table to loop through : table, #2 function with i and v as first and second argument : function>@
 is()~Same as through() just for short this is if-statement... <argument: #1 condition : anything, #2 function if true : function, #3 function if false : function>@
 chatted()~It's user.Chatted:Connect(func()) but for short... <argument: #1 player : userdata, #2 function, first argument is returning a string : function>@
+list_places()~Return a table storing all expierance from a universe... <argument: nil>@

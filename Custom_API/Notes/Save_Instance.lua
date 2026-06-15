@@ -118,7 +118,8 @@ module.LOAD = function(_parent, t)
   _idk_man(1) _visible(true)
   for i, _ in pairs(t) do
     counts = counts + 1
-    _display_progression("Loading: " .. tostring(i):upper() .. " " .. tostring(counts))
+    _display_progression("Loading: " .. tostring(counts))
+    _set_layoutsize(counts / 25000)
     task.wait(0.001)
   end task.wait(0.02)
   for idx = 1, counts do

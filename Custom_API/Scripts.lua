@@ -443,6 +443,30 @@ function create_tween(...)
   end
 end
 
+function find_jobid(pid)
+  local url = "https://games.roblox.com/v1/games/" .. pid .. "/servers/Public?sortOrder=Asc&limit=100&excludeFullGames=true"
+  local map = htps:JSONDecode(game:HttpGet(url))
+  local counts, servers_list = {}, {}
+  if map and map.data do
+    for _, body in next, map.data do
+      if body.playing then
+        table.insert(counts, tonumber(body.playing))
+      end
+    end table.sort(counts)
+    for _, body in next, map.data do
+      if body.playing and tonumber(body.playing) == counts[1] then
+        table.insert(servers_list, tostring(body.id))
+      end
+    end
+  end return servers_list
+end
+
+function tplace(place_id, job_id)
+  local success, err = pcall(function()
+    tps:TeleportToPlaceInstance(place_id, job_id, plr)
+  end) if success then print("Teleporting... ") else print("Teleport Failed: " .. tostring(err) .. ".") end
+end
+
 function built_in_funcs()
   local tbox_found = nil
   local text_rs = ""
@@ -485,3 +509,5 @@ through()~Just for short, this is for i,v loop through table... <argument: #1 ta
 is()~Same as through() just for short this is if-statement... <argument: #1 condition : anything, #2 function if true : function, #3 function if false : function>@
 chatted()~It's user.Chatted:Connect(func()) but for short... <argument: #1 player : userdata, #2 function, first argument is returning a string : function>@
 list_places()~Return a table storing all expierance from a universe... <argument: nil>@
+find_jobid()~Return a table storing 30 different server jobid from a placeid... <argument: #1 placeid : numberic>@
+tplace()~Teleport to specific place... <argument: #1 placeid : numberic, #2 jobid : string>@

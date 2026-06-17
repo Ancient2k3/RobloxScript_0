@@ -467,6 +467,15 @@ function tplace(place_id, job_id)
   end) if success then print("Teleporting... ") else print("Teleport Failed: " .. tostring(err) .. ".") end
 end
 
+function show_bytes(str)
+  local bytes = #str
+  local units, unit_index = {"B", "kB", "MB", "GB", "TB"}, 1
+  while bytes >= 1000 and unit_index < #units do
+    bytes /= 1000
+    unit_index += 1
+  end print(string.format("%.2f %s", bytes, units[unit_index]))
+end
+
 function built_in_funcs()
   local tbox_found = nil
   local text_rs = ""
@@ -511,3 +520,4 @@ chatted()~It's user.Chatted:Connect(func()) but for short... <argument: #1 playe
 list_places()~Return a table storing all expierance from a universe... <argument: nil>@
 find_jobid()~Return a table storing 30 different server jobid from a placeid... <argument: #1 placeid : numberic>@
 tplace()~Teleport to specific place... <argument: #1 placeid : numberic, #2 jobid : string>@
+show_bytes()~Printing output showing how many bytes from a string... <argument: #1 string to check : string>

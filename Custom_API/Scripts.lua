@@ -464,7 +464,13 @@ end
 function tplace(place_id, job_id)
   local success, err = pcall(function()
     tps:TeleportToPlaceInstance(place_id, job_id, plr)
-  end) if success then print("Teleporting... ") else print("Teleport Failed: " .. tostring(err) .. ".") end
+  end) if success then print("Teleporting... ") else print("Teleport Failed, Error: " .. tostring(err) .. ".") end
+end
+
+function tgame(id)
+  local success, err = pcall(function()
+    tps:Teleport(id)
+  end) if success then print("Teleporting... ") else print("Teleport Failed, Error: " .. tostring(err) .. ".") end
 end
 
 function show_bytes(str)
@@ -520,4 +526,5 @@ chatted()~It's user.Chatted:Connect(func()) but for short... <argument: #1 playe
 list_places()~Return a table storing all expierance from a universe... <argument: nil>@
 find_jobid()~Return a table storing 30 different server jobid from a placeid... <argument: #1 placeid : numberic>@
 tplace()~Teleport to specific place... <argument: #1 placeid : numberic, #2 jobid : string>@
+tgame()~Teleport to specific expierance/game... <argument: #1 gameid : numberic>@
 show_bytes()~Printing output showing how many bytes from a string... <argument: #1 string to check : string>

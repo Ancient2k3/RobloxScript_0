@@ -303,6 +303,11 @@ function my_module(_path)
   end
 end
 
+function commands_module()
+  print("module functions: .addcmd(\"name\", {\"name\", \"alliase\"}, \"command description\", function).")
+  return my_module("Modules/refs/heads/main/Commands.lua")
+end
+
 function find_object_by_name(name, class)
   if not name then print("<find_object_by_name: name, class?>")
     return "missing argument 1: object name"
@@ -479,7 +484,8 @@ function show_bytes(str)
   while bytes >= 1000 and unit_index < #units do
     bytes /= 1000
     unit_index += 1
-  end print(string.format("%.2f %s", bytes, units[unit_index]))
+  end local out = string.format("%.2f %s", bytes, units[unit_index])
+  print(out) return out
 end
 
 function built_in_funcs()
@@ -527,4 +533,5 @@ list_places()~Return a table storing all expierance from a universe... <argument
 find_jobid()~Return a table storing 30 different server jobid from a placeid... <argument: #1 placeid : numberic>@
 tplace()~Teleport to specific place... <argument: #1 placeid : numberic, #2 jobid : string>@
 tgame()~Teleport to specific expierance/game... <argument: #1 gameid : numberic>@
-show_bytes()~Printing output showing how many bytes from a string... <argument: #1 string to check : string>
+show_bytes()~Printing output showing how many bytes from a string... <argument: #1 string to check : string>@
+commands_module()~Load commands module and printing tutorials... <argument: nil>@

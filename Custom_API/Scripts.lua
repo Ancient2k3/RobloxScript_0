@@ -60,7 +60,7 @@ in_script_funcs = {
   end,
   find_full_name = function(_input)
     for _, usr in pairs(plrs:GetPlayers()) do
-      if (usr.Name:lower():sub(1, #_input) or usr.DisplayName:lower():sub(1, #_input)) == _input:lower() then
+      if usr.Name:lower():sub(1, #_input) == _input:lower() or usr.DisplayName:lower():sub(1, #_input) == _input:lower() then
         return usr
       end
     end

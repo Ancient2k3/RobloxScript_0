@@ -16,12 +16,14 @@ function receive_turrets()
   local turrets = {}
   if #plrs:GetPlayers() < 1 then return end
   for _, user in pairs(plrs:GetPlayers()) do
-    local basement = ws.Tycoons[user.Name]
-    for _, xyz in next, basement:GetDescendants() do
-      if xyz:IsA("Model") and xyz.Name == "XYZGuns" and tostring(xyz.Parent) == "Turret" then
-        if xyz:FindFirstChild("Left") or xyz:FindFirstChild("Right") then  
-          table.insert(turrets, xyz)
-        end    
+    if ws.Tycoons:FindFirstChild(user.Name) then
+      local basement = ws.Tycoons[user.Name]
+      for _, xyz in next, basement:GetDescendants() do
+        if xyz:IsA("Model") and xyz.Name == "XYZGuns" and tostring(xyz.Parent) == "Turret" then
+          if xyz:FindFirstChild("Left") or xyz:FindFirstChild("Right") then  
+            table.insert(turrets, xyz)
+          end    
+        end
       end
     end
   end return turrets

@@ -5,7 +5,7 @@ local maps, _module = {
 }, {}
 
 function _reverse(key)
-  for i = 32, 126 do
+  for i = 1, 126 do
     if string.char(i) == key then
       return i
     end

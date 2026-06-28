@@ -499,6 +499,10 @@ function joystick_direction()
   return require(plr.PlayerScripts.PlayerModule.ControlModule):GetMoveVector()
 end
 
+function github(_path)
+  return game:HttpGet("https://raw.githubusercontent.com/" .. _path)
+end
+
 function built_in_funcs()
   local tbox_found = nil
   local text_rs = ""
@@ -548,3 +552,4 @@ show_bytes()~Printing output showing how many bytes from a string... <argument: 
 commands_module()~Load commands module and printing tutorials... <argument: nil>@
 is_prop()~Return true if a property exist from an Instance... <argument: #1 path : instance, #2 property name : string>@
 joystick_direction()~Return joystick direction .X, .Z... <argument: nil>@
+github()~Just for short cuz i don't wanna do rewrite whole github raw link, just insert the path and we all done... <argument: #1 url path : string>@

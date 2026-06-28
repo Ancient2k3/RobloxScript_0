@@ -488,6 +488,13 @@ function show_bytes(str)
   print(out) return out
 end
 
+function is_prop(t, name)
+  local exist, err = pcall(function()
+    local val = t[name]
+  end) if exist then return true end
+  return false
+end
+
 function built_in_funcs()
   local tbox_found = nil
   local text_rs = ""
@@ -535,3 +542,4 @@ tplace()~Teleport to specific place... <argument: #1 placeid : numberic, #2 jobi
 tgame()~Teleport to specific expierance/game... <argument: #1 gameid : numberic>@
 show_bytes()~Printing output showing how many bytes from a string... <argument: #1 string to check : string>@
 commands_module()~Load commands module and printing tutorials... <argument: nil>@
+is_prop()~Return true if a property exist from an Instance... <argument: #1 path : instance, #2 property name : string>@

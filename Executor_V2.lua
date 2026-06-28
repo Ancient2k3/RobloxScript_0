@@ -25,6 +25,8 @@ else
     Map = loadstring(game:HttpGet(modules[2]))()
   }
 end
+
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/Notes/Chatlogs.lua"))()
 -- new stuff --
 
 local ui_data, funcs = {

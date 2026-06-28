@@ -503,6 +503,12 @@ function github(_path)
   return game:HttpGet("https://raw.githubusercontent.com/" .. _path)
 end
 
+function chatlogs(name)
+  if _G.my_chatlogs then
+    return _G.my_chatlogs[name]
+  end
+end
+
 function built_in_funcs()
   local tbox_found = nil
   local text_rs = ""
@@ -553,3 +559,4 @@ commands_module()~Load commands module and printing tutorials... <argument: nil>
 is_prop()~Return true if a property exist from an Instance... <argument: #1 path : instance, #2 property name : string>@
 joystick_direction()~Return joystick direction .X, .Z... <argument: nil>@
 github()~Just for short cuz i don't wanna do rewrite whole github raw link, just insert the path and we all done... <argument: #1 url path : string>@
+chatlogs()~Return a table, store all specific player chat since time this script running... <argument: #1 username : string>@

@@ -495,6 +495,10 @@ function is_prop(t, name)
   return false
 end
 
+function joystick_direction()
+  return require(plr.PlayerScripts.PlayerModule.ControlModule):GetMoveVector()
+end
+
 function built_in_funcs()
   local tbox_found = nil
   local text_rs = ""
@@ -543,3 +547,4 @@ tgame()~Teleport to specific expierance/game... <argument: #1 gameid : numberic>
 show_bytes()~Printing output showing how many bytes from a string... <argument: #1 string to check : string>@
 commands_module()~Load commands module and printing tutorials... <argument: nil>@
 is_prop()~Return true if a property exist from an Instance... <argument: #1 path : instance, #2 property name : string>@
+joystick_direction()~Return joystick direction .X, .Z... <argument: nil>@

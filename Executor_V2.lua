@@ -27,7 +27,6 @@ else
 end
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/Notes/Chatlogs.lua"))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/infyiff/backup/refs/heads/main/konstant.lua"))()
 -- new stuff --
 
 local ui_data, funcs = {

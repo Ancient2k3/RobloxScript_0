@@ -509,6 +509,13 @@ function chatlogs(name)
   end
 end
 
+function konstant_decompile(t)
+  local dc_func = getgenv().decompile
+  if dc_func then
+    return dc_func(t)
+  end
+end
+
 function built_in_funcs()
   local tbox_found = nil
   local text_rs = ""
@@ -560,3 +567,4 @@ is_prop()~Return true if a property exist from an Instance... <argument: #1 path
 joystick_direction()~Return joystick direction .X, .Z... <argument: nil>@
 github()~Just for short cuz i don't wanna do rewrite whole github raw link, just insert the path and we all done... <argument: #1 url path : string>@
 chatlogs()~Return a table, store all specific player chat since time this script running... <argument: #1 username : string>@
+konstant_decompile()~Return decompiled source code from a LocalScript... <argument: #1 path to script : instance>@

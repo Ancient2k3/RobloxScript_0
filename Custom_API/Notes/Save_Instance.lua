@@ -122,16 +122,18 @@ module.LOAD = function(_parent, t)
     _set_layoutsize(counts / 25000)
     task.wait(0.001)
   end task.wait(0.02)
+  local new_model = Instance.new("Model", _parent)
+  new_model.Name = "MAP_MODEL_#" .. tostring(math.random(1, 9999)) task.wait(0.02)
   for idx = 1, counts do
     local data = t["object_" .. tostring(idx)]
     local p, s, r, c, cr, m, tsp = data.position, data.size, data.rotation, data.class, data.color, data.material, data.transparency
     _display_progression("PLACING: " .. c:upper() .. "   " .. tostring(idx) .. "/" .. tostring(counts))
-    local new_obj = Instance.new(c, _parent)
+    local new_obj = Instance.new(c, new_model)
     new_obj.Name = c
     if c == "Part" and data and data.shape then
       new_obj.Shape = data.shape
     elseif c == "MeshPart" and data and data.meshid then
-      new_obj.MeshId = data.meshid
+      new_obj.MeshId = "" --data.meshid
     end
     new_obj.Material = Enum.Material[m]
     new_obj.Anchored = true

@@ -123,7 +123,8 @@ module.LOAD = function(_parent, t)
     task.wait(0.001)
   end task.wait(0.02)
   local new_model = Instance.new("Model", _parent)
-  new_model.Name = "MAP_MODEL_#" .. tostring(math.random(1, 9999)) task.wait(0.02)
+  new_model.Name = "MAP_MODEL_#" .. tostring(math.random(1, 9999))
+  task.wait(0.02)
   for idx = 1, counts do
     local data = t["object_" .. tostring(idx)]
     local p, s, r, c, cr, m, tsp = data.position, data.size, data.rotation, data.class, data.color, data.material, data.transparency

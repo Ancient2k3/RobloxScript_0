@@ -66,9 +66,11 @@ function use_turret(t, p)
   end
 end
 
-function b_joints(t)
-  local damage = 5000
-  slap:FireServer(t.Character, damage, 0, 0, "Jay")
+function auto_slap()
+  local item = plr and plr.Character and plr.Character:FindFirstChildOfClass("Tool")
+  if item then
+    print(item.Name)
+  end
 end
 
 function power(name)
@@ -92,5 +94,5 @@ receive_turrets()~Return a table storing turret model instance... <void>@
 receive_dollars()~Return a table of a bunch of dollar object... <void>@
 shoot_rmt()~Using turret to shooting at specific position... <argument: #1 position : vector3, #2 turret model : instance>@
 use_turret()~Using turret models, working same as shoot_rmt... <argument: #1 turret? : instance or table storing instance, #2 position : vector3>@
-b_joints()~Instantly [eliminating or damage] a specific target... <argument: #1 target : instance, #2 damage : numberic>@
+auto_slap()~Currently fixing... <void>@
 power()~Receive specific spell items... <argument: #1 spell name : string OR list of spell : table>

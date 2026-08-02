@@ -526,7 +526,7 @@ function generate_props(da_inst, valid_props)
     holder.TextScaled = false
     holder.TextSize = 14
     holder.TextColor3 = Color3.new(1, 1, 1)
-    holder.Text = tostring(name) .. ": " .. fnc(da_inst)
+    holder.Text = tostring(name) .. ": " .. fnc(da_inst, tostring(name))
     holder.TextXAlignment = "Left"
     holder.TextYAlignment = "Top"
     holder.Font = Enum.Font.Code

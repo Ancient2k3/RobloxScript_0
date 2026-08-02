@@ -514,7 +514,7 @@ function removing_shades()
 end
 
 function generate_props(da_inst, valid_props)
-  local the_holder, info_1
+  local the_holder, preview_holder, info_1
   local special_class = {"Animation", "Sound", "ParticleEmitter"}
   for name, fnc in pairs(valid_props) do
     local holder = Instance.new("TextLabel", _properties_board)
@@ -526,7 +526,7 @@ function generate_props(da_inst, valid_props)
     holder.TextScaled = false
     holder.TextSize = 14
     holder.TextColor3 = Color3.new(1, 1, 1)
-    holder.Text = tostring(name) .. ": " .. fnc(da_inst, tostring(name))
+    holder.Text = tostring(name) .. ": " .. fnc(da_inst, tostring(name)) or "..."
     holder.TextXAlignment = "Left"
     holder.TextYAlignment = "Top"
     holder.Font = Enum.Font.Code
@@ -550,8 +550,12 @@ function generate_props(da_inst, valid_props)
     
     properties_board_btn = properties_board_btn + 0.0038
   end if table.find(special_class, da_inst.ClassName) then
-    info_1 = Instance.new("TextButton", the_holder)
-    info_1.Name = "PLAY:" .. the_holder.Name
+    preview_holder = the_holder:Clone()
+    preview_holder.Parent = the_holder.Parent
+    preview_holder.Position = UDim2.new(0, 0, properties_board_btn, 0)
+    preview_holder.Text = "Preview: " .. tostring(da_inst.Name)
+    info_1 = Instance.new("TextButton", preview_holder)
+    info_1.Name = "PLAY:" .. preview_holder.Name
     info_1.BackgroundTransparency = 0.2
     info_1.BackgroundColor3 = Color3.new(1, 1, 0)
     info_1.BorderColor3 = Color3.new(1, 1, 1)
@@ -576,7 +580,7 @@ end
 --code_box size y 0.195, explorer_scroll size y 0.3
 function add_inst_properties()
   if ui_data.vars.path_selected ~= nil then
-    code_box.Size = UDim2.new(0.4, 0, 0.195, 0)
+    code_box.Size = UDim2.new(0.102, 0, 0.195, 0)
     explorer_scroll.Size = UDim2.new(0.297, 0, 0.3, 0)
     _properties_board.Visible = true
     
@@ -591,9 +595,9 @@ function add_inst_properties()
     if prop_list and type(prop_list) == "table" then
       generate_props(ui_data.vars.path_selected, prop_list)
     else
-      generate_props({Info = "Unsupported Instance"}, {
-          ["HHxScripts"] = function(i)
-            return i["Info"]
+      generate_props({HHxScripts = "Unsupported Instance"}, {
+          ["HHxScripts"] = function(i, ...)
+            return i[...]
           end
       })
     end

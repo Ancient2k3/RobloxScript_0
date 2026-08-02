@@ -50,6 +50,7 @@ local ui_data, funcs = {
     speed = 0.05,
     path_selected = nil
   },
+  properties_table = {},
   api_funcs = game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/Scripts.lua"),
   for_games_api = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/MatchedGames.lua"))(),
   store_instances_name = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/QuickInstances_1.lua"))()
@@ -511,6 +512,35 @@ function removing_shades()
   ui_data.vars.inst_obj_num = 1
 end
 
+function generate_props(da_inst, valid_props)
+  for i = 1, #
+end
+
+--code_box size y 0.195, explorer_scroll size y 0.3
+function add_inst_properties()
+  if ui_data.vars.path_selected ~= nil then
+    code_box.Size = UDim2.new(0.4, 0, 0.195, 0)
+    explorer_scroll.Size = UDim2.new(0.297, 0, 0.3, 0)
+    _properties_board.Visible = true
+    
+    local _any_props = _properties_board:GetChildren()
+    if #_any_props > 0 then
+      for _, _old_prop in pairs(_any_props) do
+        if _old_prop then _old_prop:Destroy() end
+      end
+    end -- clearing old props
+
+    local prop_list = ui_data.properties_table[ui_data.vars.path_selected.ClassName]
+    if prop_list and type(prop_list) == "table" then
+      generate_props(ui_data.vars.path_selected, prop_list)
+    end
+  else
+    code_box.Size = UDim2.new(0.4, 0, 0.4, 0)
+    explorer_scroll.Size = UDim2.new(0.297, 0, 0.505, 0)
+    _properties_board.Visible = false
+  end
+end
+
 --pos y 0.02, size 0.765, 0.85
 function add_inst_label(t)
   if type(t) ~= "table" then funcs.notify("Script hiện đang gặp lỗi... !") return else ui_data.vars.is_loading_childs = true end
@@ -705,7 +735,7 @@ function add_inst_label(t)
       else
         ui_data.vars.path_selected = nil
         inst_selected.BackgroundTransparency = 1
-      end
+      end add_inst_properties()
     end)
   end if ui_data.vars.is_loading_childs then ui_data.vars.is_loading_childs = false end
 end

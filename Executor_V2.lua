@@ -36,17 +36,19 @@ local ui_data, funcs = {
   name_1 = "OBJECT_",
   vars = {
     delay = 0.001,
-    script_version = 3.0,
+    script_version = 3.2,
     show = false,
     looped = false,
     loaded_text = false,
+    is_loading_childs = false,
     dig_into = false,
     recall = false,
     show_api = 0,
     idx_count = 0,
     idx_child = 0,
     inst_obj_num = 1,
-    speed = 0.05
+    speed = 0.05,
+    path_selected = nil
   },
   api_funcs = game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/Scripts.lua"),
   for_games_api = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/MatchedGames.lua"))(),
@@ -509,8 +511,9 @@ function removing_shades()
   ui_data.vars.inst_obj_num = 1
 end
 
+--pos y 0.02, size 0.765, 0.85
 function add_inst_label(t)
-  if type(t) ~= "table" then funcs.notify("Script hiện đang gặp lỗi... !") return end
+  if type(t) ~= "table" then funcs.notify("Script hiện đang gặp lỗi... !") return else ui_data.vars.is_loading_childs = true end
   for name_inst, _path in pairs(t) do ui_data.vars.idx_child = ui_data.vars.idx_child + 1
     local path_childs = #_path:GetChildren()
     local path_have_parent = _path.Parent or false
@@ -531,6 +534,22 @@ function add_inst_label(t)
     holder.Font = Enum.Font.Code
     holder.Visible = true
     holder.ZIndex = 2
+    local inst_selected = Instance.new("TextButton", holder)
+    inst_selected.Name = "SELECTED:" .. holder.Name
+    inst_selected.BackgroundTransparency = 1
+    inst_selected.BackgroundColor3 = Color3.new(0, 1, 0)
+    inst_selected.BorderColor3 = Color3.new(1, 1, 1)
+    inst_selected.Position = UDim2.new(0, 0, 0.02, 0)
+    inst_selected.Size = UDim2.new(0.765, 0, 0.85, 0)
+    inst_selected.TextScaled = false
+    inst_selected.TextWrapped = true
+    inst_selected.TextSize = 9
+    inst_selected.TextColor3 = Color3.new(1, 1, 1)
+    inst_selected.TextStrokeColor3 = Color3.new(1, 0, 0)
+    inst_selected.Text = ""
+    inst_selected.Font = Enum.Font.Arcade
+    inst_selected.Visible = true
+    inst_selected.ZIndex = 3
     local shade = Instance.new("TextLabel", holder)
     shade.Name = "SHADE:" .. tostring(ui_data.vars.inst_obj_num)
     shade.BackgroundTransparency = 0
@@ -664,8 +683,31 @@ function add_inst_label(t)
           end
         end)
       end
-    end
-  end
+    end inst_selected.MouseButton1Click:Connect(function()
+      if not ui_data.vars.is_loading_childs and inst_selected.BackgroundTransparency == 1 then
+        local outer_loop = false
+        for _, holder_lb in pairs(explorer_scroll:GetChildren()) do
+          for _, one_inst in pairs(holder_lb:GetChildren()) do
+            if one_inst:IsA("TextButton") and one_inst.Name:sub(1, 9):lower():match("selected:") then
+              if one_inst.BackgroundTransparency ~= 1 then
+                  ui_data.vars.path_selected = nil
+                  one_inst.BackgroundTransparency = 1
+                  outer_loop = true
+                  break
+              end
+            end
+          end if outer_loop then
+            outer_loop = false
+            break
+          end
+        end ui_data.vars.path_selected = _path
+        inst_selected.BackgroundTransparency = 0.85
+      else
+        ui_data.vars.path_selected = nil
+        inst_selected.BackgroundTransparency = 1
+      end
+    end)
+  end if ui_data.vars.is_loading_childs then ui_data.vars.is_loading_childs = false end
 end
 
 tshow_ui.MouseButton1Click:Connect(function()
@@ -737,6 +779,11 @@ code_box:GetPropertyChangedSignal("Text"):Connect(function()
   local max_string = #code_box.Text
   saved_codes[tostring(game.GameId)] = code_box.Text
   local _position, _total, _string = string.find(code_box.Text, "%+Inst:%s*(.-)%s*!")
+  if code_box.Text:match("+Path") and ui_data.vars.path_selected ~= nil then
+    code_box.Text = code_box.Text:gsub("+Path", ui_data.vars.path_selected:GetFullName())
+  else
+    code_box.Text = code_box.Text:gsub("+Path", "")
+  end
   if _position ~= nil and type(_position) == "number" then
     local result_count = 0
     for i = 1, max_string do
@@ -775,7 +822,8 @@ add_display_label("Assist Functions: Specific Game.")
 add_info_labels(bif.exp[2])
 add_display_label("Special Commands")
 add_info_labels({
-  ["+Inst:---!"] = "(PUT INSIDE CODES EDITOR): +Inst:<ClassName : string>,<IstanceName : string>,<Parent : string>!"
+  ["+Inst:---!"] = "(PUT INSIDE CODES EDITOR): +Inst:<ClassName : string>,<IstanceName : string>,<Parent : string>!",
+  ["+Path"] = "(PUT INSIDE CODES EDITOR): Paste selected instance from explorer into codes editor."
 })
 add_display_label("Modules")
 add_info_labels({
@@ -787,4 +835,4 @@ add_inst_label(srvs) removing_shades()
 
 funcs.notify("Codes Editor by HoangHienXScripts.")
 print("[HHxScripts: Custom Code Editors, Loaded!]")
--- Update: 3.0, Last Fix --
+-- Update: 3.2, Last Fix --

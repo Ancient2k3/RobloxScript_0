@@ -1,10 +1,10 @@
 local x = function(i, p) return i[p] end
 return {
   ["Folder"] = {
-    ["Name"] = x(i, "Name")
+    ["Name"] = x
   },
   ["Sound"] = {
-    ["Name"] = x(i, "Name"),
-    ["SoundId"] = x(i, "SoundId")
+    ["Name"] = x,
+    ["SoundId"] = x
   }
 }

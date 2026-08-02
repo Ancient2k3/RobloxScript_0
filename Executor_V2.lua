@@ -50,7 +50,7 @@ local ui_data, funcs = {
     speed = 0.05,
     path_selected = nil
   },
-  properties_table = {},
+  properties_table = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/Instances_Props.lua"))(),
   api_funcs = game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/Scripts.lua"),
   for_games_api = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/MatchedGames.lua"))(),
   store_instances_name = loadstring(game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/RobloxScript_0/refs/heads/main/Custom_API/QuickInstances_1.lua"))()
@@ -397,6 +397,7 @@ end
 
 local pos_index = 0
 local explorer_btn = 0
+local properties_board_btn = 0
 
 function add_display_label(str)
   local holder = Instance.new("TextLabel", _listedAPIs)
@@ -513,7 +514,63 @@ function removing_shades()
 end
 
 function generate_props(da_inst, valid_props)
-  for i = 1, #
+  local the_holder, info_1
+  local special_class = {"Animation", "Sound", "ParticleEmitter"}
+  for name, fnc in pairs(valid_props) do
+    local holder = Instance.new("TextLabel", _properties_board)
+    holder.Name = "PROP-of:" .. tostring(name):upper()
+    holder.BackgroundTransparency = 1
+    holder.BackgroundColor3 = Color3.new(0, 0, 0)
+    holder.Position = UDim2.new(0, 0, properties_board_btn, 0)
+    holder.Size = UDim2.new(1, 0, 0.003, 0)
+    holder.TextScaled = false
+    holder.TextSize = 14
+    holder.TextColor3 = Color3.new(1, 1, 1)
+    holder.Text = tostring(name) .. ": " .. fnc(da_inst)
+    holder.TextXAlignment = "Left"
+    holder.TextYAlignment = "Top"
+    holder.Font = Enum.Font.Code
+    holder.Visible = true
+    holder.ZIndex = 2
+    local decor_1 = Instance.new("TextLabel", holder)
+    decor_1.Name = "Decoration-On:" .. holder.Name
+    decor_1.BackgroundTransparency = 0.2
+    decor_1.BackgroundColor3 = Color3.new(1, 1, 0)
+    decor_1.BorderColor3 = Color3.new(1, 1, 0)
+    decor_1.Position = UDim2.new(0, 0, 0.99, 0)
+    decor_1.Size = UDim2.new(0.88, 0, 0.003, 0)
+    decor_1.TextScaled = false
+    decor_1.TextSize = 9
+    decor_1.TextColor3 = Color3.new(1, 1, 1)
+    decor_1.Text = ""
+    decor_1.Font = Enum.Font.Code
+    decor_1.Visible = true
+
+    the_holder = holder
+    
+    properties_board_btn = properties_board_btn + 0.0038
+  end if table.find(special_class, da_inst.ClassName) then
+    info_1 = Instance.new("TextButton", the_holder)
+    info_1.Name = "PLAY:" .. the_holder.Name
+    info_1.BackgroundTransparency = 0.2
+    info_1.BackgroundColor3 = Color3.new(1, 1, 0)
+    info_1.BorderColor3 = Color3.new(1, 1, 1)
+    info_1.Position = UDim2.new(0.89, 0, 0.02, 0)
+    info_1.Size = UDim2.new(0.098, 0, 0.98, 0)
+    info_1.TextScaled = false
+    info_1.TextWrapped = true
+    info_1.TextSize = 9
+    info_1.TextColor3 = Color3.new(1, 1, 1)
+    info_1.TextStrokeColor3 = Color3.new(1, 0, 0)
+    info_1.Text = "PLAY"
+    info_1.Font = Enum.Font.Arcade
+    info_1.Visible = true
+    info_1.MouseButton1Click:Connect(function()
+      if da_inst:IsA("Sound") then
+        da_inst:Play()
+      end
+    end)
+  end
 end
 
 --code_box size y 0.195, explorer_scroll size y 0.3
@@ -527,12 +584,18 @@ function add_inst_properties()
     if #_any_props > 0 then
       for _, _old_prop in pairs(_any_props) do
         if _old_prop then _old_prop:Destroy() end
-      end
+      end properties_board_btn = 0
     end -- clearing old props
 
     local prop_list = ui_data.properties_table[ui_data.vars.path_selected.ClassName]
     if prop_list and type(prop_list) == "table" then
       generate_props(ui_data.vars.path_selected, prop_list)
+    else
+      generate_props({Info = "Unsupported Instance"}, {
+          ["HHxScripts"] = function(i)
+            return i["Info"]
+          end
+      })
     end
   else
     code_box.Size = UDim2.new(0.4, 0, 0.4, 0)

@@ -519,7 +519,7 @@ function combined_t(...)
   local ts = {...}
   local nst, outp = {}, {}
   if #ts > 0 then
-    for i = 1, #ts do if type(ts[i]) ~= "table" then break return {} end end
+    for i = 1, #ts do if type(ts[i]) ~= "table" then return {} end end
     for i = 1, #ts do if #ts[i] > 0 then for x = 1, #ts[i] do nst[ts[i][x]] = 1 end end end
     for i, _ in next, nst do table.insert(outp, i) end
   end return outp

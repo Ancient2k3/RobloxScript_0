@@ -8,7 +8,7 @@ local z = function(i, p)
     elseif ist == "color3" then
       return "R: " .. tostring(prop.R):sub(1, 4) .. ", G: " .. tostring(prop.G):sub(1, 4) .. ", B: " .. tostring(prop.B):sub(1, 4)
     elseif ist == "cframe" then
-      return tostring(math.floor(tonumber(prop)))
+      return tostring(prop)
     end
   end return tostring(nil)
 end

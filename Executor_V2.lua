@@ -515,7 +515,7 @@ function removing_shades()
   ui_data.vars.inst_obj_num = 1
 end
 
-function add_property_edit_btn(da_inst, name)
+function add_property_edit_btn(da_inst, name, fnc)
   local holder = Instance.new("TextLabel", _properties_board)
   holder.Name = "PROP-of:" .. tostring(name):upper()
   holder.BackgroundTransparency = 1
@@ -552,10 +552,10 @@ function generate_props(da_inst, valid_props)
   local the_holder, preview_holder, info_1
   local special_class, can_teleport_inst = {"Animation", "Sound", "ParticleEmitter"}, {
     "Part"
-  } add_property_edit_btn(da_inst, "ClassName")
-  add_property_edit_btn(da_inst, "Name")
+  } add_property_edit_btn(da_inst, "ClassName", function(i, ...) return tostring(i[...] or nil) end)
+  add_property_edit_btn(da_inst, "Name", function(i, ...) return tostring(i[...] or nil) end)
   for name, fnc in pairs(valid_props) do
-    the_holder = add_property_edit_btn(da_inst, name)
+    the_holder = add_property_edit_btn(da_inst, name, fnc)
   end if table.find(special_class, da_inst.ClassName) then
     preview_holder = the_holder:Clone()
     preview_holder.Parent = the_holder.Parent

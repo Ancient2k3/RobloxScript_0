@@ -290,6 +290,8 @@ _openList.Text = "Built-In"
 _openList.Visible = false
 funcs.corner(_openList, 0.15)
 
+local plr = plrs.LocalPlayer
+
 function fill_text_effect(subject, sub_prop, str)
   if not ui_data.vars.loaded_text then
     ui_data.vars.loaded_text = true
@@ -513,42 +515,47 @@ function removing_shades()
   ui_data.vars.inst_obj_num = 1
 end
 
+function add_property_edit_btn(da_inst, name)
+  local holder = Instance.new("TextLabel", _properties_board)
+  holder.Name = "PROP-of:" .. tostring(name):upper()
+  holder.BackgroundTransparency = 1
+  holder.BackgroundColor3 = Color3.new(0, 0, 0)
+  holder.Position = UDim2.new(0, 0, properties_board_btn, 0)
+  holder.Size = UDim2.new(1, 0, 0.003, 0)
+  holder.TextScaled = false
+  holder.TextSize = 14
+  holder.TextColor3 = Color3.new(1, 1, 1)
+  holder.Text = tostring(name) .. ": " .. fnc(da_inst, tostring(name)) or "..."
+  holder.TextXAlignment = "Left"
+  holder.TextYAlignment = "Top"
+  holder.Font = Enum.Font.Code
+  holder.Visible = true
+  holder.ZIndex = 2
+  local decor_1 = Instance.new("TextLabel", holder)
+  decor_1.Name = "Decoration-On:" .. holder.Name
+  decor_1.BackgroundTransparency = 0.2
+  decor_1.BackgroundColor3 = Color3.new(1, 1, 0)
+  decor_1.BorderColor3 = Color3.new(1, 1, 0)
+  decor_1.Position = UDim2.new(0, 0, 0.99, 0)
+  decor_1.Size = UDim2.new(0.88, 0, 0.003, 0)
+  decor_1.TextScaled = false
+  decor_1.TextSize = 9
+  decor_1.TextColor3 = Color3.new(1, 1, 1)
+  decor_1.Text = ""
+  decor_1.Font = Enum.Font.Code
+  decor_1.Visible = true
+  properties_board_btn = properties_board_btn + 0.0038
+  return holder
+end
+
 function generate_props(da_inst, valid_props)
   local the_holder, preview_holder, info_1
-  local special_class = {"Animation", "Sound", "ParticleEmitter"}
+  local special_class, can_teleport_inst = {"Animation", "Sound", "ParticleEmitter"}, {
+    "Part"
+  } add_property_edit_btn(da_inst, "ClassName")
+  add_property_edit_btn(da_inst, "Name")
   for name, fnc in pairs(valid_props) do
-    local holder = Instance.new("TextLabel", _properties_board)
-    holder.Name = "PROP-of:" .. tostring(name):upper()
-    holder.BackgroundTransparency = 1
-    holder.BackgroundColor3 = Color3.new(0, 0, 0)
-    holder.Position = UDim2.new(0, 0, properties_board_btn, 0)
-    holder.Size = UDim2.new(1, 0, 0.003, 0)
-    holder.TextScaled = false
-    holder.TextSize = 14
-    holder.TextColor3 = Color3.new(1, 1, 1)
-    holder.Text = tostring(name) .. ": " .. fnc(da_inst, tostring(name)) or "..."
-    holder.TextXAlignment = "Left"
-    holder.TextYAlignment = "Top"
-    holder.Font = Enum.Font.Code
-    holder.Visible = true
-    holder.ZIndex = 2
-    local decor_1 = Instance.new("TextLabel", holder)
-    decor_1.Name = "Decoration-On:" .. holder.Name
-    decor_1.BackgroundTransparency = 0.2
-    decor_1.BackgroundColor3 = Color3.new(1, 1, 0)
-    decor_1.BorderColor3 = Color3.new(1, 1, 0)
-    decor_1.Position = UDim2.new(0, 0, 0.99, 0)
-    decor_1.Size = UDim2.new(0.88, 0, 0.003, 0)
-    decor_1.TextScaled = false
-    decor_1.TextSize = 9
-    decor_1.TextColor3 = Color3.new(1, 1, 1)
-    decor_1.Text = ""
-    decor_1.Font = Enum.Font.Code
-    decor_1.Visible = true
-
-    the_holder = holder
-    
-    properties_board_btn = properties_board_btn + 0.0038
+    the_holder = add_property_edit_btn(da_inst, name)
   end if table.find(special_class, da_inst.ClassName) then
     preview_holder = the_holder:Clone()
     preview_holder.Parent = the_holder.Parent
@@ -567,11 +574,38 @@ function generate_props(da_inst, valid_props)
     info_1.TextColor3 = Color3.new(1, 1, 1)
     info_1.TextStrokeColor3 = Color3.new(1, 0, 0)
     info_1.Text = "PLAY"
+    if table.find(can_teleport_inst, da_inst.ClassName) then
+      info_1.Text = "TP"
+    end
     info_1.Font = Enum.Font.Arcade
     info_1.Visible = true
     info_1.MouseButton1Click:Connect(function()
+      local hmoid = plr and plr.Character and plr.Character:FindFirstChildOfClass("Humanoid")
+      local hrp = plr and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart")
       if da_inst:IsA("Sound") then
-        da_inst:Play()
+        if info_1.Text == "PLAY" then
+          da_inst:Play()
+          info_1.Text = "STOP"
+        else
+          da_inst:Pause()
+          info_1.Text = "PLAY"
+        end
+      elseif da_inst:IsA("Animation") then
+        if hmoid and hmoid.Health > 0 then
+          if info_1.Text == "PLAY" then
+            hmoid:LoadAnimation(da_inst):Play()
+            info_1.Text = "STOP"
+          else
+            hmoid:LoadAnimation(da_inst):Stop()
+            info_1.Text = "PLAY"
+          end
+        end
+      elseif da_inst:IsA("Part") then
+        if hrp then
+          if info_1.Text == "TP" then
+            hrp.CFrame = CFrame.new(da_inst.Position)
+          end
+        end
       end
     end)
   end

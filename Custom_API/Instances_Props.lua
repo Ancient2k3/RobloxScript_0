@@ -4,11 +4,11 @@ local z = function(i, p)
   if prop then
     local ist = typeof(i[p]):lower()
     if ist == "vector3" then
-      return "X: " .. tostring(prop.X) .. ", Y: " .. tostring(prop.Y) .. ", Z: " .. tostring(prop.Z)
+      return "X: " .. tostring(prop.X):sub(1, 4) .. ", Y: " .. tostring(prop.Y):sub(1, 4) .. ", Z: " .. tostring(prop.Z):sub(1, 4)
     elseif ist == "color3" then
-      return "R: " .. tostring(prop.R) .. ", G: " .. tostring(prop.G) .. ", B: " .. tostring(prop.B)
+      return "R: " .. tostring(prop.R):sub(1, 4) .. ", G: " .. tostring(prop.G):sub(1, 4) .. ", B: " .. tostring(prop.B):sub(1, 4)
     elseif ist == "cframe" then
-      return tostring(prop)
+      return tostring(math.floor(tonumber(prop)))
     end
   end return tostring(nil)
 end

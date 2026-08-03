@@ -515,6 +515,16 @@ function removing_shades()
   ui_data.vars.inst_obj_num = 1
 end
 
+function combined_t(...)
+  local ts = {...}
+  local nst, outp = {}, {}
+  if #ts > 0 then
+    for i = 1, #ts do if type(ts[i]) ~= "table" then break return {} end end
+    for i = 1, #ts do if #ts[i] > 0 then for x = 1, #ts[i] do nst[ts[i][x]] = 1 end end end
+    for i, _ in next, nst do table.insert(outp, i) end
+  end return outp
+end
+
 function add_property_edit_btn(da_inst, name, fnc)
   local holder = Instance.new("TextLabel", _properties_board)
   holder.Name = "PROP-of:" .. tostring(name):upper()
@@ -552,7 +562,8 @@ function generate_props(da_inst, valid_props)
   local the_holder, preview_holder, info_1
   local special_class, can_teleport_inst = {"Animation", "Sound", "ParticleEmitter"}, {
     "Part"
-  } add_property_edit_btn(da_inst, "ClassName", function(i, ...) return tostring(i[...] or nil) end)
+  } special_class = combined_t(special_class, can_teleport_inst)
+  add_property_edit_btn(da_inst, "ClassName", function(i, ...) return tostring(i[...] or nil) end)
   add_property_edit_btn(da_inst, "Name", function(i, ...) return tostring(i[...] or nil) end)
   for name, fnc in pairs(valid_props) do
     the_holder = add_property_edit_btn(da_inst, name, fnc)

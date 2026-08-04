@@ -15,27 +15,19 @@ end
 return {
   ["Folder"] = {},
   ["Sound"] = {
-    ["SoundId"] = x,
-    ["Pitch"] = x,
-    ["Volume"] = x
+    ["SoundId"] = x, ["Pitch"] = x, ["Volume"] = x
   },
   ["Animation"] = {
     ["AnimationId"] = x
   },
   ["Humanoid"] = {
-    ["Health"] = x,
-    ["WalkSpeed"] = x,
-    ["JumpPower"] = x,
-    ["Jump"] = x,
-    ["Sit"] = x
+    ["Health"] = x, ["WalkSpeed"] = x, ["JumpPower"] = x, ["Jump"] = x, ["Sit"] = x
   },
   ["Part"] = {
-    ["Transparency"] = x,
-    ["Position"] = z,
-    ["Size"] = z,
-    ["Anchored"] = x,
-    ["CanCollide"] = x,
-    ["Color"] = z,
-    ["CFrame"] = z
-  }
+    ["Transparency"] = x, ["Position"] = z, ["Size"] = z, ["Anchored"] = x, ["CanCollide"] = x, ["Color"] = z, ["CFrame"] = z
+  },
+  ["Player"] = {
+    ["UserId"] = x, ["Age"] = x, ["Archivable"] = x
+  },
+  ["Model"] = {}, ["Workspace"] = {}, ["RemoteEvent"] = {}
 }

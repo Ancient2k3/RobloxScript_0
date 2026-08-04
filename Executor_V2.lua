@@ -331,6 +331,28 @@ function str_convert(str)
   return {x_codes[1], z_listed}
 end
 
+function cfs_from_start(str, matc)
+  if #str > 0 then
+    for mtc, change in next, matc do
+      if str:sub(1, #mtc) == mtc then
+        return str:gsub(mtc, change)
+      end
+    end
+  end return str
+end
+
+function rcv_str_path(_path)
+  if _path and _path.Name then
+    return cfs_from_start(_path:GetFullName(), {
+      ["Workspace."] = "ws.",
+      ["Players."] = "plrs.",
+      ["ReplicatedStorage"] = "rls.",
+      ["CoreGui."] = "core.",
+      ["StarterGui."] = "statui."
+    })
+  end
+end
+
 function ui_visible(state, int)
   local x = state or false
   local zp = int or 0
@@ -931,7 +953,7 @@ code_box:GetPropertyChangedSignal("Text"):Connect(function()
   saved_codes[tostring(game.GameId)] = code_box.Text
   local _position, _total, _string = string.find(code_box.Text, "%+Inst:%s*(.-)%s*!")
   if code_box.Text:match("+Path") and ui_data.vars.path_selected ~= nil then
-    code_box.Text = code_box.Text:gsub("+Path", ui_data.vars.path_selected:GetFullName())
+    code_box.Text = code_box.Text:gsub("+Path", rcv_str_path(ui_data.vars.path_selected))
   else
     code_box.Text = code_box.Text:gsub("+Path", "")
   end
@@ -983,7 +1005,8 @@ add_info_labels({
 })
 add_display_label("Update/Change Logs")
 add_info_labels({
-  ["Version 3.3"] = "(4/8/2026, 9:28PM): Fix some GUI bugs n added Script loaded Time taken check."
+  ["Version 3.3"] = "(4/8/2026, 9:28PM): Fix some GUI bugs n added Script loaded Time taken check.",
+  ["• 3.31"] = "Updated \"+Path\" Special Commands."
 })
 add_display_label("Code Editor Version: " .. tostring(ui_data.vars.script_version))
 add_inst_label(srvs) removing_shades()
@@ -991,4 +1014,3 @@ add_inst_label(srvs) removing_shades()
 funcs.notify("Codes Editor by HoangHienXScripts.")
 print("[HHxScripts: Custom Code Editors, Loaded!]\n[Time taken: " .. tostring(tick() - ui_data.vars.time_start):sub(1, 4) .. "]")
 -- Update: 3.3, 4/8/2026 21:28 Last Fix --
--- Dev By HHxScripts --

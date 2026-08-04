@@ -35,8 +35,9 @@ local ui_data, funcs = {
   name = "CodesEditor_xScripts",
   name_1 = "OBJECT_",
   vars = {
+    time_start = tick(),
     delay = 0.001,
-    script_version = 3.2,
+    script_version = 3.3,
     show = false,
     looped = false,
     loaded_text = false,
@@ -980,9 +981,14 @@ add_info_labels({
   ["Encoder"] = ".EN(<string>), .DE(<string>)",
   ["Map"] = ".SAVE(<path>), .LOAD(<parent>, <json_string>)"
 })
+add_display_label("Update/Change Logs")
+add_info_labels({
+  ["Version 3.3"] = "(4/8/2026, 9:28PM): Fix some GUI bugs n added Script loaded Time taken check."
+})
 add_display_label("Code Editor Version: " .. tostring(ui_data.vars.script_version))
 add_inst_label(srvs) removing_shades()
 
 funcs.notify("Codes Editor by HoangHienXScripts.")
-print("[HHxScripts: Custom Code Editors, Loaded!]")
--- Update: 3.2, Last Fix --
+print("[HHxScripts: Custom Code Editors, Loaded!]\n[Time taken: " .. tostring(tick() - ui_data.vars.time_start):sub(1, 4) .. "]")
+-- Update: 3.3, 4/8/2026 21:28 Last Fix --
+-- Dev By HHxScripts --

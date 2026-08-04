@@ -346,6 +346,7 @@ end
 
 function explorer_reset_state()
   explorer_scroll.Visible = false
+  _properties_board.Visible = false
   debug_console.Size = UDim2.new(0.4, 0, 0.1, 0)
   code_box.Size = UDim2.new(0.4, 0, 0.4, 0)
   _listedAPIs.Size = UDim2.new(0.4, 0, 0.5, 0)
@@ -561,8 +562,9 @@ end
 function generate_props(da_inst, valid_props)
   local the_holder, preview_holder, info_1
   local special_class, can_teleport_inst = {"Animation", "Sound", "ParticleEmitter"}, {
-    "Part"
+    "Part", "Model"
   } special_class = combined_t(special_class, can_teleport_inst)
+  add_property_edit_btn(da_inst, "Parent", function(i, ...) if i[...] ~= nil then return tostring(i[...]:GetFullName()) end return tostring(nil) end)
   add_property_edit_btn(da_inst, "ClassName", function(i, ...) return tostring(i[...] or nil) end)
   add_property_edit_btn(da_inst, "Name", function(i, ...) return tostring(i[...] or nil) end)
   for name, fnc in pairs(valid_props) do
@@ -614,7 +616,13 @@ function generate_props(da_inst, valid_props)
       elseif da_inst:IsA("Part") then
         if hrp then
           if info_1.Text == "TP" then
-            hrp.CFrame = CFrame.new(da_inst.Position)
+            hrp.CFrame = CFrame.new(da_inst.Position + Vector3.new(0, da_inst.Size.Y, 0))
+          end
+        end
+      elseif da_inst:IsA("Model") then
+        if hrp then
+          if info_1.Text == "TP" then
+            hrp.CFrame = CFrame.new(da_inst:GetBoundingBox().Position + Vector3.new(0, 5, 0))
           end
         end
       end
@@ -647,7 +655,7 @@ function add_inst_properties()
       })
     end
   else
-    code_box.Size = UDim2.new(0.4, 0, 0.4, 0)
+    code_box.Size = UDim2.new(0.102, 0, 0.4, 0)
     explorer_scroll.Size = UDim2.new(0.297, 0, 0.505, 0)
     _properties_board.Visible = false
   end

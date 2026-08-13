@@ -308,6 +308,11 @@ function commands_module()
   return my_module("Modules/refs/heads/main/Commands.lua")
 end
 
+function btnlists_module()
+  print("module functions: itself(\"name\", function).")
+  return my_module("Modules/refs/heads/main/Items_List.lua")
+end
+
 function find_object_by_name(name, class)
   if not name then print("<find_object_by_name: name, class?>")
     return "missing argument 1: object name"
@@ -563,6 +568,7 @@ tplace()~Teleport to specific place... <argument: #1 placeid : numberic, #2 jobi
 tgame()~Teleport to specific expierance/game... <argument: #1 gameid : numberic>@
 show_bytes()~Printing output showing how many bytes from a string... <argument: #1 string to check : string>@
 commands_module()~Load commands module and printing tutorials... <argument: nil>@
+btnlists_module()~Load buttons list module and printing tutorials... <argument: nil>@
 is_prop()~Return true if a property exist from an Instance... <argument: #1 path : instance, #2 property name : string>@
 joystick_direction()~Return joystick direction .X, .Z... <argument: nil>@
 github()~Just for short cuz i don't wanna do rewrite whole github raw link, just insert the path and we all done... <argument: #1 url path : string>@

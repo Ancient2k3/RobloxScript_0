@@ -335,7 +335,7 @@ function fix_key(t)
   if type(t) ~= "string" then return nil end
   for i = 2, #t do
     if not t:sub(i, i):match("[A-Za-z0-9_]") then
-      return "[\"" .. t:sub(1) .. "\"]"
+      return "[\"" .. t:sub(2) .. "\"]"
     end
   end
   return t

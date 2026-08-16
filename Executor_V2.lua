@@ -331,6 +331,27 @@ function str_convert(str)
   return {x_codes[1], z_listed}
 end
 
+function fix_key(t)
+  if type(t) ~= "string" then return nil end
+  for i = 2, #t do
+    if not t:sub(i, i):match("[A-Za-z0-9_]") then
+      return "[\"" .. t:sub(1) .. "\"]"
+    end
+  end
+  return t
+end
+
+function fix_path(t)
+  if t and type(t) == "string" and t:match(".") then
+    t = t:split(".")
+    local out = ""
+    for idx = 1, #t do
+      out = out .. fix_key("." .. t[idx])
+    end out = out:sub(2, #out)
+    return out
+  end return ""
+end
+
 function cfs_from_start(str, matc)
   if #str > 0 then
     for mtc, change in next, matc do
@@ -953,7 +974,7 @@ code_box:GetPropertyChangedSignal("Text"):Connect(function()
   saved_codes[tostring(game.GameId)] = code_box.Text
   local _position, _total, _string = string.find(code_box.Text, "%+Inst:%s*(.-)%s*!")
   if code_box.Text:match("+Path") and ui_data.vars.path_selected ~= nil then
-    code_box.Text = code_box.Text:gsub("+Path", rcv_str_path(ui_data.vars.path_selected))
+    code_box.Text = code_box.Text:gsub("+Path", fix_path(rcv_str_path(ui_data.vars.path_selected)))
   else
     code_box.Text = code_box.Text:gsub("+Path", "")
   end

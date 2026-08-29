@@ -514,6 +514,10 @@ function chatlogs(name)
   end
 end
 
+function lua_escape(str)
+  return (str:gsub(".", function(c) return string.format("\\%03d", string.byte(c)) end))
+end
+
 function konstant_decompile(t) -- Re added because idk what wrong with github
   local dc_func = getgenv().decompile
   if dc_func then
@@ -574,3 +578,4 @@ joystick_direction()~Return joystick direction .X, .Z... <argument: nil>@
 github()~Just for short cuz i don't wanna do rewrite whole github raw link, just insert the path and we all done... <argument: #1 url path : string>@
 chatlogs()~Return a table, store all specific player chat since time this script running... <argument: #1 username : string>@
 konstant_decompile()~Return decompiled source code from a LocalScript... <argument: #1 path to script : instance>@
+lua_escape()~Return a lua escape string convert from a string... <argument: #1 string to convert : string>@

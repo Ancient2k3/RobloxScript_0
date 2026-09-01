@@ -518,6 +518,13 @@ function lua_escape(str)
   return (str:gsub(".", function(c) return string.format("\\%03d", string.byte(c)) end))
 end
 
+function hash_str(str, c)
+  local n = c or 5381
+  for i = 1, #str do
+    n = ((n * 33) + string.byte(str, i)) % 4294967296
+  end return string.format("%08x", n)
+end
+
 function konstant_decompile(t) -- Re added because idk what wrong with github
   local dc_func = getgenv().decompile
   if dc_func then
@@ -579,3 +586,4 @@ github()~Just for short cuz i don't wanna do rewrite whole github raw link, just
 chatlogs()~Return a table, store all specific player chat since time this script running... <argument: #1 username : string>@
 konstant_decompile()~Return decompiled source code from a LocalScript... <argument: #1 path to script : instance>@
 lua_escape()~Return a lua escape string convert from a string... <argument: #1 string to convert : string>@
+hash_str()~Return a hashed string convert from a string... <argument: #1 string to convert : string, #2 randomness : numberic>@

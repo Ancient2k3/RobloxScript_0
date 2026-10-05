@@ -530,6 +530,50 @@ function hash_str(str, c)
   end return string.format("%08x", n)
 end
 
+function save_array(t, db)
+  if not _G.SAVED_AR then
+    _G.SAVED_AR = {}
+  else
+    if not table.find(_G.SAVED_AR, t) then
+      table.insert(_G.SAVED_AR, t)
+      if db then
+        print(tostring(t).." array: SAVED")
+      end
+    end return _G.SAVED_AR
+  end
+end
+
+function clear_saved_array()
+  if _G.SAVED_AR then
+    _G.SAVED_AR = {}
+    print("Saved array: CLEARED")
+  else
+    print("Must call save_array() first...")
+  end
+end
+
+function rmv_duped_array(t)
+  local tbl, out = t or {}, {}
+  for i = 1, #tbl do
+    if not table.find(out, tbl[i]) then
+      table.insert(out, tbl[i])
+    end
+  end return out
+end
+
+function create_player(n)
+  local a, b, c
+  a, b = pcall(function() c = plrs:CreateHumanoidModelFromUserIdAsync(plrs:GetUserIdFromNameAsync(n)) end)
+  if not a then
+    print("Err: "..tostring(b)..".")
+  end if c then
+    c.Parent = ws
+    task.wait(0.5)
+    c["HumanoidRootPart"].CFrame = plr.Character["HumanoidRootPart"].CFrame
+    return c
+  end
+end
+
 function konstant_decompile(t) -- Re added because idk what wrong with github
   local dc_func = getgenv().decompile
   if dc_func then
@@ -593,3 +637,7 @@ chatlogs()~Return a table, store all specific player chat since time this script
 konstant_decompile()~Return decompiled source code from a LocalScript... <argument: #1 path to script : instance>@
 lua_escape()~Return a lua escape string convert from a string... <argument: #1 string to convert : string>@
 hash_str()~Return a hashed string convert from a string... <argument: #1 string to convert : string, #2 randomness : numberic>@
+save_array()~Save anything and return table store that thing non-duped... <argument: #1 anything : any, #2 allow debug print : any or nil>@
+clear_saved_array()~Clear saved array... <argument: nil>@
+rmv_duped_array()~Return a table store non-duped array from inserted array table... <argument: #1 array table : table>@
+create_player()~Return created player model... <argument: #1 player name : username : string>@

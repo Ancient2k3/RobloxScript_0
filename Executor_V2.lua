@@ -102,7 +102,7 @@ end saved_codes = htps:JSONDecode(readfile("HHxScripts/Storage/Scripts/LastTimeC
 task.wait()
 -- End --
 
-local screenui, debug_console, code_box, exec_one, exec_loop, tshow_ui, _wait, _listedAPIs, _selectedAPI, _openList, _properties_board
+local screenui, debug_console, code_box, exec_one, exec_loop, tshow_ui, _wait, _listedAPIs, _selectedAPI, _openList, _openExplorer, _properties_board
 local credit_label, explorer_scroll
 screenui = Instance.new("ScreenGui", core[ui_data.name])
 screenui.Name = "ExecuteTools"
@@ -291,6 +291,21 @@ _openList.Text = "Built-In"
 _openList.Visible = false
 funcs.corner(_openList, 0.15)
 
+_openExplorer = Instance.new("TextButton", screenui)
+_openExplorer.Name = "Built-In:TG_Explorer"
+_openExplorer.BackgroundTransparency = 0.2
+_openExplorer.BackgroundColor3 = Color3.new(1, 1, 0)
+_openExplorer.Position = UDim2.new(0.94, 0, 0.24, 0)
+_openExplorer.Size = UDim2.new(0.05, 0, 0.1, 0)
+_openExplorer.TextScaled = true
+_openExplorer.TextSize = 12
+_openExplorer.TextStrokeTransparency = 0.2
+_openExplorer.TextColor3 = Color3.new(1, 1, 1)
+_openExplorer.Font = Enum.Font.Arcade
+_openExplorer.Text = "Explorer"
+_openExplorer.Visible = false
+funcs.corner(_openExplorer, 0.15)
+
 local plr = plrs.LocalPlayer
 
 function fill_text_effect(subject, sub_prop, str)
@@ -367,7 +382,7 @@ function rcv_str_path(_path)
     return cfs_from_start(_path:GetFullName(), {
       ["Workspace."] = "ws.",
       ["Players."] = "plrs.",
-      ["ReplicatedStorage"] = "rls.",
+      ["ReplicatedStorage."] = "reps.",
       ["CoreGui."] = "core.",
       ["StarterGui."] = "statui."
     })
@@ -385,6 +400,7 @@ function ui_visible(state, int)
     credit_label.Visible = x
     _wait.Visible = x
     _openList.Visible = x
+    _openExplorer.Visible = x
   end
 end
 
@@ -926,6 +942,7 @@ tshow_ui.MouseButton1Click:Connect(function()
   end
 end)
 _openList.MouseButton1Click:Connect(api_list_visible)
+_openExplorer.MouseButton1Click:Connect(explorer_visible)
 
 exec_one.MouseButton1Click:Connect(function()
   exec_one.TextColor3 = Color3.new(0, 1, 0) task.wait(0.02)

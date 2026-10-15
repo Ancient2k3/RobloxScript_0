@@ -398,6 +398,18 @@ function raycast(pos, direction, datas)
     end
 end
 
+function draw_line(spos, epos, lsz)
+  local vsp = ws._ScriptFolder:FindFirstChild("Visual_Point")
+  if vsp and spos and epos then lsz = lsz or 0.05
+    vsp.Size = Vector3.new(lsz, lsz, (spos-epos).magnitude)
+    vsp.CFrame = CFrame.new(spos:Lerp(epos, lsz), epos)
+    vsp.Transparency = 0.25
+    vsp.Color = Color3.new(math.random(1, 255), math.random(1, 255), math.random(1, 255))
+  else
+    if vsp then vsp.Transparency = 1 end
+  end
+end
+
 function simulate_input(name)
   vim:SendKeyEvent(true, Enum.KeyCode[name], false, game) task.wait(0.02)
   vim:SendKeyEvent(false, Enum.KeyCode[name], false, game)
@@ -617,6 +629,7 @@ server()~Sending items to server... <argument: #1 remote event or function : ins
 new_tool()~Return a tool object into backpack... no handles require. <argument: #1 tool name : string>@
 inspect_element()~Return what inside a table, structure as a string... <argument: #1 table to check : table, #2 spaces : numberic>@
 raycast()~Return raycastresult... <argument: #1 start position : vector3, #2 end position : vector3, #3 ignore instance : table>@
+draw_line()~Make a line using preset object... <argument: #1 start position : vector3, #2 end position : vector3, #3 size : numberic>@
 create_tween()~Return tweening progress... tws:Create(...) but make it as a function just for short <argument: #1 object to tweening : instance, #2 finish in seconds : numberic, #3 tweening style : string, #4 tweening direction : string, #5 tweening property : table>@
 inst()~Basically an Instance.new(...) and properties... on code editor. <argument: #1 class name : string>@
 anim_id()~Return AnimationId get from an Humanoid... <argument: #1 character humanoid : instance>@

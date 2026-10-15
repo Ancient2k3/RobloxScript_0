@@ -378,17 +378,23 @@ function new_tool(name)
 end
 
 function raycast(pos, direction, datas)
+    local params = RaycastParams.new()
+    local empty_res = {Instance = nil, Position = Vector3.new(0, 0, 0), Distance = 0, Material = "Plastic", Normal = Vector3.new(0, 0, 0)}
     pos = pos or nil
     direction = direction or nil
     datas = datas or nil
     if not pos then
         print("Missing argument: #1 Start Position : Vector3.")
-        return nil
+        return empty_res
     end if not direction then
         print("Missing argument: #2 End Position : Vector3.")
-        return nil
+        return empty_res
     end if not datas then
         return ws:Raycast(pos, direction - pos)
+    end if datas and type(datas) == "table" and #datas > 0 then
+        params.FilterType = Enum.RaycastFilterType.Exclude
+        params.FilterDescendantsInstances = datas or {}
+        return ws:Raycast(pos, direction - pos, params)
     end
 end
 
@@ -610,7 +616,7 @@ find_sound()~Return a sound-track sound object from inside my own folder created
 server()~Sending items to server... <argument: #1 remote event or function : instance, #inf anything : any>@
 new_tool()~Return a tool object into backpack... no handles require. <argument: #1 tool name : string>@
 inspect_element()~Return what inside a table, structure as a string... <argument: #1 table to check : table, #2 spaces : numberic>@
-raycast()~Return raycastresult... <argument: #1 start position : vector3, #2 end position : vector3, #3 settings : table>@
+raycast()~Return raycastresult... <argument: #1 start position : vector3, #2 end position : vector3, #3 ignore instance : table>@
 create_tween()~Return tweening progress... tws:Create(...) but make it as a function just for short <argument: #1 object to tweening : instance, #2 finish in seconds : numberic, #3 tweening style : string, #4 tweening direction : string, #5 tweening property : table>@
 inst()~Basically an Instance.new(...) and properties... on code editor. <argument: #1 class name : string>@
 anim_id()~Return AnimationId get from an Humanoid... <argument: #1 character humanoid : instance>@

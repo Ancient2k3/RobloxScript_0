@@ -579,6 +579,21 @@ function rmv_duped_array(t)
   end return out
 end
 
+function expand_directory(t)
+  local max, order, out = 0, {}, {}
+  for i, _ in next, t do
+    table.insert(order, tonumber(i))
+  end table.sort(order)
+  max = order[#order]
+  if max > 0 then
+    for i = 1, max do
+      if t[tostring(i)] then
+        order = t[tostring(i)]
+      end out[tostring(i)] = order
+    end
+  end return out
+end
+
 function create_player(n)
   local a, b, c
   a, b = pcall(function() c = plrs:CreateHumanoidModelFromUserIdAsync(plrs:GetUserIdFromNameAsync(n)) end)
@@ -659,4 +674,5 @@ hash_str()~Return a hashed string convert from a string... <argument: #1 string 
 save_array()~Save anything and return table store that thing non-duped... <argument: #1 anything : any, #2 allow debug print : any or nil>@
 clear_saved_array()~Clear saved array... <argument: nil>@
 rmv_duped_array()~Return a table store non-duped array from inserted array table... <argument: #1 array table : table>@
+expand_directory()~Return a expanded directory, only for kind ["1"] = val, ["10"] = val...etc <argument: #1 table directory : table>@
 create_player()~Return created player model... <argument: #1 player name : username : string>@

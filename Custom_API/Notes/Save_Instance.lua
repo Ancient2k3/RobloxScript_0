@@ -5,7 +5,7 @@ local htps = game:GetService("HttpService")
 local coreui = game:GetService("CoreGui")
 
 local module, ui_setup = {}, {}
-local plr, folder_1, _object, _OnSave, _OnLoad
+local plr, folder_1, _object, _alt_object, _OnSave, _OnLoad
 plr = plrs.LocalPlayer
 _OnSave = false
 _OnLoad = false
@@ -23,8 +23,13 @@ if not ws:FindFirstChild("_ScriptFolder") then
   _object.Color = Color3.new(1, 0, 1)
   _object.Size = Vector3.new(0.5, 0.5, 0.5)
   _object.Position = Vector3.new(0, 9999, 0)
+  _alt_object = _object:Clone()
+  _alt_object.Parent = _object.Parent
+  _alt_object.Name = "Visual_Point"
+  _alt_object.Color = Color3.new(1, 1, 1)
 else
   _object = ws._ScriptFolder.Origin_Point
+  _alt_object = ws._ScriptFolder.Visual_Point
 end
 
 function _idk_man(is_num)

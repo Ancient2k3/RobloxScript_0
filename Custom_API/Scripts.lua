@@ -434,6 +434,22 @@ function create_line(spos, epos, lsz)
   end
 end
 
+function create_point(atpos, pnm)
+  local orp = ws._ScriptFolder:FindFirstChild("Origin_Point")
+  local fvs = ws._ScriptFolder:FindFirstChild("Store_Points")
+  if not fvs then Instance.new("Folder", ws._ScriptFolder).Name = "Store_Points" end
+  if orp and fvs then
+    local norp = orp:Clone()
+    norp.Parent = fvs
+    norp.Material = Enum.Material.Plastic
+    norp.Name = pnm or "Unknown:"..tostring(#fvs:GetChildren())
+    norp.Position = atpos
+    norp:SetAttribute("Is_Object", 0)
+  else
+    if fvs and #fvs:GetChildren() > 0 then for _, item in next, fvs:GetChildren() do if item and item:GetAttribute("Is_Object") == 0 then item:Destroy() end end end
+  end
+end
+
 function simulate_input(name)
   vim:SendKeyEvent(true, Enum.KeyCode[name], false, game) task.wait(0.02)
   vim:SendKeyEvent(false, Enum.KeyCode[name], false, game)
@@ -670,6 +686,7 @@ inspect_element()~Return what inside a table, structure as a string... <argument
 raycast()~Return raycastresult... <argument: #1 start position : vector3, #2 end position : vector3, #3 ignore instance : table>@
 draw_line()~Make a line using preset object... <argument: #1 start position : vector3, #2 end position : vector3, #3 size : numberic>@
 create_line()~Work same way as draw_line() but... new line instead re-using old line... <argument: #1 start position : vector3, #2 end position : vector3, #3 size : numberic>@
+create_point()~Create a part at specific position... <argument: #1 at position : vector3, #2 point name : string>@
 create_tween()~Return tweening progress... tws:Create(...) but make it as a function just for short <argument: #1 object to tweening : instance, #2 finish in seconds : numberic, #3 tweening style : string, #4 tweening direction : string, #5 tweening property : table>@
 inst()~Basically an Instance.new(...) and properties... on code editor. <argument: #1 class name : string>@
 anim_id()~Return AnimationId get from an Humanoid... <argument: #1 character humanoid : instance>@

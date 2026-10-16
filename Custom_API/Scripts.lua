@@ -437,11 +437,14 @@ end
 function create_point(atpos, pnm)
   local orp = ws._ScriptFolder:FindFirstChild("Origin_Point")
   local fvs = ws._ScriptFolder:FindFirstChild("Store_Points")
-  if not fvs then Instance.new("Folder", ws._ScriptFolder).Name = "Store_Points" end
-  if orp and fvs then
+  if not fvs then Instance.new("Folder", ws._ScriptFolder).Name = "Store_Points"
+    create_point(atpos, pnm)
+  end if orp and fvs then
     local norp = orp:Clone()
     norp.Parent = fvs
-    norp.Material = Enum.Material.Plastic
+    norp.Color = Color3.new(1, 1, 1)
+    norp.Shape = "Ball"
+    norp.Transparency = 0.25
     norp.Name = pnm or "Unknown:"..tostring(#fvs:GetChildren())
     norp.Position = atpos
     norp:SetAttribute("Is_Object", 0)

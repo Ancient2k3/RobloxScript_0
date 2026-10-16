@@ -422,7 +422,7 @@ function create_line(spos, epos, lsz)
     nvsp.Size = Vector3.new(lsz, lsz, (spos-epos).magnitude)
     nvsp.CFrame = CFrame.new(spos:Lerp(epos, 0.5), epos)
   else
-    if fvs and fvs:GetChildren() > 0 then fvs:ClearAllChildren() end
+    if fvs and #fvs:GetChildren() > 0 then fvs:ClearAllChildren() end
   end
 end
 

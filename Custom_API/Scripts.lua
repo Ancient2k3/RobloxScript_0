@@ -44,9 +44,11 @@ local v3, cframe = {
   inf = Vector3.new(999999999, 999999999, 999999999),
   own = plr.Character:GetBoundingBox().Position,
   mouse = plr:GetMouse().Hit.p,
-  m_direction = (plr:GetMouse().Hit.p - plr.Character:GetBoundingBox().Position).Unit
+  m_direction = (plr:GetMouse().Hit.p - plr.Character:GetBoundingBox().Position).Unit,
+  new = Vector3.new
 }, {
-  zero = CFrame.new(0, 0, 0) * CFrame.Angles(0, 0, 0)
+  zero = CFrame.new(0, 0, 0) * CFrame.Angles(0, 0, 0),
+  new = CFrame.new
 }
 
 in_script_funcs = {
@@ -379,23 +381,29 @@ end
 
 function raycast(pos, direction, datas)
     local params = RaycastParams.new()
-    local empty_res = {Instance = nil, Position = Vector3.new(0, 0, 0), Distance = 0, Material = "Plastic", Normal = Vector3.new(0, 0, 0)}
+    local empty_res = {Instance = nil, Position = Vector3.new(0, 0, 0), Distance = 0, Direction = Vector3.new(0, 0, 0), Material = "Plastic", Normal = Vector3.new(0, 0, 0), Bounce = Vector3.new(0, 0, 0)}
     pos = pos or nil
     direction = direction or nil
     datas = datas or nil
-    if not pos then
+    local function r_set(t)
+        empty_res.Instance = t.Instance
+        empty_res.Position = t.Position
+        empty_res.Distance = t.Distance
+        empty_res.Direction = (direction-pos).Unit
+        empty_res.Material = t.Material
+        empty_res.Normal = t.Normal
+        empty_res.Bounce = (direction-pos).Unit - (2 * (direction-pos).Unit:Dot(t.Normal) * t.Normal)
+    end if not pos then
         print("Missing argument: #1 Start Position : Vector3.")
-        return empty_res
     end if not direction then
         print("Missing argument: #2 End Position : Vector3.")
-        return empty_res
     end if not datas then
-        return ws:Raycast(pos, direction - pos)
+        r_set(ws:Raycast(pos, direction - pos))
     end if datas and type(datas) == "table" and #datas > 0 then
         params.FilterType = Enum.RaycastFilterType.Exclude
         params.FilterDescendantsInstances = datas or {}
-        return ws:Raycast(pos, direction - pos, params)
-    end
+        r_set(ws:Raycast(pos, direction - pos, params))
+    end return empty_res
 end
 
 function draw_line(spos, epos, lsz)

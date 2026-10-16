@@ -402,11 +402,27 @@ function draw_line(spos, epos, lsz)
   local vsp = ws._ScriptFolder:FindFirstChild("Visual_Point")
   if vsp and spos and epos then lsz = lsz or 0.05
     vsp.Size = Vector3.new(lsz, lsz, (spos-epos).magnitude)
-    vsp.CFrame = CFrame.new(spos:Lerp(epos, lsz), epos)
+    vsp.CFrame = CFrame.new(spos:Lerp(epos, 0.5), epos)
     vsp.Transparency = 0.25
     vsp.Color = Color3.new(math.random(1, 255), math.random(1, 255), math.random(1, 255))
   else
     if vsp then vsp.Transparency = 1 end
+  end
+end
+
+function create_line(spos, epos, lsz)
+  local vsp = ws._ScriptFolder:FindFirstChild("Visual_Point")
+  local fvs = ws._ScriptFolder:FindFirstChild("Store_Points")
+  if not fvs then Instance.new("Folder", ws._ScriptFolder).Name = "Store_Points" end
+  if vsp and fvs and spos and epos then lsz = lsz or 0.05
+    local nvsp = vsp:Clone()
+    nvsp.Parent = fvs
+    nvsp.Name = "NewVisual_Point"
+    nvsp.Transparency = 0.25
+    nvsp.Size = Vector3.new(lsz, lsz, (spos-epos).magnitude)
+    nvsp.CFrame = CFrame.new(spos:Lerp(epos, 0.5), epos)
+  else
+    if fvs and fvs:GetChildren() > 0 then fvs:ClearAllChildren() end
   end
 end
 
@@ -645,6 +661,7 @@ new_tool()~Return a tool object into backpack... no handles require. <argument: 
 inspect_element()~Return what inside a table, structure as a string... <argument: #1 table to check : table, #2 spaces : numberic>@
 raycast()~Return raycastresult... <argument: #1 start position : vector3, #2 end position : vector3, #3 ignore instance : table>@
 draw_line()~Make a line using preset object... <argument: #1 start position : vector3, #2 end position : vector3, #3 size : numberic>@
+create_line()~Work same way as draw_line() but... new line instead re-using old line... <argument: #1 start position : vector3, #2 end position : vector3, #3 size : numberic>@
 create_tween()~Return tweening progress... tws:Create(...) but make it as a function just for short <argument: #1 object to tweening : instance, #2 finish in seconds : numberic, #3 tweening style : string, #4 tweening direction : string, #5 tweening property : table>@
 inst()~Basically an Instance.new(...) and properties... on code editor. <argument: #1 class name : string>@
 anim_id()~Return AnimationId get from an Humanoid... <argument: #1 character humanoid : instance>@

@@ -38,7 +38,7 @@ if HHxScripts then
   Map = HHxScripts.Map
 end
 
-local v3, cframe = {
+local v3, cframe, custom_vars = {
   random = Vector3.new(x_numbers[math.random(#x_numbers)], x_numbers[math.random(#x_numbers)], x_numbers[math.random(#x_numbers)]),
   zero = Vector3.new(0, 0, 0),
   inf = Vector3.new(999999999, 999999999, 999999999),
@@ -49,7 +49,7 @@ local v3, cframe = {
 }, {
   zero = CFrame.new(0, 0, 0) * CFrame.Angles(0, 0, 0),
   new = CFrame.new
-}
+}, {}
 
 in_script_funcs = {
   find_txt_box = function(name_func)
@@ -654,6 +654,26 @@ function konstant_decompile(t) -- Re added because idk what wrong with github
   local dc_func = getgenv().decompile
   if dc_func then
     return dc_func(t)
+  end
+end
+
+custom_vars.print = print
+function print(...)
+  local items, unknown = {...}, "unknown"
+  if #items > 0 then
+    for idx = 1, #items do
+      if typeof(items[idx]) == "table" then
+        custom_vars.print(inspect_element(items[idx]))
+      elseif typeof(items[idx]) == "function" then
+        if getinfo then
+          unknown = getinfo(items[idx]).name
+        end custom_vars.print("function: name = "..unknown..".")
+      elseif typeof(items[idx]) == "instance" then
+        custom_vars.print(items[idx].Name.." = "..items[idx].ClassName)
+      else custom_vars.print(tostring(items[idx]))
+      end
+    end
+  else return nil
   end
 end
 

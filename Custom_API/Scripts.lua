@@ -657,6 +657,17 @@ function konstant_decompile(t) -- Re added because idk what wrong with github
   end
 end
 
+function rcv_signal(ins, cdt)
+  local signals, out = {
+    "Activated", "InputBegan", "InputEnded", "TouchTap", "TouchLongPress", "MouseButton1Down", "MouseButton1Up", "MouseButton1Click"
+  }, "" if firesignal and type(firesignal) == "function" then
+    for i = 1, #signals do
+      firesignal(ins[signals[i]])
+      if cdt then out = signals[i] break end
+    end
+  end return out
+end
+
 custom_vars.print = print
 function print(...)
   local items, unknown = {...}, "unknown"
@@ -734,6 +745,7 @@ joystick_direction()~Return joystick direction .X, .Z... <argument: nil>@
 github()~Just for short cuz i don't wanna do rewrite whole github raw link, just insert the path and we all done... <argument: #1 url path : string>@
 chatlogs()~Return a table, store all specific player chat since time this script running... <argument: #1 username : string>@
 konstant_decompile()~Return decompiled source code from a LocalScript... <argument: #1 path to script : instance>@
+rcv_signal()~Return rbxsignal if there a condition... <argument: #1 instance : instance, #2 condition : bool>@
 lua_escape()~Return a lua escape string convert from a string... <argument: #1 string to convert : string>@
 hash_str()~Return a hashed string convert from a string... <argument: #1 string to convert : string, #2 randomness : numberic>@
 save_array()~Save anything and return table store that thing non-duped... <argument: #1 anything : any, #2 allow debug print : any or nil>@

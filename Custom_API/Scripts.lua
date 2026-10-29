@@ -1,9 +1,10 @@
 -- Custom Built+In_Functions --
-local ws, plrs, core, reps, tws, vim, txcs, htps, tps, asts
+local ws, plrs, core, reps, rs, tws, vim, txcs, htps, tps, asts
 ws = game:GetService("Workspace")
 plrs = game:GetService("Players")
 core = game:GetService("CoreGui")
 reps = game:GetService("ReplicatedStorage")
+rs = game:GetService("RunService")
 tws = game:GetService("TweenService")
 vim = game:GetService("VirtualInputManager")
 txcs = game:GetService("TextChatService")
@@ -655,6 +656,24 @@ function create_player(n)
   end
 end
 
+function wtpos(t, p)
+  if t and t:FindFirstChild("Humanoid") and p then
+    local thrp, thmo = t:FindFirstChild("HumanoidRootPart"), t:FindFirstChild("Humanoid")
+    if thrp and thmo and thmo.WalkToPoint then
+      if type(p) == "table" then
+        for i = 1, #p do
+          local pnt = p[i]
+          repeat task.wait()
+            thmo.WalkToPoint = pnt
+          until (pnt - thrp.Position).magnitude <= 1.75
+        end return "Reached point..."
+      else
+        thmo.WalkToPoint = p
+      end
+    end
+  end
+end
+
 function konstant_decompile(t) -- Re added because idk what wrong with github
   local dc_func = getgenv().decompile
   if dc_func then
@@ -759,3 +778,4 @@ clear_saved_array()~Clear saved array... <argument: nil>@
 rmv_duped_array()~Return a table store non-duped array from inserted array table... <argument: #1 array table : table>@
 expand_directory()~Return a expanded directory, only for kind ["1"] = val, ["10"] = val...etc <argument: #1 table directory : table>@
 create_player()~Return created player model... <argument: #1 player name : username : string>@
+wtpos()~Make rig model walking to specific position and return message... <argument: #1 rig model : instance, #2 table contain position or position : table or vector3>@

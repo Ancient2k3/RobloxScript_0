@@ -320,6 +320,11 @@ function database_module()
   return loadstring(game:HttpGet("\104\116\116\112\115\058\047\047\114\097\119\046\103\105\116\104\117\098\117\115\101\114\099\111\110\116\101\110\116\046\099\111\109\047\072\111\097\110\103\072\105\101\110\088\083\099\114\105\112\116\115\047\077\111\100\117\108\101\115\047\114\101\102\115\047\104\101\097\100\115\047\097\108\116\047\099\111\110\115\111\108\101\095\108\111\103\046\108\117\097"))("HdcqvBvMCa7sH16g5CeYtytUCSSrT15tSPMVwFeD")
 end
 
+function pathfind_module()
+  print("module functions: .create_path(start_pos, end_pos, preset_points).")
+  return loadstring(game:HttpGet("https://raw.githubusercontent.com/Ancient2k3/DetectTool/refs/heads/main/Learning/Pathfind/Custom_Pathfinder.lua"))()
+end
+
 function find_object_by_name(name, class)
   if not name then print("<find_object_by_name: name, class?>")
     return "missing argument 1: object name"
@@ -740,6 +745,7 @@ show_bytes()~Printing output showing how many bytes from a string... <argument: 
 commands_module()~Load commands module and printing tutorials... <argument: nil>@
 btnlists_module()~Load buttons list module and printing tutorials... <argument: nil>@
 database_module()~Load database module and printing tutorials... <argument: nil>@
+pathfind_module()~Load custom pathfinding module and printing tutorials... <argument: nil>@
 is_prop()~Return true if a property exist from an Instance... <argument: #1 path : instance, #2 property name : string>@
 joystick_direction()~Return joystick direction .X, .Z... <argument: nil>@
 github()~Just for short cuz i don't wanna do rewrite whole github raw link, just insert the path and we all done... <argument: #1 url path : string>@

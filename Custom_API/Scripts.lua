@@ -378,11 +378,13 @@ function list_places()
   end return out
 end
 
-function new_tool(name)
+function new_tool(name, func)
   local xtool = Instance.new("Tool", plr.Backpack)
   xtool.Name = name or "unknown item"
   xtool.RequiresHandle = false
-  return xtool
+  if func and type(func) == "function" then
+    xtool.Activated:Connect(func)
+  end return xtool
 end
 
 function raycast(pos, direction, datas)
@@ -436,7 +438,7 @@ function create_line(spos, epos, lsz)
     nvsp.Size = Vector3.new(lsz, lsz, (spos-epos).magnitude)
     nvsp.CFrame = CFrame.new(spos:Lerp(epos, 0.5), epos)
   else
-    if fvs and #fvs:GetChildren() > 0 then fvs:ClearAllChildren() end
+    if fvs and #fvs:GetChildren() > 0 then for _, item in next, fvs:GetChildren() do if item and item.Name == "NewVisual_Point" then item:Destroy() end end end
   end
 end
 
@@ -457,6 +459,24 @@ function create_point(atpos, pnm)
   else
     if fvs and #fvs:GetChildren() > 0 then for _, item in next, fvs:GetChildren() do if item and item:GetAttribute("Is_Object") == 0 then item:Destroy() end end end
   end
+end
+
+function collect_points(t)
+  local out, mode = {}, t or 0
+  local fvs = ws._ScriptFolder:FindFirstChild("Store_Points")
+  if fvs and #fvs:GetChildren() > 0 then
+    for _, item in pairs(fvs:GetChildren()) do
+      if item and item:GetAttribute("Is_Object") == 0 then
+        if mode == 0 then
+          table.insert(out, item)
+        elseif mode == 1 then
+          table.insert(out, item.Position)
+        else
+          break
+        end
+      end
+    end
+  end return out
 end
 
 function simulate_input(name)
@@ -681,6 +701,28 @@ function konstant_decompile(t) -- Re added because idk what wrong with github
   end
 end
 
+function create_grids(m, size)
+  local out, x, y, z = {}, 4, 4, 4
+  for i = 1, 16 * m do
+    table.insert(out, Vector3.new(x, y, z))
+    x += 4 if x > size then
+      z += 4 x = 4 if z > size then
+        y += 4 z = 4
+      end
+    end
+  end return out
+end
+
+function is_moving(t)
+  local ignore_values, out = {"-1", "0", "1"}, false
+  if t and t.Velocity then
+    if not table.find(ignore_values, tostring(math.floor(t.Velocity.X))) then
+      out = true
+    end
+  else print("argument: #1 must be basepart...")
+  end return out
+end
+
 function rcv_signal(ins, cdt)
   local signals, out = {
     "Activated", "InputBegan", "InputEnded", "TouchTap", "TouchLongPress", "MouseButton1Down", "MouseButton1Up", "MouseButton1Click"
@@ -739,12 +781,13 @@ find_object_by_name()~Return object by name and which class... <argument: #1 nam
 built_in_funcs()~<OLD VERSION FUNC> Load built in func tutorial into codes editor... <void>@
 find_sound()~Return a sound-track sound object from inside my own folder created on games... <argument: #1 sound name : string>@
 server()~Sending items to server... <argument: #1 remote event or function : instance, #inf anything : any>@
-new_tool()~Return a tool object into backpack... no handles require. <argument: #1 tool name : string>@
+new_tool()~Return a tool object into backpack... no handles require. <argument: #1 tool name : string, #2 script : function>@
 inspect_element()~Return what inside a table, structure as a string... <argument: #1 table to check : table, #2 spaces : numberic>@
 raycast()~Return raycastresult... <argument: #1 start position : vector3, #2 end position : vector3, #3 ignore instance : table>@
 draw_line()~Make a line using preset object... <argument: #1 start position : vector3, #2 end position : vector3, #3 size : numberic>@
 create_line()~Work same way as draw_line() but... new line instead re-using old line... <argument: #1 start position : vector3, #2 end position : vector3, #3 size : numberic>@
 create_point()~Create a part at specific position... <argument: #1 at position : vector3, #2 point name : string>@
+collect_points()~Return a table store all point from create_point() function... <argument: #1 mode 0 or 2 : numberic>@
 create_tween()~Return tweening progress... tws:Create(...) but make it as a function just for short <argument: #1 object to tweening : instance, #2 finish in seconds : numberic, #3 tweening style : string, #4 tweening direction : string, #5 tweening property : table>@
 inst()~Basically an Instance.new(...) and properties... on code editor. <argument: #1 class name : string>@
 anim_id()~Return AnimationId get from an Humanoid... <argument: #1 character humanoid : instance>@
@@ -770,6 +813,8 @@ joystick_direction()~Return joystick direction .X, .Z... <argument: nil>@
 github()~Just for short cuz i don't wanna do rewrite whole github raw link, just insert the path and we all done... <argument: #1 url path : string>@
 chatlogs()~Return a table, store all specific player chat since time this script running... <argument: #1 username : string>@
 konstant_decompile()~Return decompiled source code from a LocalScript... <argument: #1 path to script : instance>@
+create_grids()~Test function use to make vector3 grid... <argument: #1 max val : numberic, #2 size : numberic>@
+is_moving()~Return true if an object is moving, false if idle... <argument: #1 basepart or part : instance>@
 rcv_signal()~Return rbxsignal if there a condition... <argument: #1 instance : instance, #2 condition : bool>@
 lua_escape()~Return a lua escape string convert from a string... <argument: #1 string to convert : string>@
 hash_str()~Return a hashed string convert from a string... <argument: #1 string to convert : string, #2 randomness : numberic>@

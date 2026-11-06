@@ -723,6 +723,22 @@ function is_moving(t)
   end return out
 end
 
+function format_time(s, nd, nh, nm, ns)
+  local format_text = {
+    day = nd or "ngày", minute = nm or "phút",
+    hour = nh or "giờ", second = ns or "giây nữa"
+  } if s < 0 then return "nil" end
+  local d = math.floor(s / 86400) s = s % 86400
+  local h = math.floor(s / 3600) s = s % 3600
+  local m = math.floor(s / 60) s = s % 60
+  if d > 0 then return string.format("%d "..format_text.day..", %02d "..format_text.hour..", %02d "..format_text.minute..", %02d "..format_text.second..".", d, h, m, s)
+  elseif d <= 0 and h > 0 then return string.format("%02d "..format_text.hour..", %02d "..format_text.minute..", %02d "..format_text.second..".", h, m, s)
+  elseif d <= 0 and h <= 0 and m > 0 then return string.format("%02d "..format_text.minute..", %02d "..format_text.second..".", m, s)
+  elseif d <= 0 and h <= 0 and m <= 0 and s > 0 then return string.format("%02d "..format_text.second..".", s)
+  else return "nil"
+  end
+end
+
 function rcv_signal(ins, cdt)
   local signals, out = {
     "Activated", "InputBegan", "InputEnded", "TouchTap", "TouchLongPress", "MouseButton1Down", "MouseButton1Up", "MouseButton1Click"
@@ -815,6 +831,7 @@ chatlogs()~Return a table, store all specific player chat since time this script
 konstant_decompile()~Return decompiled source code from a LocalScript... <argument: #1 path to script : instance>@
 create_grids()~Test function use to make vector3 grid... <argument: #1 max val : numberic, #2 size : numberic>@
 is_moving()~Return true if an object is moving, false if idle... <argument: #1 basepart or part : instance>@
+format_time()~Return day/hours/minutes/seconds from tick(), a string... <argument: #1 tick : numberic, #2 day : string, #3 hours : string, #4 minutes : string, #5 seconds : string>@
 rcv_signal()~Return rbxsignal if there a condition... <argument: #1 instance : instance, #2 condition : bool>@
 lua_escape()~Return a lua escape string convert from a string... <argument: #1 string to convert : string>@
 hash_str()~Return a hashed string convert from a string... <argument: #1 string to convert : string, #2 randomness : numberic>@
